@@ -7,9 +7,14 @@ This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 ## Getting started
 
 ```
-yarn build
+# Usage
+npx @antoinechalifour/memento --targetUrl=<YOUR API BASE URL> --port=<THE PORT>
 
-yarn dev --targetUrl=http://your.api.base.url.com
+# Example for caching Punk API
+npx @antoinechalifour/memento --targetUrl=https://api.punkapi.com/v2
+
+# Delay all responses by 3 seconds
+npx @antoinechalifour/memento --targetUrl=https://api.punkapi.com/v2 --delay=3000
 ```
 
 ### Options
