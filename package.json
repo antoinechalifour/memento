@@ -1,8 +1,8 @@
 {
-  "name": "api-vhs",
+  "name": "memento",
   "version": "0.1.0",
   "main": "dist/index.js",
-  "module": "dist/api-vhs.esm.js",
+  "module": "dist/memento.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"

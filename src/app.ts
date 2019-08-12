@@ -28,9 +28,9 @@ export function createApp({ port, container }: AppOptions) {
     run() {
       return new Promise(resolve =>
         app.listen(port, () => {
-          logger.info(`VHS running @ http://localhost:${port}`);
+          logger.info(`Memento running @ http://localhost:${port}`);
           logger.info(
-            `VHS configured to proxy to ${targetUrl} with a delay of ${delay}ms`
+            `Memento configured to proxy to ${targetUrl} with a delay of ${delay}ms`
           );
 
           resolve();
