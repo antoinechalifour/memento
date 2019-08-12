@@ -1,0 +1,15 @@
+export type Method =
+  | 'get'
+  | 'GET'
+  | 'post'
+  | 'POST'
+  | 'put'
+  | 'PUT'
+  | 'head'
+  | 'HEAD'
+  | 'delete'
+  | 'DELETE'
+  | 'options'
+  | 'OPTIONS'
+  | 'patch'
+  | 'PATCH';
