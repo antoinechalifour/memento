@@ -13,6 +13,7 @@ assert(cliArgs.targetUrl, 'targetUrl option is required');
 
 const targetUrl = cliArgs.targetUrl as string;
 const delay = cliArgs.delay ? parseInt(cliArgs.delay as string, 10) : 0;
+const port = cliArgs.port ? parseInt(cliArgs.port as string, 10) : 3344;
 
 const container = createContainer();
 
@@ -31,4 +32,4 @@ container.register({
   networkService: asClass(NetworkServiceAxios),
 });
 
-createApp({ port: 3344, container }).run();
+createApp({ port, container }).run();

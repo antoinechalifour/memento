@@ -5,9 +5,14 @@
   "module": "dist/memento.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "bin",
     "dist"
   ],
+  "bin": {
+    "memento": "./bin/memento.js"
+  },
   "scripts": {
+    "prepublishOnly": "yarn lint && yarn test && yarn build",
     "start": "tsdx watch --target node",
     "build": "tsdx build --target node",
     "test": "tsdx test",

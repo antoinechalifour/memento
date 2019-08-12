@@ -20,6 +20,7 @@ The following options can be used in the command line :
 | --------- | ------------------------------------------------------- | --------------------- | ------------- |
 | targetUrl | The API base URL                                        | http://localhost:4000 | None          |
 | delay     | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0             |
+| port      | The port used to launch Memento                         | 9876                  | 3344          |
 
 ## Local Development
 
