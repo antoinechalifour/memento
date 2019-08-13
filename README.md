@@ -9,7 +9,11 @@ This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 ## Getting started
 
 ```
-# Usage
+# Usage with configuration file
+# You may use any configuration file supported by https://github.com/davidtheclark/cosmiconfig (e.g. .mementorc, memento.config.js, ...)
+npx @antoinechalifour/memento
+
+# Usage with CLI  args
 npx @antoinechalifour/memento --targetUrl=<YOUR API BASE URL> --port=<THE PORT>
 
 # Example for caching Punk API
@@ -21,6 +25,18 @@ npx @antoinechalifour/memento --targetUrl=https://api.punkapi.com/v2 --delay=300
 
 ### Options
 
+#### Configuration file example
+You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig). For instance, you may create a `.mementorc` in your project root :
+
+```
+{
+  "targetUrl": "https://api.punkapi.com/v2",
+  "delay": 2,
+  "port": 3344
+}
+```
+
+#### Command Line Options
 The following options can be used in the command line :
 
 | Option    | Description                                             | Example               | Default value |

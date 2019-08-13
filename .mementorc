@@ -1,0 +1,5 @@
+{
+  "targetUrl": "https://api.punkapi.com/v2",
+  "delay": 2,
+  "port": 3344
+}
