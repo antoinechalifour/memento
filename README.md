@@ -32,7 +32,7 @@ The following options can be used in the command line :
 Below is a list of commands you will probably find useful.
 
 ```
-# Start TS compiletation in watch mode
+# Start TS compilation in watch mode
 yarn start
 
 # Start the local server
