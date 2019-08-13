@@ -1,11 +1,13 @@
 import supertest from 'supertest';
 import nock from 'nock';
+import { Server } from 'http';
 
 import { getTestApplication } from './utils';
 
 let request: supertest.SuperTest<supertest.Test>;
 let networkSpy: jest.SpyInstance;
 let targetUrl: string;
+let server: Server;
 
 const HTTP_METHODS = ['post', 'put', 'patch'] as const;
 
@@ -15,6 +17,11 @@ beforeAll(() => {
   request = testApplication.request;
   networkSpy = testApplication.spies.networkService;
   targetUrl = testApplication.targetUrl;
+  server = testApplication.server;
+});
+
+afterAll(() => {
+  server.close();
 });
 
 beforeEach(() => {
