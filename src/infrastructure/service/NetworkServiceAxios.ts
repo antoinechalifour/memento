@@ -21,6 +21,7 @@ export class NetworkServiceAxios implements NetworkService {
   public async executeRequest(request: Request): Promise<Response> {
     // Remove the host header which crashes SSL
     const { host, ...headers } = request.headers; // eslint-disable-line @typescript-eslint/no-unused-vars
+    delete headers['content-length']; // TODO: figure out why we need that
 
     await new Promise(resolve => setTimeout(resolve, this.delay));
 

@@ -5,30 +5,30 @@ import { Method } from '../../../domain/entity';
 import { RespondToRequest, Headers } from '../../../domain/usecase';
 
 interface Dependencies {
-    respondToRequestUseCase: RespondToRequest;
+  respondToRequestUseCase: RespondToRequest;
 }
 
 class RequestHandler {
-    private respondToRequestUseCase: RespondToRequest;
+  private respondToRequestUseCase: RespondToRequest;
 
-    public constructor({ respondToRequestUseCase }: Dependencies) {
-        this.respondToRequestUseCase = respondToRequestUseCase;
-    }
+  public constructor({ respondToRequestUseCase }: Dependencies) {
+    this.respondToRequestUseCase = respondToRequestUseCase;
+  }
 
-    public async respondToRequest(ctx: Context) {
-        const { request } = ctx;
+  public async respondToRequest(ctx: Context) {
+    const { request } = ctx;
 
-        const response = await this.respondToRequestUseCase.execute(
-            (request.method || 'GET') as Method,
-            request.url || '/',
-            (request.headers || {}) as Headers,
-            ctx.request.rawBody || ''
-        );
+    const response = await this.respondToRequestUseCase.execute(
+      (request.method || 'GET') as Method,
+      request.url || '/',
+      (request.headers || {}) as Headers,
+      ctx.request.rawBody || ''
+    );
 
-        ctx.status = response.status;
-        ctx.set(response.headers);
-        ctx.body = response.body;
-    }
+    ctx.status = response.status;
+    ctx.set(response.headers);
+    ctx.body = response.body;
+  }
 }
 
 const handler = makeInvoker(RequestHandler);

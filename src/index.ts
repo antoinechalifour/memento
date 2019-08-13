@@ -26,10 +26,10 @@ container.register({
   respondToRequestUseCase: asClass(RespondToRequest),
 
   // Repositories
-  responseRepository: asClass(ResponseRepositoryMemory),
+  responseRepository: asClass(ResponseRepositoryMemory).singleton(),
 
   // Services
-  networkService: asClass(NetworkServiceAxios),
+  networkService: asClass(NetworkServiceAxios).singleton(),
 });
 
 createApp({ port, container }).run();
