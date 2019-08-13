@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/antoinechalifour/memento.svg?branch=master)](https://travis-ci.org/antoinechalifour/memento)
+
 # Memento
 
 > Memento is a **development only** tool that caches HTTP calls once they have been executed.

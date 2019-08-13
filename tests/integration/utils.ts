@@ -40,6 +40,7 @@ export function getTestApplication() {
   return {
     targetUrl,
     request,
+    server,
     spies: {
       networkService: networkServiceSpy,
     },
