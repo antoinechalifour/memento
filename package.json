@@ -1,6 +1,6 @@
 {
   "name": "@antoinechalifour/memento",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "module": "dist/memento.esm.js",
   "typings": "dist/index.d.ts",
