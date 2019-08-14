@@ -820,6 +820,13 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@koa/cors@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@koa/cors/-/cors-3.0.0.tgz#df021b4df2dadf1e2b04d7c8ddf93ba2d42519cb"
+  integrity sha512-hDp+cXj6vTYSwHRJfiSpnf5dTMv3FmqNKh1or9BPJk4SHOviHnK9GoL9dT0ypt/E+hlkRkZ9edHylcosW3Ghrw==
+  dependencies:
+    vary "^1.1.2"
+
 "@koa/router@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@koa/router/-/router-8.0.0.tgz#fd4ffa6f03d8293a04c023cb4a22b612401fbe70"
@@ -1022,6 +1029,13 @@
     "@types/keygrip" "*"
     "@types/koa-compose" "*"
     "@types/node" "*"
+
+"@types/koa__cors@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@types/koa__cors/-/koa__cors-2.2.3.tgz#227154b4c70439083b33c89627eb780a517cd05b"
+  integrity sha512-RfG2EuSc+nv/E+xbDSLW8KCoeri/3AkqwVPuENfF/DctllRoXhooboO//Sw7yFtkLvj7nG7O1H3JcZmoTQz8nQ==
+  dependencies:
+    "@types/koa" "*"
 
 "@types/mime@*":
   version "2.0.1"

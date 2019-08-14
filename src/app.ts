@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import bodyparser from 'koa-bodyparser';
 import loggerMiddleware from 'koa-logger';
+import cors from '@koa/cors';
 import { AwilixContainer } from 'awilix';
 import { scopePerRequest } from 'awilix-koa';
 
@@ -18,6 +19,7 @@ export function createApp({ port, container }: AppOptions) {
   const delay = container.resolve('delay');
 
   app
+    .use(cors())
     .use(loggerMiddleware())
     .use(bodyparser())
     .use(scopePerRequest(container))
