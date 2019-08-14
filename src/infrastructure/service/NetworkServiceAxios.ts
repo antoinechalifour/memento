@@ -6,16 +6,13 @@ import { Request, Response } from '../../domain/entity';
 
 interface Dependencies {
   targetUrl: string;
-  delay: number;
 }
 
 export class NetworkServiceAxios implements NetworkService {
   private targetUrl: string;
-  private delay: number;
 
-  public constructor({ targetUrl, delay }: Dependencies) {
+  public constructor({ targetUrl }: Dependencies) {
     this.targetUrl = targetUrl;
-    this.delay = delay;
   }
 
   public async executeRequest(request: Request): Promise<Response> {
@@ -26,8 +23,6 @@ export class NetworkServiceAxios implements NetworkService {
 
     // For now we do not support gzip
     delete headers['accept-encoding'];
-
-    await new Promise(resolve => setTimeout(resolve, this.delay));
 
     const axiosResponse = await axios({
       data: request.body,
