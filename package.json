@@ -4,6 +4,11 @@
   "main": "dist/index.js",
   "module": "dist/memento.esm.js",
   "typings": "dist/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antoinechalifour/memento.git"
+  },
   "files": [
     "bin",
     "dist"
