@@ -1,4 +1,5 @@
 import { logger } from '../../util/logger';
+import { wait } from '../../util/timers';
 
 import { Method, Response, Request } from '../entity';
 import { ResponseRepository } from '../repository';
@@ -7,6 +8,7 @@ import { NetworkService } from '../service';
 interface Dependencies {
   responseRepository: ResponseRepository;
   networkService: NetworkService;
+  delay: number;
 }
 
 export interface Headers {
@@ -16,10 +18,16 @@ export interface Headers {
 export class RespondToRequest {
   private responseRepository: ResponseRepository;
   private networkService: NetworkService;
+  private delay: number;
 
-  public constructor({ responseRepository, networkService }: Dependencies) {
+  public constructor({
+    responseRepository,
+    networkService,
+    delay,
+  }: Dependencies) {
     this.responseRepository = responseRepository;
     this.networkService = networkService;
+    this.delay = delay;
   }
 
   public async execute(
@@ -33,16 +41,22 @@ export class RespondToRequest {
     const cachedResponse = await this.responseRepository.getResponseForRequest(
       request
     );
+    let response: Response;
 
     if (cachedResponse) {
+      response = cachedResponse;
       logger.debug('Using response from the cache');
-      return cachedResponse;
+    } else {
+      logger.debug('Fetching response from the network');
+      response = await this.networkService.executeRequest(request);
+
+      await this.responseRepository.persistResponseForRequest(
+        request,
+        response
+      );
     }
 
-    logger.debug('Fetching response from the network');
-    const response = await this.networkService.executeRequest(request);
-
-    await this.responseRepository.persistResponseForRequest(request, response);
+    await wait(this.delay);
 
     return response;
   }
