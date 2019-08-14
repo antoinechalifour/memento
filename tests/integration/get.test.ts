@@ -59,16 +59,22 @@ describe('2xx success / JSON', () => {
   beforeEach(() => {
     nock(`${targetUrl}`)
       .get('/json')
-      .reply(200, [
+      .reply(
+        200,
+        [
+          {
+            id: 'user-1',
+            name: 'Sarah Walker',
+          },
+          {
+            id: 'user-2',
+            name: 'John Doe',
+          },
+        ],
         {
-          id: 'user-1',
-          name: 'Sarah Walker',
-        },
-        {
-          id: 'user-2',
-          name: 'John Doe',
-        },
-      ]);
+          'content-type': 'application/json; charset=utf-8',
+        }
+      );
   });
 
   it('should forward the response', async () => {
