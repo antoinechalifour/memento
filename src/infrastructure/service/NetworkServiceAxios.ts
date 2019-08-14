@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { logger } from '../../util/logger';
 import { NetworkService } from '../../domain/service';
@@ -34,13 +34,14 @@ export class NetworkServiceAxios implements NetworkService {
       url: `${this.targetUrl}${request.url}`,
       headers,
       method: request.method,
+      transformResponse: (data: string) => data,
     }).catch(error => {
-      if (!error.isAxiosError) {
+      if (!error.response) {
         logger.error(`Unexpected error from ${this.targetUrl}${request.url}`);
         throw error;
       }
 
-      return error.response;
+      return error.response as AxiosResponse;
     });
 
     return new Response(

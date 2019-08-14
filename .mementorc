@@ -1,5 +1,6 @@
 {
-  "targetUrl": "https://api.punkapi.com/v2",
-  "delay": 2,
-  "port": 3344
+  "targetUrl": "http://localhost:8080",
+  "delay": 0,
+  "port": 3344,
+  "dbAdapter": "file"
 }
