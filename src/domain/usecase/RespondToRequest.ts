@@ -1,4 +1,3 @@
-import { logger } from '../../util/logger';
 import { wait } from '../../util/timers';
 
 import { Method, Response, Request } from '../entity';
@@ -45,9 +44,7 @@ export class RespondToRequest {
 
     if (cachedResponse) {
       response = cachedResponse;
-      logger.debug('Using response from the cache');
     } else {
-      logger.debug('Fetching response from the network');
       response = await this.networkService.executeRequest(request);
 
       await this.responseRepository.persistResponseForRequest(

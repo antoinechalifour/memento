@@ -15,6 +15,10 @@ beforeEach(() => {
   responseRepository = {
     getResponseForRequest: jest.fn().mockResolvedValue(null),
     persistResponseForRequest: jest.fn().mockResolvedValue(null),
+    getAllRequests: jest.fn().mockResolvedValue([]),
+    deleteAll: jest.fn().mockResolvedValue(null),
+    deleteByRequestId: jest.fn().mockResolvedValue(null),
+    getRequestById: jest.fn().mockResolvedValue(null),
   };
   networkService = {
     executeRequest: jest.fn().mockResolvedValue(null),

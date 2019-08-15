@@ -41,6 +41,9 @@ export class ResponseRepositoryFile implements ResponseRepository {
     // Write the metadata file
     const metadataFilePath = this.getMetaDataFilePath(request);
     await fs.outputJSON(metadataFilePath, {
+      method: request.method,
+      url: request.url,
+      requestBody: request.body,
       status: response.status,
       requestHeaders: request.headers,
       responseHeaders: response.headers,
@@ -51,15 +54,104 @@ export class ResponseRepositoryFile implements ResponseRepository {
     await fs.writeFile(bodyFilePath, response.body);
   }
 
-  private getCacheDirectoryPath(request: Request) {
+  public async getAllRequests() {
+    await this.ensureProjectDirectory();
+
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    const subdirectories = await this.getSubdirectories();
+    const allRequests: Request[] = [];
+
+    for (const subdirectory of subdirectories) {
+      const metadatFilePath = path.join(
+        projectDirectoryPath,
+        subdirectory,
+        'metadata.json'
+      );
+      const metadata = await fs.readJSON(metadatFilePath);
+
+      allRequests.push(
+        new Request(
+          metadata.method,
+          metadata.url,
+          metadata.requestHeaders,
+          metadata.requestBody
+        )
+      );
+    }
+
+    return allRequests;
+  }
+
+  public async getRequestById(requestId: string) {
+    await this.ensureProjectDirectory();
+
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    const subdirectories = await this.getSubdirectories();
+
+    for (const subdirectory of subdirectories) {
+      const regexp = new RegExp(`-${requestId}$`);
+
+      if (regexp.test(subdirectory)) {
+        const metadatFilePath = path.join(
+          projectDirectoryPath,
+          subdirectory,
+          'metadata.json'
+        );
+        const metadata = await fs.readJSON(metadatFilePath);
+
+        return new Request(
+          metadata.method,
+          metadata.url,
+          metadata.requestHeaders,
+          metadata.requestBody
+        );
+      }
+    }
+
+    return null;
+  }
+
+  public async deleteAll() {
+    await this.ensureProjectDirectory();
+
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    const subdirectories = await this.getSubdirectories();
+
+    for (const subdirectory of subdirectories) {
+      await fs.remove(path.join(projectDirectoryPath, subdirectory));
+    }
+  }
+
+  public async deleteByRequestId(requestId: string) {
+    await this.ensureProjectDirectory();
+
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    const subdirectories = await this.getSubdirectories();
+
+    for (const subdirectory of subdirectories) {
+      const regexp = new RegExp(`-${requestId}$`);
+
+      if (regexp.test(subdirectory)) {
+        await fs.remove(path.join(projectDirectoryPath, subdirectory));
+      }
+    }
+  }
+
+  private getProjectDirectoryPath() {
     const projectDir = this.targetUrl
       .replace(/[:\/]/g, '_')
       .replace(/\./g, '-');
-    const requestDir = `${request.method.toLowerCase()}_${request.url.replace(
+
+    return path.join(process.cwd(), '.memento-cache', projectDir);
+  }
+
+  private getCacheDirectoryPath(request: Request) {
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    const requestDirectoryPath = `${request.method.toLowerCase()}_${request.url.replace(
       /\//g,
       '_'
     )}-${request.getComputedId()}`;
-    return path.join(process.cwd(), '.memento-cache', projectDir, requestDir);
+    return path.join(projectDirectoryPath, requestDirectoryPath);
   }
 
   private getMetaDataFilePath(request: Request) {
@@ -84,6 +176,16 @@ export class ResponseRepositoryFile implements ResponseRepository {
       this.getCacheDirectoryPath(request),
       `body.${fileExtension}`
     );
+  }
+
+  private getSubdirectories() {
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    return fs.readdir(projectDirectoryPath);
+  }
+
+  private ensureProjectDirectory() {
+    const projectDirectoryPath = this.getProjectDirectoryPath();
+    return fs.ensureDir(projectDirectoryPath);
   }
 
   private ensureCacheDirectory(request: Request) {
