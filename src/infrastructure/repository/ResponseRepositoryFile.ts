@@ -1,7 +1,6 @@
 import path from 'path';
-import { promises as fs } from 'fs';
+import fs from 'fs-extra';
 
-import { logger } from '../../util/logger';
 import { ResponseRepository } from '../../domain/repository';
 import { Request, Response } from '../../domain/entity';
 
@@ -17,16 +16,18 @@ export class ResponseRepositoryFile implements ResponseRepository {
   }
 
   public async getResponseForRequest(request: Request) {
-    const filePath = this.getFilePath(request);
-    logger.debug(`Trying to read file ${filePath}`);
+    await this.ensureCacheDirectory(request);
 
     try {
-      const contents = await fs.readFile(filePath, 'utf-8');
-      const [rawStatus, rawHeaders, body] = contents.split('\n\n');
-
+      const metadataFilePath = this.getMetaDataFilePath(request);
+      const bodyFilePath = await this.getBodyFilePath(request);
+      const [metadata, body] = await Promise.all([
+        fs.readJSON(metadataFilePath),
+        fs.readFile(bodyFilePath, 'utf-8'),
+      ]);
       return new Response(
-        parseInt(rawStatus, 10),
-        JSON.parse(rawHeaders),
+        parseInt(metadata.status, 10),
+        metadata.responseHeaders,
         body
       );
     } catch (err) {
@@ -35,36 +36,76 @@ export class ResponseRepositoryFile implements ResponseRepository {
   }
 
   public async persistResponseForRequest(request: Request, response: Response) {
-    const filePath = this.getFilePath(request);
-    const contents = [
-      response.status,
-      JSON.stringify(response.headers),
-      response.body,
-    ].join('\n\n');
+    await this.ensureCacheDirectory(request);
 
-    logger.debug(`Persisting response for ${filePath}`);
-    try {
-      await fs.mkdir(this.getPersistanceDirectory());
-    } catch (err) {
-      // Ignore
+    // Write the metadata file
+    const metadataFilePath = this.getMetaDataFilePath(request);
+    await fs.outputJSON(metadataFilePath, {
+      status: response.status,
+      requestHeaders: request.headers,
+      responseHeaders: response.headers,
+    });
+
+    // Write the content
+    const bodyFilePath = await this.getBodyFilePath(request);
+    await fs.writeFile(bodyFilePath, response.body);
+  }
+
+  private getCacheDirectoryPath(request: Request) {
+    const projectDir = this.targetUrl
+      .replace(/[:\/]/g, '_')
+      .replace(/\./g, '-');
+    const requestDir = `${request.method.toLowerCase()}_${request.url.replace(
+      /\//g,
+      '_'
+    )}-${request.getComputedId()}`;
+    return path.join(process.cwd(), '.memento-cache', projectDir, requestDir);
+  }
+
+  private getMetaDataFilePath(request: Request) {
+    return path.join(this.getCacheDirectoryPath(request), 'metadata.json');
+  }
+
+  private async getBodyFilePath(request: Request) {
+    const metadataFilePath = this.getMetaDataFilePath(request);
+    const metadata = await fs.readJSON(metadataFilePath);
+    const contentType = metadata.responseHeaders['content-type'];
+    let fileExtension: string;
+
+    if (this.isJson(contentType)) {
+      fileExtension = 'json';
+    } else if (this.isXml(contentType)) {
+      fileExtension = 'xml';
+    } else {
+      fileExtension = 'txt';
     }
 
-    await fs.writeFile(filePath, contents, 'utf-8');
+    return path.join(
+      this.getCacheDirectoryPath(request),
+      `body.${fileExtension}`
+    );
   }
 
-  private getFileName(request: Request) {
-    const sanitizedUrl = request.url.replace(/\//g, '_');
-    return `${request.method}-${sanitizedUrl}-${request.getComputedId()}`;
+  private ensureCacheDirectory(request: Request) {
+    const cacheDirPath = this.getCacheDirectoryPath(request);
+    return fs.ensureDir(cacheDirPath);
   }
 
-  private getFilePath(request: Request) {
-    return path.join(this.getPersistanceDirectory(), this.getFileName(request));
+  private isJson(contentType: string | undefined) {
+    return (
+      contentType && contentType.toLowerCase().indexOf('application/json') >= 0
+    );
   }
 
-  private getPersistanceDirectory() {
-    const hashedUrl = Buffer.from(this.targetUrl).toString('base64');
-    const fileName = `.memento-cache-${hashedUrl}`;
+  private isXml(contentType: string | undefined) {
+    if (!contentType) {
+      return false;
+    }
+    const lowerCaseContentType = contentType.toLowerCase();
 
-    return path.join(process.cwd(), fileName);
+    return (
+      lowerCaseContentType.indexOf('application/xml') >= 0 ||
+      lowerCaseContentType.indexOf('text/xml') >= 0
+    );
   }
 }

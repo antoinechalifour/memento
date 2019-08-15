@@ -7,6 +7,11 @@ export function buildRequestHeaders(inputHeaders: Headers): Headers {
     'host',
     'accept-encoding',
     'content-length',
+    'cache-control',
+    'if-match',
+    'if-modified-match',
+    'if-none-match',
+    'if-unmodified-match',
   ];
   const headers: Headers = {};
   Object.keys(inputHeaders).forEach(key => {
