@@ -44,7 +44,7 @@ function loadConfigurationFromFile(): Configuration | null {
     targetUrl: cosmicConfiguration.config.targetUrl,
     delay: getDelayFromString(cosmicConfiguration.config.delay),
     port: getPortFromString(cosmicConfiguration.config.port),
-    dbAdapter: getDbAdapter(cosmicConfiguration.config.dbAdapter),
+    dbAdapter: getDbAdapter(cosmicConfiguration.config['cache-location']),
   };
 }
 
@@ -53,7 +53,7 @@ function loadConfigurationFromCli(): Configuration {
   const targetUrl = cliArgs.targetUrl as string;
   const delay = getDelayFromString(cliArgs.delay as string);
   const port = getPortFromString(cliArgs.port as string);
-  const dbAdapter = getDbAdapter(cliArgs.dbAdapter as string);
+  const dbAdapter = getDbAdapter(cliArgs['cache-location'] as string);
 
   return { targetUrl, delay, port, dbAdapter };
 }

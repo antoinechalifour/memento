@@ -33,26 +33,29 @@ You may use any configuration file supported by [cosmiconfig](https://github.com
   "targetUrl": "https://api.punkapi.com/v2",
   "delay": 2,
   "port": 3344,
-  "dbAdapter": "file" | "memory"
+  "cache-location": "file" | "memory"
 }
 ```
 
 #### Command Line Options
 The following options can be used in the command line :
 
-| Option    | Description                                             | Example               | Default value |
-| --------- | ------------------------------------------------------- | --------------------- | ------------- |
-| targetUrl | The API base URL                                        | http://localhost:4000 | None          |
-| delay     | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0             |
-| port      | The port used to launch Memento                         | 9876                  | 3344          |
-| dbAdapter | The persistance driver for storing responses            | file                  | memory        |
+| Option         | Description                                             | Example               | Default value |
+| -------------- | ------------------------------------------------------- | --------------------- | ------------- |
+| targetUrl      | The API base URL                                        | http://localhost:4000 | None          |
+| delay          | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0             |
+| port           | The port used to launch Memento                         | 9876                  | 3344          |
+| cache-location | The cache mechanism used for storing responses          | file                  | memory        |
 
 
-### DB Adapter / Response Cache
+### Cache location
 
 By default, memento caches the responses in memory, which means that these responses will be lost when memento restarts.
 
-If you wish to persist responses, you can configure the `dbAdapter` in the configuration file to `file`. By doing so, memento will create a `.memento-cache-*` directory in the current directory where each response will be mapped to a file. This comes very handy if you wish to edit response!
+If you wish to persist responses, you can configure the `cache-location` in the configuration file to `file`. By doing so, memento will create a `.memento-cache` directory in the current directory where each response will be mapped to a directory containing:
+
+- `metadata.json` - A file containing information about the request and the response.
+- `body.{json,xml,txt}` - The response content. The extension depends on the response `content-type` header. You may edit this file to edit the response.
 
 ## Local Development
 

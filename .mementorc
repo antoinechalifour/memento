@@ -2,5 +2,5 @@
   "targetUrl": "https://pokeapi.co/api/v2",
   "delay": 0,
   "port": 3344,
-  "dbAdapter": "file"
+  "cache-location": "file"
 }
