@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from 'axios';
 import { logger } from '../../util/logger';
 import { NetworkService } from '../../domain/service';
 import { Request, Response } from '../../domain/entity';
-import { buildRequestHeaders, buildResponseHeaders } from './networkUtils';
 
 interface Dependencies {
   targetUrl: string;
@@ -20,7 +19,7 @@ export class NetworkServiceAxios implements NetworkService {
     const axiosResponse = await axios({
       data: request.body,
       url: `${this.targetUrl}${request.url}`,
-      headers: buildRequestHeaders(request.headers),
+      headers: request.headers,
       method: request.method,
       transformResponse: (data: string) => data,
     }).catch(error => {
@@ -34,7 +33,7 @@ export class NetworkServiceAxios implements NetworkService {
 
     return new Response(
       axiosResponse.status,
-      buildResponseHeaders(axiosResponse.headers),
+      axiosResponse.headers,
       axiosResponse.data
     );
   }
