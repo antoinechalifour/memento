@@ -53,7 +53,7 @@ export class ResponseRepositoryFile implements ResponseRepository {
   }
 
   private getFileName(request: Request) {
-    const sanitizedUrl = request.url.replace(/\//, '_');
+    const sanitizedUrl = request.url.replace(/\//g, '_');
     return `${request.method}-${sanitizedUrl}-${request.getComputedId()}`;
   }
 
