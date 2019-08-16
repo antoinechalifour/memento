@@ -1,45 +1,46 @@
 [![Build Status](https://travis-ci.org/antoinechalifour/memento.svg?branch=master)](https://travis-ci.org/antoinechalifour/memento) [![codecov](https://codecov.io/gh/antoinechalifour/memento/branch/master/graph/badge.svg)](https://codecov.io/gh/antoinechalifour/memento)
 
+<p align="center">
+  <h1 align="center">Memento</h3>
+  <p align="center">Memento is a <strong>development only</strong> tool that caches HTTP calls once they have been executed</p>
+</p>
 
-# Memento
-
-> Memento is a **development only** tool that caches HTTP calls once they have been executed.
+<div align="center"><img src="./cover.png" alt="Medium Zoom Demo"></div>
 
 This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 
+## Why should one use Memento?
+
+When building a UI, or working on any project that rely on external services, many things can slow us down :
+
+- the API may not be stable at the moment
+- the API may apply harsh rate-limiting (and that's terrible if you forget the dependency array in your `React.useEffect` 😉)
+- ...or you may be working on a train or plane where the network is not reliable.
+
+**Memento has been built to solve our development workflow.**
+
+Memento acts as a development buddy that remembers the requests that your application is sending, the server response, and will respond to your app without the need for requests to go over the internet.
+
+*Pro-tip: Memento may also be used for stubbing external services for integration or end-to-end testing 🎉*
+
 ## Getting started
 
-```
-# Usage with configuration file
-# You may use any configuration file supported by https://github.com/davidtheclark/cosmiconfig (e.g. .mementorc, memento.config.js, ...)
-npx @antoinechalifour/memento
+To add Memento to your project, you just need to add a `.mementorc` file to your project root and run `npx @antoinechalifour/memento`. You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).
 
-# Usage with CLI  args
-npx @antoinechalifour/memento --targetUrl=<YOUR API BASE URL> --port=<THE PORT>
+The most basic configuration file to cache the [PunkApi](https://punkapi.com/documentation/v2) would look something like this:
 
-# Example for caching Punk API
-npx @antoinechalifour/memento --targetUrl=https://api.punkapi.com/v2
-
-# Delay all responses by 3 seconds
-npx @antoinechalifour/memento --targetUrl=https://api.punkapi.com/v2 --delay=3000
-```
-
-### Options
-
-#### Configuration file example
-You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig). For instance, you may create a `.mementorc` in your project root :
-
-```
+```json
 {
   "targetUrl": "https://api.punkapi.com/v2",
-  "delay": 2,
-  "port": 3344,
-  "cache-location": "file" | "memory"
+  "cache-location": "file"
 }
 ```
 
-#### Command Line Options
-The following options can be used in the command line :
+An example for using Memento with create-react-app can be found [here](./example/create-react-app).
+
+### Options
+
+The following options are supported:
 
 | Option         | Description                                             | Example               | Default value |
 | -------------- | ------------------------------------------------------- | --------------------- | ------------- |
@@ -48,8 +49,11 @@ The following options can be used in the command line :
 | port           | The port used to launch Memento                         | 9876                  | 3344          |
 | cache-location | The cache mechanism used for storing responses          | file                  | memory        |
 
+## Using the CLI
 
-### Cache location
+Launching Memento will start the interactive Memento CLI, where you can type commands to modify the cached requests and responses. The documentation can be found by typing `help` in the command prompt.
+
+## Cache location
 
 By default, memento caches the responses in memory, which means that these responses will be lost when memento restarts.
 
@@ -58,7 +62,7 @@ If you wish to persist responses, you can configure the `cache-location` in the 
 - `metadata.json` - A file containing information about the request and the response.
 - `body.{json,xml,txt}` - The response content. The extension depends on the response `content-type` header. You may edit this file to edit the response.
 
-## Local Development
+## Contributing
 
 Below is a list of commands you will probably find useful.
 
