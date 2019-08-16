@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Server } from 'http';
 import Koa from 'koa';
 import bodyparser from 'koa-bodyparser';

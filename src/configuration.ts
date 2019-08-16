@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import assert from 'assert';
 import cosmiconfig from 'cosmiconfig';
 import yargs from 'yargs';

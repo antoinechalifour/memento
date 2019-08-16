@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import Vorpal from 'vorpal';
 import { AwilixContainer } from 'awilix';
 import chalk from 'chalk';

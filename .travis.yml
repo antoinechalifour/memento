@@ -1,6 +1,10 @@
 language: node_js
 cache: yarn
+install:
+  - yarn global add codecov
+  - yarn
 script:
   - yarn lint
-  - yarn test
+  - yarn test --coverage
   - yarn build
+  - codecov
