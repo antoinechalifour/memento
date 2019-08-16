@@ -5,7 +5,7 @@
   <p align="center">Memento is a <strong>development only</strong> tool that caches HTTP calls once they have been executed</p>
 </p>
 
-<div align="center"><img src="./cover.png" alt="Medium Zoom Demo"></div>
+<div align="center"><img src="https://github.com/antoinechalifour/memento/blob/master/cover.png?raw=true" alt="Medium Zoom Demo"></div>
 
 This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 
