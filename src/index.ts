@@ -4,6 +4,7 @@ import { createContainer, asClass, asValue } from 'awilix';
 
 import { createCli } from './cli';
 import { createApp } from './app';
+import { configuration } from './configuration';
 import {
   RespondToRequest,
   ClearAllRequests,
@@ -12,7 +13,7 @@ import {
   ListRequest,
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
-import { configuration } from './configuration';
+import { ResponseRepositoryFile } from './infrastructure/repository';
 
 const container = createContainer();
 
@@ -20,6 +21,7 @@ container.register({
   // Constants
   targetUrl: asValue(configuration.targetUrl),
   delay: asValue(configuration.delay),
+  cacheDirectory: asValue(configuration.cacheDirectory),
 
   // Use cases
   respondToRequestUseCase: asClass(RespondToRequest),
@@ -29,21 +31,28 @@ container.register({
   listRequestsUseCase: asClass(ListRequest),
 
   // Repositories
-  responseRepository: asClass(configuration.dbAdapter).singleton(),
+  responseRepository: asClass(ResponseRepositoryFile).singleton(),
 
   // Services
   networkService: asClass(NetworkServiceAxios).singleton(),
 });
 
-const app = createApp({ port: configuration.port, container });
-
-app.run().then(() => {
-  createCli({ container }).show();
-});
-
-function stopServer() {
-  app.stop();
+export interface MementoOptions {
+  cacheDirectory?: string;
 }
 
-process.on('SIGINT', stopServer);
-process.on('exit', stopServer);
+export function Memento({ cacheDirectory }: MementoOptions = {}) {
+  if (cacheDirectory) {
+    container.register('cacheDirectory', asValue(cacheDirectory));
+  }
+
+  const app = createApp({ port: configuration.port, container });
+
+  return {
+    run: app.run,
+    stop: app.stop,
+    container,
+  };
+}
+
+export { createCli };

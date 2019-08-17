@@ -31,23 +31,25 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 
 ```json
 {
-  "targetUrl": "https://api.punkapi.com/v2",
-  "cache-location": "file"
+  "target-url": "https://api.punkapi.com/v2"
 }
 ```
 
-An example for using Memento with create-react-app can be found [here](./example/create-react-app).
+### Examples
+
+- [Usage with Create React App](./examples/create-react-app)
+- [Stubbing external services for integration tests](./examples/stub-external-services)
 
 ### Options
 
 The following options are supported:
 
-| Option         | Description                                             | Example               | Default value |
-| -------------- | ------------------------------------------------------- | --------------------- | ------------- |
-| targetUrl      | The API base URL                                        | http://localhost:4000 | None          |
-| delay          | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0             |
-| port           | The port used to launch Memento                         | 9876                  | 3344          |
-| cache-location | The cache mechanism used for storing responses          | file                  | memory        |
+| Option          | Description                                             | Example               | Default value  |
+| --------------- | ------------------------------------------------------- | --------------------- | -------------- |
+| target-url      | The API base URL                                        | http://localhost:4000 | None           |
+| delay           | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0              |
+| port            | The port used to launch Memento                         | 9876                  | 3344           |
+| cache-directory | The cache directory used for storing responses          | memento-integration   | .memento-cache |
 
 ## Using the CLI
 
@@ -55,12 +57,12 @@ Launching Memento will start the interactive Memento CLI, where you can type com
 
 ## Cache location
 
-By default, memento caches the responses in memory, which means that these responses will be lost when memento restarts.
-
-If you wish to persist responses, you can configure the `cache-location` in the configuration file to `file`. By doing so, memento will create a `.memento-cache` directory in the current directory where each response will be mapped to a directory containing:
+By default, memento will create a `.memento-cache` directory in the current directory where each response will be mapped to a directory containing:
 
 - `metadata.json` - A file containing information about the request and the response.
 - `body.{json,xml,txt}` - The response content. The extension depends on the response `content-type` header. You may edit this file to edit the response.
+
+You may override this directory by providing a `cache-directory` in the configuration file. this may be useful for storing environment dependent responses.
 
 ## Contributing
 

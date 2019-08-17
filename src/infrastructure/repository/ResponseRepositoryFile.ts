@@ -6,17 +6,20 @@ import { Request, Response } from '../../domain/entity';
 
 interface Dependencies {
   targetUrl: string;
+  cacheDirectory: string;
 }
 
 export class ResponseRepositoryFile implements ResponseRepository {
   private targetUrl: string;
+  private cacheDirectory: string;
 
-  public constructor({ targetUrl }: Dependencies) {
+  public constructor({ targetUrl, cacheDirectory }: Dependencies) {
     this.targetUrl = targetUrl;
+    this.cacheDirectory = cacheDirectory;
   }
 
   public async getResponseForRequest(request: Request) {
-    await this.ensureCacheDirectory(request);
+    await this.ensureRequestDirectory(request);
 
     try {
       const metadataFilePath = this.getMetaDataFilePath(request);
@@ -36,7 +39,7 @@ export class ResponseRepositoryFile implements ResponseRepository {
   }
 
   public async persistResponseForRequest(request: Request, response: Response) {
-    await this.ensureCacheDirectory(request);
+    await this.ensureRequestDirectory(request);
 
     // Write the metadata file
     const metadataFilePath = this.getMetaDataFilePath(request);
@@ -142,10 +145,10 @@ export class ResponseRepositoryFile implements ResponseRepository {
       .replace(/[:\/]/g, '_')
       .replace(/\./g, '-');
 
-    return path.join(process.cwd(), '.memento-cache', projectDir);
+    return path.join(this.cacheDirectory, projectDir);
   }
 
-  private getCacheDirectoryPath(request: Request) {
+  private getRequestDirectoryPath(request: Request) {
     const projectDirectoryPath = this.getProjectDirectoryPath();
     const requestDirectoryPath = `${request.method.toLowerCase()}_${request.url.replace(
       /\//g,
@@ -155,7 +158,7 @@ export class ResponseRepositoryFile implements ResponseRepository {
   }
 
   private getMetaDataFilePath(request: Request) {
-    return path.join(this.getCacheDirectoryPath(request), 'metadata.json');
+    return path.join(this.getRequestDirectoryPath(request), 'metadata.json');
   }
 
   private async getBodyFilePath(request: Request) {
@@ -173,7 +176,7 @@ export class ResponseRepositoryFile implements ResponseRepository {
     }
 
     return path.join(
-      this.getCacheDirectoryPath(request),
+      this.getRequestDirectoryPath(request),
       `body.${fileExtension}`
     );
   }
@@ -188,8 +191,8 @@ export class ResponseRepositoryFile implements ResponseRepository {
     return fs.ensureDir(projectDirectoryPath);
   }
 
-  private ensureCacheDirectory(request: Request) {
-    const cacheDirPath = this.getCacheDirectoryPath(request);
+  private ensureRequestDirectory(request: Request) {
+    const cacheDirPath = this.getRequestDirectoryPath(request);
     return fs.ensureDir(cacheDirPath);
   }
 
