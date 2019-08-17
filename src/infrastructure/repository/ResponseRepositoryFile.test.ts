@@ -5,12 +5,13 @@ import { Request, Response } from '../../domain/entity';
 import { ResponseRepositoryFile } from './ResponseRepositoryFile';
 import { ResponseRepository } from 'domain/repository';
 
-const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-cache');
+const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
 const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 
 function getResponseRepository() {
   return new ResponseRepositoryFile({
     targetUrl: 'https://pokeapi.co/api/v2',
+    cacheDirectory: MEMENTO_CACHE_DIR,
   });
 }
 
