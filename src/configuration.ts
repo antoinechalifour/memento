@@ -1,66 +1,39 @@
 /* istanbul ignore file */
 
+import path from 'path';
 import assert from 'assert';
 import cosmiconfig from 'cosmiconfig';
-import yargs from 'yargs';
 
-import { ResponseRepositoryConstructor } from './domain/repository';
-import {
-  ResponseRepositoryFile,
-  ResponseRepositoryMemory,
-} from './infrastructure/repository';
-
-interface Configuration {
-  targetUrl: string;
-  delay: number;
-  port: number;
-  dbAdapter: ResponseRepositoryConstructor;
-}
-
-function getDelayFromString(str: string) {
+function getDelayFromString(str: string | undefined): number {
   return str ? parseInt(str, 10) : 0;
 }
 
-function getPortFromString(port: string) {
+function getPortFromString(port: string | undefined): number {
   return port ? parseInt(port, 10) : 3344;
 }
 
-function getDbAdapter(adapter: string) {
-  switch (adapter) {
-    case 'file':
-      return ResponseRepositoryFile;
-    default:
-      return ResponseRepositoryMemory;
-  }
+function getCacheDirectory(directory: string | undefined): string {
+  const defaultCacheDirectory = path.join(process.cwd(), '.memento-cache');
+
+  return directory ? path.resolve(directory) : defaultCacheDirectory;
 }
 
-function loadConfigurationFromFile(): Configuration | null {
-  const configExplorer = cosmiconfig('memento');
-  const cosmicConfiguration = configExplorer.searchSync();
+const configExplorer = cosmiconfig('memento');
+const cosmicConfiguration = configExplorer.searchSync();
 
-  if (!cosmicConfiguration) {
-    return null;
-  }
-
-  return {
-    targetUrl: cosmicConfiguration.config.targetUrl,
-    delay: getDelayFromString(cosmicConfiguration.config.delay),
-    port: getPortFromString(cosmicConfiguration.config.port),
-    dbAdapter: getDbAdapter(cosmicConfiguration.config['cache-location']),
-  };
+if (!cosmicConfiguration) {
+  throw new Error(
+    'Memento configuration was not found. Did you create a .mementorc file?'
+  );
 }
 
-function loadConfigurationFromCli(): Configuration {
-  const cliArgs = yargs.argv;
-  const targetUrl = cliArgs.targetUrl as string;
-  const delay = getDelayFromString(cliArgs.delay as string);
-  const port = getPortFromString(cliArgs.port as string);
-  const dbAdapter = getDbAdapter(cliArgs['cache-location'] as string);
+export const configuration = {
+  targetUrl: cosmicConfiguration.config['target-url'],
+  delay: getDelayFromString(cosmicConfiguration.config.delay),
+  port: getPortFromString(cosmicConfiguration.config.port),
+  cacheDirectory: getCacheDirectory(
+    cosmicConfiguration.config['cache-directory']
+  ),
+};
 
-  return { targetUrl, delay, port, dbAdapter };
-}
-
-export const configuration =
-  loadConfigurationFromFile() || loadConfigurationFromCli();
-
-assert(configuration.targetUrl, 'targetUrl option is required');
+assert(configuration.targetUrl, 'target-url option is required');

@@ -16,7 +16,3 @@ export interface ResponseRepository {
 
   deleteByRequestId(requestId: string): Promise<void>;
 }
-
-export interface ResponseRepositoryConstructor {
-  new (...args: any[]): ResponseRepository; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
