@@ -1,4 +1,4 @@
 {
-  "target-url": "https://api.punkapi.com/v2",
+  "targetUrl": "https://api.punkapi.com/v2",
   "port": 3344
 }

@@ -24,11 +24,9 @@ if (!cosmicConfiguration) {
 }
 
 export const configuration = {
-  targetUrl: cosmicConfiguration.config['target-url'],
+  targetUrl: cosmicConfiguration.config.targetUrl,
   port: getPortFromString(cosmicConfiguration.config.port),
-  cacheDirectory: getCacheDirectory(
-    cosmicConfiguration.config['cache-directory']
-  ),
+  cacheDirectory: getCacheDirectory(cosmicConfiguration.config.cacheDirectory),
 };
 
-assert(configuration.targetUrl, 'target-url option is required');
+assert(configuration.targetUrl, 'targetUrl option is required');

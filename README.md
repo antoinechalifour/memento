@@ -2,16 +2,15 @@
 
 <p align="center">
   <h1 align="center">Memento</h3>
-  <p align="center">Memento is a <strong>development only</strong> tool that caches HTTP calls once they have been executed</p>
+  <p align="center">Memento is a <strong>development-only</strong> tool that caches HTTP calls once they have been executed</p>
 </p>
 
 <div align="center"><img src="https://github.com/antoinechalifour/memento/blob/master/cover.png?raw=true" alt="Medium Zoom Demo"></div>
 
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 
 ## Why should one use Memento?
 
-When building a UI, or working on any project that rely on external services, many things can slow us down :
+When building a UI, or working on any project that rely on external services, many things can slow us down:
 
 - the API may not be stable at the moment
 - the API may apply harsh rate-limiting (and that's terrible if you forget the dependency array in your `React.useEffect` 😉)
@@ -25,13 +24,13 @@ Memento acts as a development buddy that remembers the requests that your applic
 
 ## Getting started
 
-To add Memento to your project, you just need to add a `.mementorc` file to your project root and run `npx @antoinechalifour/memento`. You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).
+To add Memento to your project, you need to add a `.mementorc` file to your project root and run `npx @antoinechalifour/memento`. You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).
 
 The most basic configuration file to cache the [PunkApi](https://punkapi.com/documentation/v2) would look something like this:
 
 ```json
 {
-  "target-url": "https://api.punkapi.com/v2"
+  "targetUrl": "https://api.punkapi.com/v2"
 }
 ```
 
@@ -44,11 +43,11 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 
 The following options are supported:
 
-| Option          | Description                                    | Example               | Default value  |
-| --------------- | ---------------------------------------------- | --------------------- | -------------- |
-| target-url      | The API base URL                               | http://localhost:4000 | None           |
-| port            | The port used to launch Memento                | 9876                  | 3344           |
-| cache-directory | The cache directory used for storing responses | memento-integration   | .memento-cache |
+| Option         | Description                                    | Example               | Default value  |
+| -------------- | ---------------------------------------------- | --------------------- | -------------- |
+| targetUrl      | The API base URL                               | http://localhost:4000 | None           |
+| port           | The port used to launch Memento                | 9876                  | 3344           |
+| cacheDirectory | The cache directory used for storing responses | memento-integration   | .memento-cache |
 
 ## Using the CLI
 
@@ -61,7 +60,7 @@ By default, memento will create a `.memento-cache` directory in the current dire
 - `metadata.json` - A file containing information about the request and the response.
 - `body.{json,xml,txt}` - The response content. The extension depends on the response `content-type` header. You may edit this file to edit the response.
 
-You may override this directory by providing a `cache-directory` in the configuration file. this may be useful for storing environment dependent responses.
+You may override this directory by providing a `cacheDirectory` in the configuration file. this may be useful for storing environment dependent responses.
 
 ## Contributing
 
