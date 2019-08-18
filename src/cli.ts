@@ -52,7 +52,7 @@ export function createCli({ container }: CreateCliOptions) {
         table([
           [chalk.gray('id'), chalk.gray('method'), chalk.gray('url')],
           ...requests.map(request => [
-            chalk.yellow(request.getComputedId()),
+            chalk.yellow(request.id),
             chalk.green(request.method),
             chalk.white(request.url),
           ]),

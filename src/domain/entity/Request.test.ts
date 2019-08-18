@@ -21,7 +21,7 @@ describe('getComputedId', () => {
     );
 
     // When
-    const id = request.getComputedId();
+    const id = request.id;
 
     //Then
     expect(id).toEqual(

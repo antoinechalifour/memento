@@ -1,17 +1,17 @@
-import { ResponseRepository } from '../repository';
+import { RequestRepository } from '../repository';
 
 interface Dependencies {
-  responseRepository: ResponseRepository;
+  requestRepository: RequestRepository;
 }
 
 export class ListRequest {
-  private responseRepository: ResponseRepository;
+  private requestRepository: RequestRepository;
 
-  public constructor({ responseRepository }: Dependencies) {
-    this.responseRepository = responseRepository;
+  public constructor({ requestRepository }: Dependencies) {
+    this.requestRepository = requestRepository;
   }
 
   public execute() {
-    return this.responseRepository.getAllRequests();
+    return this.requestRepository.getAllRequests();
   }
 }

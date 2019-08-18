@@ -1,17 +1,17 @@
-import { ResponseRepository } from '../repository';
+import { RequestRepository } from '../repository';
 
 interface Dependencies {
-  responseRepository: ResponseRepository;
+  requestRepository: RequestRepository;
 }
 
 export class ClearAllRequests {
-  private responseRepository: ResponseRepository;
+  private requestRepository: RequestRepository;
 
-  public constructor({ responseRepository }: Dependencies) {
-    this.responseRepository = responseRepository;
+  public constructor({ requestRepository }: Dependencies) {
+    this.requestRepository = requestRepository;
   }
 
   public async execute() {
-    await this.responseRepository.deleteAll();
+    await this.requestRepository.deleteAll();
   }
 }
