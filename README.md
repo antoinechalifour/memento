@@ -5,18 +5,18 @@
   <p align="center">Memento is a <strong>development-only</strong> tool that caches HTTP calls once they have been executed</p>
 </p>
 
-<div align="center"><img src="https://github.com/antoinechalifour/memento/blob/master/cover.png?raw=true" alt="Medium Zoom Demo"></div>
+<div align="center"><img src="https://github.com/antoinechalifour/memento/blob/master/cover.png?raw=true" alt="Memento screenshot"></div>
 
 
 ## Why should one use Memento?
 
-When building a UI, or working on any project that rely on external services, many things can slow us down:
+When building a UI or working on any project that rely on external services, some things can slow us down:
 
-- the API may not be stable at the moment
-- the API may apply harsh rate-limiting (and that's terrible if you forget the dependency array in your `React.useEffect` 😉)
-- ...or you may be working on a train or plane where the network is not reliable.
+- the API **may not be stable** at the moment
+- the API **may apply harsh rate-limiting** (and that's terrible if you forget the dependency array in your `React.useEffect` 😉)
+- ...or you may be working on a train or plane where **the network is not reliable**.
 
-**Memento has been built to solve our development workflow.**
+**Memento has been built to solve these problems.**
 
 Memento acts as a development buddy that remembers the requests that your application is sending, the server response, and will respond to your app without the need for requests to go over the internet.
 
@@ -24,7 +24,11 @@ Memento acts as a development buddy that remembers the requests that your applic
 
 ## Getting started
 
-To add Memento to your project, you need to add a `.mementorc` file to your project root and run `npx @antoinechalifour/memento`. You may use any configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).
+**1. Add a Memento configuration file**
+
+To add Memento to your project, you need to add a `.mementorc` file to your project root.
+
+*Note: you may use any other configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).*
 
 The most basic configuration file to cache the [PunkApi](https://punkapi.com/documentation/v2) would look something like this:
 
@@ -34,7 +38,17 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 }
 ```
 
-### Examples
+**2. Target the endpoint**
+
+You will then need to configure your app to target `http://localhost:3344` as the API url.
+
+**3. Run Memento**
+
+You can then run Memento using `npx @antoinechalifour/memento`. 
+
+*Note: `npx` is a command that comes with `npm` when installing Node and enables users to run binaries without installing them manually.*
+
+### More examples
 
 - [Usage with Create React App](./examples/create-react-app)
 - [Stubbing external services for integration tests](./examples/stub-external-services)
