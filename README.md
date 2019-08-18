@@ -42,6 +42,8 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 
 You will then need to configure your app to target `http://localhost:3344` as the API url.
 
+*Note: this should only be done at development time, do not target localhost for your production build!*
+
 **3. Run Memento**
 
 You can then run Memento using `npx @antoinechalifour/memento`. 
