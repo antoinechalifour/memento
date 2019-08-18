@@ -2,4 +2,5 @@ export * from './RespondToRequest';
 export * from './ClearAllRequests';
 export * from './ClearRequest';
 export * from './RefreshRequest';
-export * from './ListRequest';
+export * from './ListRequests';
+export * from './GetRequestDetails';

@@ -1,7 +1,7 @@
 import { getTestRequestRepository } from '../../test-utils/infrastructure';
 import { RequestRepository } from '../repository';
 import { Request } from '../entity';
-import { ListRequest } from './ListRequest';
+import { ListRequest } from './ListRequests';
 
 let useCase: ListRequest;
 let requestRepository: RequestRepository;

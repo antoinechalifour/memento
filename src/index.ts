@@ -11,6 +11,7 @@ import {
   ClearRequest,
   RefreshRequest,
   ListRequest,
+  GetRequestDetails,
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
 import { RequestRepositoryFile } from './infrastructure/repository';
@@ -29,6 +30,7 @@ container.register({
   clearRequestUseCase: asClass(ClearRequest),
   refreshRequestUseCase: asClass(RefreshRequest),
   listRequestsUseCase: asClass(ListRequest),
+  getRequestDetailsUseCase: asClass(GetRequestDetails),
 
   // Repositories
   requestRepository: asClass(RequestRepositoryFile).singleton(),

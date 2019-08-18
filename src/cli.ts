@@ -10,6 +10,7 @@ import {
   ClearRequest,
   RefreshRequest,
   ListRequest,
+  GetRequestDetails,
 } from './domain/usecase';
 
 interface CreateCliOptions {
@@ -31,6 +32,9 @@ export function createCli({ container }: CreateCliOptions) {
   );
   const listRequestsUseCase = container.resolve<ListRequest>(
     'listRequestsUseCase'
+  );
+  const getRequestDetailsUseCase = container.resolve<GetRequestDetails>(
+    'getRequestDetailsUseCase'
   );
 
   const vorpal = new Vorpal();
@@ -88,6 +92,48 @@ export function createCli({ container }: CreateCliOptions) {
       this.log(chalk`Refetching data for request {yellow ${requestId}}...`);
       await refreshRequestUseCase.execute(requestId);
       this.log('Done.');
+    });
+
+  vorpal
+    .command(
+      'info <requestId>',
+      'Displays information about the request and its response'
+    )
+    .option('-b, --body', 'Include the response body')
+    .action(async function(
+      this: Vorpal.CommandInstance,
+      { requestId, options }
+    ) {
+      const [request, response] = await getRequestDetailsUseCase.execute(
+        requestId
+      );
+
+      this.log(chalk`{green Request information}`);
+      this.log(
+        table([
+          [chalk.yellow('Method'), chalk.white(request.method)],
+          [chalk.yellow('URL'), chalk.white(request.url)],
+          ...Object.keys(request.headers).map(headerName => [
+            chalk.yellow(headerName),
+            chalk.white(request.headers[headerName]),
+          ]),
+        ])
+      );
+
+      this.log(chalk`\n\n{green Response information}`);
+      this.log(
+        table([
+          ...Object.keys(response.headers).map(headerName => [
+            chalk.yellow(headerName),
+            chalk.white(response.headers[headerName]),
+          ]),
+        ])
+      );
+
+      if (options.body) {
+        this.log(chalk`\n\n{green Response body}`);
+        this.log(response.body);
+      }
     });
 
   console.log(chalk`{green 
