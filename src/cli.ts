@@ -3,6 +3,7 @@
 import Vorpal from 'vorpal';
 import { AwilixContainer } from 'awilix';
 import chalk from 'chalk';
+import table from 'text-table';
 
 import {
   ClearAllRequests,
@@ -47,13 +48,16 @@ export function createCli({ container }: CreateCliOptions) {
       }
 
       this.log('The following requests have been cached:');
-      requests.forEach(request => {
-        this.log(
-          chalk`{yellow ${request.getComputedId()}} ${request.method} ${
-            request.url
-          }`
-        );
-      });
+      this.log(
+        table([
+          [chalk.gray('id'), chalk.gray('method'), chalk.gray('url')],
+          ...requests.map(request => [
+            chalk.yellow(request.getComputedId()),
+            chalk.green(request.method),
+            chalk.white(request.url),
+          ]),
+        ])
+      );
     });
 
   vorpal
