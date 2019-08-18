@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { RequestRepository } from '../../domain/repository';
 import { Request, Response } from '../../domain/entity';
 

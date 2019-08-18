@@ -177,6 +177,38 @@ describe('persistResponseForRequest', () => {
     });
     expect(bodyContent).toEqual('Hello world');
   });
+
+  it('should persist no content-type as txt with their meta data', async () => {
+    // Given
+    const requestRepository = getRequestRepository();
+    const inputRequest = new Request('GET', '/text', {}, '');
+    const inputResponse = new Response(200, {}, 'Hello world');
+
+    // When
+    await requestRepository.persistResponseForRequest(
+      inputRequest,
+      inputResponse
+    );
+
+    const metadataContent = await fs.readJSON(
+      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/metadata.json`
+    );
+    const bodyContent = await fs.readFile(
+      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body.txt`,
+      'utf-8'
+    );
+
+    //Then
+    expect(metadataContent).toEqual({
+      method: 'GET',
+      status: 200,
+      url: '/text',
+      requestBody: '',
+      requestHeaders: {},
+      responseHeaders: {},
+    });
+    expect(bodyContent).toEqual('Hello world');
+  });
 });
 
 describe('getResponseByRequestId', () => {
@@ -227,6 +259,19 @@ describe('getResponseByRequestId', () => {
         JSON.stringify({ id: 'user-1', name: 'John Doe' })
       )
     );
+  });
+
+  it('should return null when the request does not exist', async () => {
+    // Given
+    const requestId = 'does-not-exist';
+
+    // When
+    const response = await requestRepositorysitory.getResponseByRequestId(
+      requestId
+    );
+
+    //Then
+    expect(response).toBeNull();
   });
 });
 
