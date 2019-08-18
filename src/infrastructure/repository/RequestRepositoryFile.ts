@@ -19,6 +19,7 @@ function isXml(contentType: string | undefined) {
   if (!contentType) {
     return false;
   }
+
   const lowerCaseContentType = contentType.toLowerCase();
 
   return (

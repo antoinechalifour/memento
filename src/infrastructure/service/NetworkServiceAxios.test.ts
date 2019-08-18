@@ -194,3 +194,32 @@ describe('Headers handling', () => {
     });
   });
 });
+
+describe('error handling', () => {
+  it('should throw an error when the error does not have a response', async () => {
+    expect.assertions(1);
+    // Given
+    ((axios as any) as jest.Mock).mockRejectedValue(
+      new Error('Failed to fetch')
+    );
+    const request = new Request(
+      'GET',
+      '/test',
+      {
+        authorization: 'bearer token',
+      },
+      ''
+    );
+    const networkService = new NetworkServiceAxios({
+      targetUrl: 'http://localhost',
+    });
+
+    // When
+    try {
+      await networkService.executeRequest(request);
+    } catch (err) {
+      // Then
+      expect(err).toBeDefined();
+    }
+  });
+});
