@@ -48,12 +48,7 @@ You can then run Memento using `npx @antoinechalifour/memento`.
 
 *Note: `npx` is a command that comes with `npm` when installing Node and enables users to run binaries without installing them manually.*
 
-### More examples
-
-- [Usage with Create React App](./examples/create-react-app)
-- [Stubbing external services for integration tests](./examples/stub-external-services)
-
-### Options
+## Options
 
 The following options are supported:
 
@@ -62,6 +57,11 @@ The following options are supported:
 | targetUrl      | The API base URL                               | http://localhost:4000 | None           |
 | port           | The port used to launch Memento                | 9876                  | 3344           |
 | cacheDirectory | The cache directory used for storing responses | memento-integration   | .memento-cache |
+
+## Examples
+
+- [Usage with Create React App](./examples/create-react-app)
+- [Stubbing external services for integration tests](./examples/stub-external-services)
 
 ## Using the CLI
 
