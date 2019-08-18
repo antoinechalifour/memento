@@ -44,12 +44,11 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 
 The following options are supported:
 
-| Option          | Description                                             | Example               | Default value  |
-| --------------- | ------------------------------------------------------- | --------------------- | -------------- |
-| target-url      | The API base URL                                        | http://localhost:4000 | None           |
-| delay           | A delay in milliseconds to be applied to each HTTP call | 1000                  | 0              |
-| port            | The port used to launch Memento                         | 9876                  | 3344           |
-| cache-directory | The cache directory used for storing responses          | memento-integration   | .memento-cache |
+| Option          | Description                                    | Example               | Default value  |
+| --------------- | ---------------------------------------------- | --------------------- | -------------- |
+| target-url      | The API base URL                               | http://localhost:4000 | None           |
+| port            | The port used to launch Memento                | 9876                  | 3344           |
+| cache-directory | The cache directory used for storing responses | memento-integration   | .memento-cache |
 
 ## Using the CLI
 

@@ -15,7 +15,6 @@ export function getTestApplication() {
   container.register({
     // Constants
     targetUrl: asValue(targetUrl),
-    delay: asValue(0),
 
     // Use cases
     respondToRequestUseCase: asClass(RespondToRequest),

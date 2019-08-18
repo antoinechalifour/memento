@@ -21,7 +21,6 @@ const container = createContainer();
 container.register({
   // Constants
   targetUrl: asValue(configuration.targetUrl),
-  delay: asValue(configuration.delay),
   cacheDirectory: asValue(configuration.cacheDirectory),
 
   // Use cases
