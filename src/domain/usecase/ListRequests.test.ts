@@ -1,25 +1,19 @@
-import { ResponseRepository } from '../repository';
+import { getTestRequestRepository } from '../../test-utils/infrastructure';
+import { RequestRepository } from '../repository';
 import { Request } from '../entity';
 import { ListRequest } from './ListRequest';
 
 let useCase: ListRequest;
-let responseRepository: ResponseRepository;
+let requestRepository: RequestRepository;
 
 beforeEach(() => {
-  responseRepository = {
-    getResponseForRequest: jest.fn().mockResolvedValue(null),
-    persistResponseForRequest: jest.fn().mockResolvedValue(null),
-    getAllRequests: jest.fn().mockResolvedValue([]),
-    deleteAll: jest.fn().mockResolvedValue(null),
-    deleteByRequestId: jest.fn().mockResolvedValue(null),
-    getRequestById: jest.fn().mockResolvedValue(null),
-  };
-  useCase = new ListRequest({ responseRepository });
+  requestRepository = getTestRequestRepository();
+  useCase = new ListRequest({ requestRepository });
 });
 
 it('should return all the requests', async () => {
   // Given
-  (responseRepository.getAllRequests as jest.Mock).mockResolvedValue([
+  (requestRepository.getAllRequests as jest.Mock).mockResolvedValue([
     new Request(
       'put',
       '/pokemon/1',

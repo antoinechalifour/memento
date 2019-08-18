@@ -1,20 +1,14 @@
-import { ResponseRepository } from '../repository';
+import { getTestRequestRepository } from '../../test-utils/infrastructure';
+import { RequestRepository } from '../repository';
 import { ClearRequest } from './ClearRequest';
 
 let useCase: ClearRequest;
-let responseRepository: ResponseRepository;
+let requestRepository: RequestRepository;
 
 beforeEach(() => {
-  responseRepository = {
-    getResponseForRequest: jest.fn().mockResolvedValue(null),
-    persistResponseForRequest: jest.fn().mockResolvedValue(null),
-    getAllRequests: jest.fn().mockResolvedValue([]),
-    deleteAll: jest.fn().mockResolvedValue(null),
-    deleteByRequestId: jest.fn().mockResolvedValue(null),
-    getRequestById: jest.fn().mockResolvedValue(null),
-  };
+  requestRepository = getTestRequestRepository();
 
-  useCase = new ClearRequest({ responseRepository });
+  useCase = new ClearRequest({ requestRepository });
 });
 
 it('should delete the request', async () => {
@@ -25,6 +19,6 @@ it('should delete the request', async () => {
   await useCase.execute(requestId);
 
   //Then
-  expect(responseRepository.deleteByRequestId).toHaveBeenCalledTimes(1);
-  expect(responseRepository.deleteByRequestId).toHaveBeenCalledWith(requestId);
+  expect(requestRepository.deleteByRequestId).toHaveBeenCalledTimes(1);
+  expect(requestRepository.deleteByRequestId).toHaveBeenCalledWith(requestId);
 });

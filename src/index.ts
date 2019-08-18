@@ -13,7 +13,7 @@ import {
   ListRequest,
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
-import { ResponseRepositoryFile } from './infrastructure/repository';
+import { RequestRepositoryFile } from './infrastructure/repository';
 
 const container = createContainer();
 
@@ -31,7 +31,7 @@ container.register({
   listRequestsUseCase: asClass(ListRequest),
 
   // Repositories
-  responseRepository: asClass(ResponseRepositoryFile).singleton(),
+  requestRepository: asClass(RequestRepositoryFile).singleton(),
 
   // Services
   networkService: asClass(NetworkServiceAxios).singleton(),

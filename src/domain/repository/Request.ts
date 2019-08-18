@@ -1,11 +1,11 @@
 import { Request, Response } from '../entity';
 
-export interface ResponseRepository {
+export interface RequestRepository {
   getRequestById(requestId: string): Promise<Request | null>;
 
   getAllRequests(): Promise<Request[]>;
 
-  getResponseForRequest(request: Request): Promise<Response | null>;
+  getResponseByRequestId(requestId: string): Promise<Response | null>;
 
   persistResponseForRequest(
     request: Request,

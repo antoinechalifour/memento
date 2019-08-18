@@ -1,30 +1,30 @@
-import { ResponseRepository } from '../repository';
+import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
 
 interface Dependencies {
-  responseRepository: ResponseRepository;
+  requestRepository: RequestRepository;
   networkService: NetworkService;
 }
 
 export class RefreshRequest {
-  private responseRepository: ResponseRepository;
+  private requestRepository: RequestRepository;
   private networkService: NetworkService;
 
-  public constructor({ responseRepository, networkService }: Dependencies) {
-    this.responseRepository = responseRepository;
+  public constructor({ requestRepository, networkService }: Dependencies) {
+    this.requestRepository = requestRepository;
     this.networkService = networkService;
   }
 
   public async execute(requestId: string) {
-    const request = await this.responseRepository.getRequestById(requestId);
+    const request = await this.requestRepository.getRequestById(requestId);
 
     if (!request) {
       throw new Error('Request not found');
     }
 
-    await this.responseRepository.deleteByRequestId(requestId);
+    await this.requestRepository.deleteByRequestId(requestId);
 
     const response = await this.networkService.executeRequest(request);
-    await this.responseRepository.persistResponseForRequest(request, response);
+    await this.requestRepository.persistResponseForRequest(request, response);
   }
 }

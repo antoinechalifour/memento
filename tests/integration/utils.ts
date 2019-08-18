@@ -3,7 +3,7 @@ import supertest from 'supertest';
 
 import { createApp } from '../../src/app';
 import { RespondToRequest } from '../../src/domain/usecase';
-import { ResponseRepositoryMemory } from '../../src/infrastructure/repository';
+import { RequestRepositoryMemory } from '../../src/infrastructure/repository';
 import { NetworkServiceAxios } from '../../src/infrastructure/service';
 import { NetworkService } from '../../src/domain/service';
 
@@ -21,7 +21,7 @@ export function getTestApplication() {
     respondToRequestUseCase: asClass(RespondToRequest),
 
     // Repositories
-    responseRepository: asClass(ResponseRepositoryMemory).singleton(),
+    requestRepository: asClass(RequestRepositoryMemory).singleton(),
 
     // Services
     networkService: asClass(NetworkServiceAxios).singleton(),

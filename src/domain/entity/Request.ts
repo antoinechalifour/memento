@@ -13,7 +13,7 @@ export class Request {
     this.headers = this.buildHeaders(headers);
   }
 
-  public getComputedId() {
+  public get id() {
     return hashObject({
       method: this.method,
       url: this.url,

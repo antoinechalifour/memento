@@ -1,33 +1,28 @@
-import { ResponseRepository } from '../repository';
+import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
 
+import {
+  getTestRequestRepository,
+  getTestNetworkService,
+} from '../../test-utils/infrastructure';
+import { wait } from '../../util/timers';
 import { Response, Request } from '../entity';
 import { RespondToRequest } from './RespondToRequest';
-import { wait } from '../../util/timers';
 
 jest.mock('../../util/timers');
 
-let responseRepository: ResponseRepository;
+let requestRepository: RequestRepository;
 let networkService: NetworkService;
 
 beforeEach(() => {
   (wait as jest.Mock).mockReset();
-  responseRepository = {
-    getResponseForRequest: jest.fn().mockResolvedValue(null),
-    persistResponseForRequest: jest.fn().mockResolvedValue(null),
-    getAllRequests: jest.fn().mockResolvedValue([]),
-    deleteAll: jest.fn().mockResolvedValue(null),
-    deleteByRequestId: jest.fn().mockResolvedValue(null),
-    getRequestById: jest.fn().mockResolvedValue(null),
-  };
-  networkService = {
-    executeRequest: jest.fn().mockResolvedValue(null),
-  };
+  requestRepository = getTestRequestRepository();
+  networkService = getTestNetworkService();
 });
 
 describe('when the response is in the cache', () => {
   beforeEach(() => {
-    (responseRepository.getResponseForRequest as jest.Mock).mockResolvedValue(
+    (requestRepository.getResponseByRequestId as jest.Mock).mockResolvedValue(
       new Response(200, { 'cache-control': 'something' }, 'some body')
     );
   });
@@ -36,7 +31,7 @@ describe('when the response is in the cache', () => {
     // Given
     const delay = 1000;
     const useCase = new RespondToRequest({
-      responseRepository,
+      requestRepository,
       networkService,
       delay,
     });
@@ -53,9 +48,9 @@ describe('when the response is in the cache', () => {
       new Response(200, { 'cache-control': 'something' }, 'some body')
     );
 
-    expect(responseRepository.getResponseForRequest).toHaveBeenCalledTimes(1);
-    expect(responseRepository.getResponseForRequest).toHaveBeenCalledWith(
-      new Request(method, url, headers, body)
+    expect(requestRepository.getResponseByRequestId).toHaveBeenCalledTimes(1);
+    expect(requestRepository.getResponseByRequestId).toHaveBeenCalledWith(
+      new Request(method, url, headers, body).id
     );
     expect(wait).toHaveBeenCalledTimes(1);
     expect(wait).toHaveBeenCalledWith(1000);
@@ -66,7 +61,7 @@ describe('when the response is in the cache', () => {
 
 describe('when no response is in the cache', () => {
   beforeEach(() => {
-    (responseRepository.getResponseForRequest as jest.Mock).mockResolvedValue(
+    (requestRepository.getResponseByRequestId as jest.Mock).mockResolvedValue(
       null
     );
     (networkService.executeRequest as jest.Mock).mockResolvedValue(
@@ -77,7 +72,7 @@ describe('when no response is in the cache', () => {
   it('should fetch the reponse from the network and store it in the cache', async () => {
     const delay = 1000;
     const useCase = new RespondToRequest({
-      responseRepository,
+      requestRepository,
       networkService,
       delay,
     });
@@ -99,10 +94,10 @@ describe('when no response is in the cache', () => {
       new Request(method, url, headers, body)
     );
 
-    expect(responseRepository.persistResponseForRequest).toHaveBeenCalledTimes(
+    expect(requestRepository.persistResponseForRequest).toHaveBeenCalledTimes(
       1
     );
-    expect(responseRepository.persistResponseForRequest).toHaveBeenCalledWith(
+    expect(requestRepository.persistResponseForRequest).toHaveBeenCalledWith(
       new Request(method, url, headers, body),
       new Response(200, { 'cache-control': 'something' }, 'some body')
     );

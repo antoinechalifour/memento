@@ -1,11 +1,11 @@
 import { wait } from '../../util/timers';
 
 import { Method, Response, Request } from '../entity';
-import { ResponseRepository } from '../repository';
+import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
 
 interface Dependencies {
-  responseRepository: ResponseRepository;
+  requestRepository: RequestRepository;
   networkService: NetworkService;
   delay: number;
 }
@@ -15,16 +15,16 @@ export interface Headers {
 }
 
 export class RespondToRequest {
-  private responseRepository: ResponseRepository;
+  private requestRepository: RequestRepository;
   private networkService: NetworkService;
   private delay: number;
 
   public constructor({
-    responseRepository,
+    requestRepository,
     networkService,
     delay,
   }: Dependencies) {
-    this.responseRepository = responseRepository;
+    this.requestRepository = requestRepository;
     this.networkService = networkService;
     this.delay = delay;
   }
@@ -37,8 +37,8 @@ export class RespondToRequest {
   ): Promise<Response> {
     const request = new Request(method, url, headers, body);
 
-    const cachedResponse = await this.responseRepository.getResponseForRequest(
-      request
+    const cachedResponse = await this.requestRepository.getResponseByRequestId(
+      request.id
     );
     let response: Response;
 
@@ -47,10 +47,7 @@ export class RespondToRequest {
     } else {
       response = await this.networkService.executeRequest(request);
 
-      await this.responseRepository.persistResponseForRequest(
-        request,
-        response
-      );
+      await this.requestRepository.persistResponseForRequest(request, response);
     }
 
     await wait(this.delay);

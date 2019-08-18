@@ -2,14 +2,14 @@ import path from 'path';
 import fs from 'fs-extra';
 
 import { Request, Response } from '../../domain/entity';
-import { ResponseRepositoryFile } from './ResponseRepositoryFile';
-import { ResponseRepository } from 'domain/repository';
+import { RequestRepository } from '../../domain/repository';
+import { RequestRepositoryFile } from './RequestRepositoryFile';
 
 const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
 const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 
-function getResponseRepository() {
-  return new ResponseRepositoryFile({
+function getRequestRepository() {
+  return new RequestRepositoryFile({
     targetUrl: 'https://pokeapi.co/api/v2',
     cacheDirectory: MEMENTO_CACHE_DIR,
   });
@@ -34,7 +34,7 @@ describe('persistResponseForRequest', () => {
     CASES.forEach(contentType => {
       it(`should persist the ${contentType} response and its meta data`, async () => {
         // Given
-        const responseRepository = getResponseRepository();
+        const requestRepository = getRequestRepository();
         const inputRequest = new Request(
           'GET',
           '/pokemon/pikachu',
@@ -52,16 +52,16 @@ describe('persistResponseForRequest', () => {
         );
 
         // When
-        await responseRepository.persistResponseForRequest(
+        await requestRepository.persistResponseForRequest(
           inputRequest,
           inputResponse
         );
 
         const metadataContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.getComputedId()}/metadata.json`
+          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.id}/metadata.json`
         );
         const bodyContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.getComputedId()}/body.json`
+          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.id}/body.json`
         );
 
         //Then
@@ -96,7 +96,7 @@ describe('persistResponseForRequest', () => {
     CASES.forEach(contentType => {
       it(`should persist the ${contentType} response and its meta data`, async () => {
         // Given
-        const responseRepository = getResponseRepository();
+        const requestRepository = getRequestRepository();
         const inputRequest = new Request('GET', '/notes', {}, '');
         const inputResponse = new Response(
           200,
@@ -107,16 +107,16 @@ describe('persistResponseForRequest', () => {
         );
 
         // When
-        await responseRepository.persistResponseForRequest(
+        await requestRepository.persistResponseForRequest(
           inputRequest,
           inputResponse
         );
 
         const metadataContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.getComputedId()}/metadata.json`
+          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.id}/metadata.json`
         );
         const bodyContent = await fs.readFile(
-          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.getComputedId()}/body.xml`,
+          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.id}/body.xml`,
           'utf-8'
         );
 
@@ -140,7 +140,7 @@ describe('persistResponseForRequest', () => {
 
   it('should persist other types as txt with their meta data', async () => {
     // Given
-    const responseRepository = getResponseRepository();
+    const requestRepository = getRequestRepository();
     const inputRequest = new Request('GET', '/text', {}, '');
     const inputResponse = new Response(
       200,
@@ -151,16 +151,16 @@ describe('persistResponseForRequest', () => {
     );
 
     // When
-    await responseRepository.persistResponseForRequest(
+    await requestRepository.persistResponseForRequest(
       inputRequest,
       inputResponse
     );
 
     const metadataContent = await fs.readJSON(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.getComputedId()}/metadata.json`
+      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.getComputedId()}/body.txt`,
+      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body.txt`,
       'utf-8'
     );
 
@@ -179,13 +179,13 @@ describe('persistResponseForRequest', () => {
   });
 });
 
-describe('getResponseForRequest', () => {
-  let responseRepository: ResponseRepository;
+describe('getResponseByRequestId', () => {
+  let requestRepositorysitory: RequestRepository;
 
   beforeEach(async () => {
-    responseRepository = getResponseRepository();
+    requestRepositorysitory = getRequestRepository();
 
-    await responseRepository.persistResponseForRequest(
+    await requestRepositorysitory.persistResponseForRequest(
       new Request(
         'GET',
         '/pokemon/pikachu',
@@ -206,7 +206,7 @@ describe('getResponseForRequest', () => {
 
   it('should deserialize the response', async () => {
     // When
-    const cachedResponse = await responseRepository.getResponseForRequest(
+    const cachedResponse = await requestRepositorysitory.getResponseByRequestId(
       new Request(
         'GET',
         '/pokemon/pikachu',
@@ -214,7 +214,7 @@ describe('getResponseForRequest', () => {
           authorization: 'Bearer token',
         },
         ''
-      )
+      ).id
     );
 
     //Then
@@ -231,10 +231,10 @@ describe('getResponseForRequest', () => {
 });
 
 describe('getAllRequests', () => {
-  let responseRepository: ResponseRepository;
+  let requestRepository: RequestRepository;
 
   beforeEach(async () => {
-    responseRepository = getResponseRepository();
+    requestRepository = getRequestRepository();
 
     const request1 = new Request(
       'post',
@@ -278,14 +278,14 @@ describe('getAllRequests', () => {
     );
 
     await Promise.all([
-      responseRepository.persistResponseForRequest(request1, response1),
-      responseRepository.persistResponseForRequest(request2, response2),
+      requestRepository.persistResponseForRequest(request1, response1),
+      requestRepository.persistResponseForRequest(request2, response2),
     ]);
   });
 
   it('should return the requests', async () => {
     // When
-    const requests = await responseRepository.getAllRequests();
+    const requests = await requestRepository.getAllRequests();
 
     //Then
     expect(requests).toEqual([
@@ -312,10 +312,10 @@ describe('getAllRequests', () => {
 });
 
 describe('getRequestById', () => {
-  let responseRepository: ResponseRepository;
+  let requestRepository: RequestRepository;
 
   beforeEach(async () => {
-    responseRepository = getResponseRepository();
+    requestRepository = getRequestRepository();
 
     const request1 = new Request(
       'post',
@@ -359,8 +359,8 @@ describe('getRequestById', () => {
     );
 
     await Promise.all([
-      responseRepository.persistResponseForRequest(request1, response1),
-      responseRepository.persistResponseForRequest(request2, response2),
+      requestRepository.persistResponseForRequest(request1, response1),
+      requestRepository.persistResponseForRequest(request2, response2),
     ]);
   });
 
@@ -369,7 +369,7 @@ describe('getRequestById', () => {
     const requestId = 'f8a26f76bdcf7d5b69d03c70c7d689727f1ec283';
 
     // When
-    const request = await responseRepository.getRequestById(requestId);
+    const request = await requestRepository.getRequestById(requestId);
 
     //Then
     expect(request).toEqual(
@@ -391,7 +391,7 @@ describe('getRequestById', () => {
     const requestId = 'not-found-id';
 
     // When
-    const request = await responseRepository.getRequestById(requestId);
+    const request = await requestRepository.getRequestById(requestId);
 
     //Then
     expect(request).toEqual(null);
@@ -399,10 +399,10 @@ describe('getRequestById', () => {
 });
 
 describe('deleteAll', () => {
-  let responseRepository: ResponseRepository;
+  let requestRepository: RequestRepository;
 
   beforeEach(async () => {
-    responseRepository = getResponseRepository();
+    requestRepository = getRequestRepository();
 
     const request1 = new Request(
       'post',
@@ -446,8 +446,8 @@ describe('deleteAll', () => {
     );
 
     await Promise.all([
-      responseRepository.persistResponseForRequest(request1, response1),
-      responseRepository.persistResponseForRequest(request2, response2),
+      requestRepository.persistResponseForRequest(request1, response1),
+      requestRepository.persistResponseForRequest(request2, response2),
     ]);
   });
 
@@ -456,20 +456,20 @@ describe('deleteAll', () => {
     const request1Id = 'fb5ca369347c9379a0c4535f1bafacb649320d77';
     const request2Id = 'f8a26f76bdcf7d5b69d03c70c7d689727f1ec283';
     const [request1Before, request2Before] = await Promise.all([
-      responseRepository.getRequestById(request1Id),
-      responseRepository.getRequestById(request2Id),
+      requestRepository.getRequestById(request1Id),
+      requestRepository.getRequestById(request2Id),
     ]);
 
     expect(request1Before).toBeTruthy();
     expect(request2Before).toBeTruthy();
 
     // When
-    await responseRepository.deleteAll();
+    await requestRepository.deleteAll();
 
     //Then
     const [request1After, request2After] = await Promise.all([
-      responseRepository.getRequestById(request1Id),
-      responseRepository.getRequestById(request2Id),
+      requestRepository.getRequestById(request1Id),
+      requestRepository.getRequestById(request2Id),
     ]);
     expect(request1After).toBeNull();
     expect(request2After).toBeNull();
@@ -477,10 +477,10 @@ describe('deleteAll', () => {
 });
 
 describe('deleteByRequestId', () => {
-  let responseRepository: ResponseRepository;
+  let requestRepository: RequestRepository;
 
   beforeEach(async () => {
-    responseRepository = getResponseRepository();
+    requestRepository = getRequestRepository();
 
     const request1 = new Request(
       'post',
@@ -524,8 +524,8 @@ describe('deleteByRequestId', () => {
     );
 
     await Promise.all([
-      responseRepository.persistResponseForRequest(request1, response1),
-      responseRepository.persistResponseForRequest(request2, response2),
+      requestRepository.persistResponseForRequest(request1, response1),
+      requestRepository.persistResponseForRequest(request2, response2),
     ]);
   });
 
@@ -533,12 +533,12 @@ describe('deleteByRequestId', () => {
     // Given
     const requestId = 'fb5ca369347c9379a0c4535f1bafacb649320d77';
 
-    const request1Before = await responseRepository.getRequestById(requestId);
+    const request1Before = await requestRepository.getRequestById(requestId);
     expect(request1Before).toBeTruthy();
 
     // When
-    await responseRepository.deleteByRequestId(requestId);
-    const request1After = await responseRepository.getRequestById(requestId);
+    await requestRepository.deleteByRequestId(requestId);
+    const request1After = await requestRepository.getRequestById(requestId);
 
     //Then
     expect(request1After).toBeNull();

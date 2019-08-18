@@ -1,2 +1,2 @@
-export * from './ResponseRepositoryMemory';
-export * from './ResponseRepositoryFile';
+export * from './RequestRepositoryMemory';
+export * from './RequestRepositoryFile';
