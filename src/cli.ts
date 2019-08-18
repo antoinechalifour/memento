@@ -19,7 +19,6 @@ interface CreateCliOptions {
 
 export function createCli({ container }: CreateCliOptions) {
   const targetUrl = container.resolve<string>('targetUrl');
-  const delay = container.resolve<number>('delay');
   const cacheDirectory = container.resolve<string>('cacheDirectory');
   const clearAllRequestsUseCase = container.resolve<ClearAllRequests>(
     'clearAllRequestsUseCase'
@@ -148,7 +147,6 @@ export function createCli({ container }: CreateCliOptions) {
               `);
   console.log(chalk`Request will be forwarded to {yellow ${targetUrl}}`);
   console.log(chalk`Cache directory is set to {yellow ${cacheDirectory}}`);
-  console.log(chalk`Applying a delay of {yellow ${delay.toString()}ms}`);
   console.log(chalk`Type {green help} to get available commands`);
 
   return vorpal;

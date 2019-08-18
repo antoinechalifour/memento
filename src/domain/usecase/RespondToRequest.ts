@@ -1,5 +1,3 @@
-import { wait } from '../../util/timers';
-
 import { Method, Response, Request } from '../entity';
 import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
@@ -7,7 +5,6 @@ import { NetworkService } from '../service';
 interface Dependencies {
   requestRepository: RequestRepository;
   networkService: NetworkService;
-  delay: number;
 }
 
 export interface Headers {
@@ -17,16 +14,10 @@ export interface Headers {
 export class RespondToRequest {
   private requestRepository: RequestRepository;
   private networkService: NetworkService;
-  private delay: number;
 
-  public constructor({
-    requestRepository,
-    networkService,
-    delay,
-  }: Dependencies) {
+  public constructor({ requestRepository, networkService }: Dependencies) {
     this.requestRepository = requestRepository;
     this.networkService = networkService;
-    this.delay = delay;
   }
 
   public async execute(
@@ -49,8 +40,6 @@ export class RespondToRequest {
 
       await this.requestRepository.persistResponseForRequest(request, response);
     }
-
-    await wait(this.delay);
 
     return response;
   }
