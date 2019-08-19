@@ -36,6 +36,14 @@ export function createCli({ container }: CreateCliOptions) {
     'getRequestDetailsUseCase'
   );
 
+  const requestsAutocomplete = {
+    data() {
+      return listRequestsUseCase
+        .execute()
+        .then(requests => requests.map(request => request.id));
+    },
+  };
+
   const vorpal = new Vorpal();
 
   vorpal.delimiter('memento$ ');
@@ -76,6 +84,7 @@ export function createCli({ container }: CreateCliOptions) {
       'clear <requestId>',
       'Removes the cached response for the provided request id'
     )
+    .autocomplete(requestsAutocomplete)
     .action(async function(this: Vorpal.CommandInstance, { requestId }) {
       this.log(chalk`Clearing request {yellow ${requestId}}...`);
       await clearRequestUseCase.execute(requestId);
@@ -87,6 +96,7 @@ export function createCli({ container }: CreateCliOptions) {
       'refresh <requestId>',
       'Refetches the request and updates the response'
     )
+    .autocomplete(requestsAutocomplete)
     .action(async function(this: Vorpal.CommandInstance, { requestId }) {
       this.log(chalk`Refetching data for request {yellow ${requestId}}...`);
       await refreshRequestUseCase.execute(requestId);
@@ -98,6 +108,7 @@ export function createCli({ container }: CreateCliOptions) {
       'info <requestId>',
       'Displays information about the request and its response'
     )
+    .autocomplete(requestsAutocomplete)
     .option('-b, --body', 'Include the response body')
     .action(async function(
       this: Vorpal.CommandInstance,
