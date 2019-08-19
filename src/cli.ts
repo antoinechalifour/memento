@@ -122,6 +122,10 @@ export function createCli({ container }: CreateCliOptions) {
       this.log(chalk`\n\n{green Response information}`);
       this.log(
         table([
+          [
+            chalk.yellow('Status code'),
+            chalk.white(response.status.toString()),
+          ],
           ...Object.keys(response.headers).map(headerName => [
             chalk.yellow(headerName),
             chalk.white(response.headers[headerName]),
