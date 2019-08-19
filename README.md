@@ -7,7 +7,6 @@
 
 <div align="center"><img src="https://github.com/antoinechalifour/memento/blob/master/cover.png?raw=true" alt="Memento screenshot"></div>
 
-
 ## Why should one use Memento?
 
 When building a UI or working on any project that rely on external services, some things can slow us down:
@@ -20,7 +19,7 @@ When building a UI or working on any project that rely on external services, som
 
 Memento acts as a development buddy that remembers the requests that your application is sending, the server response, and will respond to your app without the need for requests to go over the internet.
 
-*Pro-tip: Memento may also be used for [stubbing external services for integration or end-to-end testing](./examples/stub-external-services) 🎉*
+_Pro-tip: Memento may also be used for [stubbing external services for integration or end-to-end testing](./examples/stub-external-services) 🎉_
 
 ## Getting started
 
@@ -28,7 +27,7 @@ Memento acts as a development buddy that remembers the requests that your applic
 
 To add Memento to your project, you need to add a `.mementorc` file to your project root.
 
-*Note: you may use any other configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).*
+_Note: you may use any other configuration file supported by [cosmiconfig](https://github.com/davidtheclark/cosmiconfig)._
 
 The most basic configuration file to cache the [PunkApi](https://punkapi.com/documentation/v2) would look something like this:
 
@@ -42,23 +41,24 @@ The most basic configuration file to cache the [PunkApi](https://punkapi.com/doc
 
 You will then need to configure your app to target `http://localhost:3344` as the API url.
 
-*Note: this should only be done at development time, do not target localhost for your production build!*
+_Note: this should only be done at development time, do not target localhost for your production build!_
 
 **3. Run Memento**
 
-You can then run Memento using `npx @antoinechalifour/memento`. 
+You can then run Memento using `npx @antoinechalifour/memento`.
 
-*Note: `npx` is a command that comes with `npm` when installing Node and enables users to run binaries without installing them manually.*
+_Note: `npx` is a command that comes with `npm` when installing Node and enables users to run binaries without installing them manually._
 
 ## Options
 
 The following options are supported:
 
-| Option         | Description                                    | Example               | Default value  |
-| -------------- | ---------------------------------------------- | --------------------- | -------------- |
-| targetUrl      | The API base URL                               | http://localhost:4000 | None           |
-| port           | The port used to launch Memento                | 9876                  | 3344           |
-| cacheDirectory | The cache directory used for storing responses | memento-integration   | .memento-cache |
+| Option              | Description                                                   | Example               | Default value  |
+| ------------------- | ------------------------------------------------------------- | --------------------- | -------------- |
+| targetUrl           | The API base URL                                              | http://localhost:4000 | None           |
+| port                | The port used to launch Memento                               | 9876                  | 3344           |
+| cacheDirectory      | The cache directory used for storing responses                | memento-integration   | .memento-cache |
+| useRealResponseTime | Whether Memento should respond using the actual response time | true                  | false          |
 
 ## Examples
 

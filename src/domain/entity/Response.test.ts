@@ -61,7 +61,8 @@ describe('headers', () => {
         SOURCEMAP: 'sourcemap',
         UPGRADE: 'upgrade',
       },
-      'OK'
+      'OK',
+      0
     );
 
     // When

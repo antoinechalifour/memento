@@ -24,6 +24,7 @@ container.register({
   targetUrl: asValue(configuration.targetUrl),
   cacheDirectory: asValue(configuration.cacheDirectory),
   appVersion: asValue(version),
+  useRealResponseTime: asValue(configuration.useRealResponseTime),
 
   // Use cases
   respondToRequestUseCase: asClass(RespondToRequest),
