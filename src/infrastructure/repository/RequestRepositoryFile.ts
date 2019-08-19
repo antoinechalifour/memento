@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 
+import { getProjectDirectory, getRequestDirectory } from '../../utils/path';
 import { RequestRepository } from '../../domain/repository';
 import { Request, Response } from '../../domain/entity';
 
@@ -107,11 +108,7 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private getProjectDirectoryPath() {
-    const projectDir = this.targetUrl
-      .replace(/[:\/]/g, '_')
-      .replace(/\./g, '-');
-
-    return path.join(this.cacheDirectory, projectDir);
+    return getProjectDirectory(this.cacheDirectory, this.targetUrl);
   }
 
   private async getSubdirectories() {
@@ -134,13 +131,7 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private getRequestDirectoryPath(request: Request) {
-    const projectDirectoryPath = this.getProjectDirectoryPath();
-    const requestDirectoryPath = `${request.method.toLowerCase()}_${request.url.replace(
-      /\//g,
-      '_'
-    )}-${request.id}`;
-
-    return path.join(projectDirectoryPath, requestDirectoryPath);
+    return getRequestDirectory(this.cacheDirectory, this.targetUrl, request);
   }
 
   private getRequestMetadataFilePath(request: Request) {
