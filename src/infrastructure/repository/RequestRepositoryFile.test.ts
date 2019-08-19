@@ -209,6 +209,44 @@ describe('persistResponseForRequest', () => {
     });
     expect(bodyContent).toEqual('Hello world');
   });
+
+  it('should persist very long URLs (fixes #30)', async () => {
+    // Given
+    const requestRepository = getRequestRepository();
+    const inputRequest = new Request(
+      'GET',
+      '/really_long_url?with=some&query=parameters[get__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_url]',
+      {},
+      ''
+    );
+    const inputResponse = new Response(200, {}, 'Hello world');
+
+    // When
+    await requestRepository.persistResponseForRequest(
+      inputRequest,
+      inputResponse
+    );
+
+    const metadataContent = await fs.readJSON(
+      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/metadata.json`
+    );
+    const bodyContent = await fs.readFile(
+      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/body.txt`,
+      'utf-8'
+    );
+
+    //Then
+    expect(metadataContent).toEqual({
+      method: 'GET',
+      status: 200,
+      url:
+        '/really_long_url?with=some&query=parameters[get__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_urlget__really_long_url]',
+      requestBody: '',
+      requestHeaders: {},
+      responseHeaders: {},
+    });
+    expect(bodyContent).toEqual('Hello world');
+  });
 });
 
 describe('getResponseByRequestId', () => {

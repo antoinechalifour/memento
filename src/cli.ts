@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import Vorpal from 'vorpal';
+import path from 'path';
 import { AwilixContainer } from 'awilix';
 import chalk from 'chalk';
 import table from 'text-table';
@@ -12,6 +13,7 @@ import {
   ListRequest,
   GetRequestDetails,
 } from './domain/usecase';
+import { getRequestDirectory } from './utils/path';
 
 interface CreateCliOptions {
   container: AwilixContainer;
@@ -118,7 +120,27 @@ export function createCli({ container }: CreateCliOptions) {
         requestId
       );
 
-      this.log(chalk`{green Request information}`);
+      const requestDirectoryPath = getRequestDirectory(
+        cacheDirectory,
+        targetUrl,
+        request
+      );
+
+      this.log(chalk`{green Request cache}`);
+      this.log(
+        table([
+          [
+            chalk.yellow('Request directory'),
+            chalk.white(requestDirectoryPath),
+          ],
+          [
+            chalk.yellow('Metadata file'),
+            chalk.white(path.join(requestDirectoryPath, 'metadata.json')),
+          ],
+        ])
+      );
+
+      this.log(chalk`\n\n{green Request information}`);
       this.log(
         table([
           [chalk.yellow('Method'), chalk.white(request.method)],
