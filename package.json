@@ -23,7 +23,8 @@
     "build": "tsdx build --target node",
     "test": "tsdx test",
     "lint": "eslint --ext .ts ./src",
-    "dev": "nodemon bin/memento.js"
+    "dev": "nodemon bin/memento.js",
+    "release": "release-it"
   },
   "peerDependencies": {},
   "husky": {
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^1.1.0",
     "@types/axios": "^0.14.0",
     "@types/cosmiconfig": "^5.0.3",
     "@types/fs-extra": "^8.0.0",
@@ -65,6 +67,7 @@
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
+    "release-it": "^12.3.5",
     "supertest": "^4.0.2",
     "tsdx": "^0.7.2",
     "tslib": "^1.10.0",
