@@ -15,6 +15,7 @@ import {
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
 import { RequestRepositoryFile } from './infrastructure/repository';
+import { version } from '../package.json';
 
 const container = createContainer();
 
@@ -22,6 +23,7 @@ container.register({
   // Constants
   targetUrl: asValue(configuration.targetUrl),
   cacheDirectory: asValue(configuration.cacheDirectory),
+  appVersion: asValue(version),
 
   // Use cases
   respondToRequestUseCase: asClass(RespondToRequest),

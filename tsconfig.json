@@ -25,6 +25,7 @@
       "*": ["src/*", "node_modules/*"]
     },
     "esModuleInterop": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "resolveJsonModule": true
   }
 }
