@@ -37,6 +37,7 @@ export function createCli({ container }: CreateCliOptions) {
   const getRequestDetailsUseCase = container.resolve<GetRequestDetails>(
     'getRequestDetailsUseCase'
   );
+  const appVersion = container.resolve<string>('appVersion');
 
   const requestsAutocomplete = {
     data() {
@@ -182,6 +183,7 @@ export function createCli({ container }: CreateCliOptions) {
       |_|   |_||_______||_|   |_||_______||_|  |__|  |___|  |_______|
     }
               `);
+  console.log(chalk`Using Memento {yellow ${appVersion}}`);
   console.log(chalk`Request will be forwarded to {yellow ${targetUrl}}`);
   console.log(chalk`Cache directory is set to {yellow ${cacheDirectory}}`);
   console.log(chalk`Type {green help} to get available commands`);
