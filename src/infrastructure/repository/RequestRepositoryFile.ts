@@ -185,8 +185,9 @@ export class RequestRepositoryFile implements RequestRepository {
 
   private async writeResponseBody(request: Request, response: Response) {
     const bodyFilePath = await this.getResponseBodyFilePath(request);
+    const buffer = Buffer.from(response.body, 'binary');
 
-    await fs.writeFile(bodyFilePath, response.body);
+    await fs.writeFile(bodyFilePath, buffer);
   }
 
   private async buildResponseFromRequest(request: Request) {
