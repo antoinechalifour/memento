@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 
 import { Request, Response } from '../../domain/entity';
 import { RequestRepository } from '../../domain/repository';
+import { getRequestDirectory } from '../../utils/path';
 import { RequestRepositoryFile } from './RequestRepositoryFile';
 
 const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
@@ -48,7 +49,8 @@ describe('persistResponseForRequest', () => {
           {
             'content-type': contentType,
           },
-          JSON.stringify({ id: 'user-1', name: 'John Doe' })
+          JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+          55
         );
 
         // When
@@ -76,6 +78,7 @@ describe('persistResponseForRequest', () => {
           responseHeaders: {
             'content-type': contentType,
           },
+          responseTime: 55,
         });
         expect(bodyContent).toEqual({
           id: 'user-1',
@@ -103,7 +106,8 @@ describe('persistResponseForRequest', () => {
           {
             'content-type': contentType,
           },
-          '<Note><Author>Jane</Author><Content>Hello world</Content></Note>'
+          '<Note><Author>Jane</Author><Content>Hello world</Content></Note>',
+          55
         );
 
         // When
@@ -130,6 +134,7 @@ describe('persistResponseForRequest', () => {
           responseHeaders: {
             'content-type': contentType,
           },
+          responseTime: 55,
         });
         expect(bodyContent).toEqual(
           '<Note><Author>Jane</Author><Content>Hello world</Content></Note>'
@@ -147,7 +152,8 @@ describe('persistResponseForRequest', () => {
       {
         'content-type': 'text/plain',
       },
-      'Hello world'
+      'Hello world',
+      66
     );
 
     // When
@@ -174,6 +180,7 @@ describe('persistResponseForRequest', () => {
       responseHeaders: {
         'content-type': 'text/plain',
       },
+      responseTime: 66,
     });
     expect(bodyContent).toEqual('Hello world');
   });
@@ -182,7 +189,7 @@ describe('persistResponseForRequest', () => {
     // Given
     const requestRepository = getRequestRepository();
     const inputRequest = new Request('GET', '/text', {}, '');
-    const inputResponse = new Response(200, {}, 'Hello world');
+    const inputResponse = new Response(200, {}, 'Hello world', 77);
 
     // When
     await requestRepository.persistResponseForRequest(
@@ -206,6 +213,7 @@ describe('persistResponseForRequest', () => {
       requestBody: '',
       requestHeaders: {},
       responseHeaders: {},
+      responseTime: 77,
     });
     expect(bodyContent).toEqual('Hello world');
   });
@@ -219,7 +227,7 @@ describe('persistResponseForRequest', () => {
       {},
       ''
     );
-    const inputResponse = new Response(200, {}, 'Hello world');
+    const inputResponse = new Response(200, {}, 'Hello world', 77);
 
     // When
     await requestRepository.persistResponseForRequest(
@@ -244,18 +252,19 @@ describe('persistResponseForRequest', () => {
       requestBody: '',
       requestHeaders: {},
       responseHeaders: {},
+      responseTime: 77,
     });
     expect(bodyContent).toEqual('Hello world');
   });
 });
 
 describe('getResponseByRequestId', () => {
-  let requestRepositorysitory: RequestRepository;
+  let requestRepository: RequestRepository;
 
   beforeEach(async () => {
-    requestRepositorysitory = getRequestRepository();
+    requestRepository = getRequestRepository();
 
-    await requestRepositorysitory.persistResponseForRequest(
+    await requestRepository.persistResponseForRequest(
       new Request(
         'GET',
         '/pokemon/pikachu',
@@ -269,14 +278,15 @@ describe('getResponseByRequestId', () => {
         {
           'content-type': 'application/json',
         },
-        JSON.stringify({ id: 'user-1', name: 'John Doe' })
+        JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+        88
       )
     );
   });
 
   it('should deserialize the response', async () => {
     // When
-    const cachedResponse = await requestRepositorysitory.getResponseByRequestId(
+    const cachedResponse = await requestRepository.getResponseByRequestId(
       new Request(
         'GET',
         '/pokemon/pikachu',
@@ -294,7 +304,8 @@ describe('getResponseByRequestId', () => {
         {
           'content-type': 'application/json',
         },
-        JSON.stringify({ id: 'user-1', name: 'John Doe' })
+        JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+        88
       )
     );
   });
@@ -304,12 +315,38 @@ describe('getResponseByRequestId', () => {
     const requestId = 'does-not-exist';
 
     // When
-    const response = await requestRepositorysitory.getResponseByRequestId(
-      requestId
-    );
+    const response = await requestRepository.getResponseByRequestId(requestId);
 
     //Then
     expect(response).toBeNull();
+  });
+
+  it('should set the responseTime to 0 for older files', async () => {
+    // Given
+    const request = new Request(
+      'GET',
+      '/pokemon/pikachu',
+      {
+        authorization: 'Bearer token',
+      },
+      ''
+    );
+    const directory = getRequestDirectory(
+      MEMENTO_CACHE_DIR,
+      'https://pokeapi.co/api/v2',
+      request
+    );
+    const metadataPath = path.join(directory, 'metadata.json');
+    const metadata = await fs.readJSON(metadataPath);
+    delete metadata['responseTime'];
+    await fs.writeJson(metadataPath, metadata);
+
+    // When
+    const response = await requestRepository.getResponseByRequestId(request.id);
+
+    // Then
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expect(response!.responseTimeInMs).toEqual(0);
   });
 });
 
@@ -338,7 +375,8 @@ describe('getAllRequests', () => {
       JSON.stringify({
         id: 'pokemon-1',
         name: 'Bulbasaur',
-      })
+      }),
+      99
     );
     const request2 = new Request(
       'get',
@@ -357,7 +395,8 @@ describe('getAllRequests', () => {
       JSON.stringify({
         id: 'pokemon-151',
         name: 'Mew',
-      })
+      }),
+      100
     );
 
     await Promise.all([
@@ -419,7 +458,8 @@ describe('getRequestById', () => {
       JSON.stringify({
         id: 'pokemon-1',
         name: 'Bulbasaur',
-      })
+      }),
+      110
     );
     const request2 = new Request(
       'get',
@@ -438,7 +478,8 @@ describe('getRequestById', () => {
       JSON.stringify({
         id: 'pokemon-151',
         name: 'Mew',
-      })
+      }),
+      120
     );
 
     await Promise.all([
@@ -506,7 +547,8 @@ describe('deleteAll', () => {
       JSON.stringify({
         id: 'pokemon-1',
         name: 'Bulbasaur',
-      })
+      }),
+      130
     );
     const request2 = new Request(
       'get',
@@ -525,7 +567,8 @@ describe('deleteAll', () => {
       JSON.stringify({
         id: 'pokemon-151',
         name: 'Mew',
-      })
+      }),
+      140
     );
 
     await Promise.all([
@@ -584,7 +627,8 @@ describe('deleteByRequestId', () => {
       JSON.stringify({
         id: 'pokemon-1',
         name: 'Bulbasaur',
-      })
+      }),
+      150
     );
     const request2 = new Request(
       'get',
@@ -603,7 +647,8 @@ describe('deleteByRequestId', () => {
       JSON.stringify({
         id: 'pokemon-151',
         name: 'Mew',
-      })
+      }),
+      160
     );
 
     await Promise.all([

@@ -15,24 +15,35 @@ export class NetworkServiceAxios implements NetworkService {
   }
 
   public async executeRequest(request: Request): Promise<Response> {
-    const axiosResponse = await axios({
-      data: request.body,
-      url: `${this.targetUrl}${request.url}`,
-      headers: request.headers,
-      method: request.method,
-      transformResponse: (data: string) => data,
-    }).catch(error => {
+    const dateBefore = new Date();
+    let dateAfter: Date;
+    let axiosResponse: AxiosResponse<any>;
+
+    try {
+      axiosResponse = await axios({
+        data: request.body,
+        url: `${this.targetUrl}${request.url}`,
+        headers: request.headers,
+        method: request.method,
+        transformResponse: (data: string) => data,
+      });
+    } catch (error) {
       if (!error.response) {
         throw error;
       }
 
-      return error.response as AxiosResponse;
-    });
+      axiosResponse = error.response;
+    } finally {
+      dateAfter = new Date();
+    }
+
+    const responseTime = dateAfter.getTime() - dateBefore.getTime();
 
     return new Response(
       axiosResponse.status,
       axiosResponse.headers,
-      axiosResponse.data
+      axiosResponse.data,
+      responseTime
     );
   }
 }

@@ -14,6 +14,10 @@ function getCacheDirectory(directory: string | undefined): string {
   return directory ? path.resolve(directory) : defaultCacheDirectory;
 }
 
+function getUseRealResponseTime(useRealResponseTime: string | undefined) {
+  return useRealResponseTime ? Boolean(useRealResponseTime) : false;
+}
+
 const configExplorer = cosmiconfig('memento');
 const cosmicConfiguration = configExplorer.searchSync();
 
@@ -27,6 +31,9 @@ export const configuration = {
   targetUrl: cosmicConfiguration.config.targetUrl,
   port: getPortFromString(cosmicConfiguration.config.port),
   cacheDirectory: getCacheDirectory(cosmicConfiguration.config.cacheDirectory),
+  useRealResponseTime: getUseRealResponseTime(
+    cosmicConfiguration.config.useRealResponseTime
+  ),
 };
 
 assert(configuration.targetUrl, 'targetUrl option is required');

@@ -15,6 +15,7 @@ export function getTestApplication() {
   container.register({
     // Constants
     targetUrl: asValue(targetUrl),
+    useRealResponseTime: asValue(false),
 
     // Use cases
     respondToRequestUseCase: asClass(RespondToRequest),

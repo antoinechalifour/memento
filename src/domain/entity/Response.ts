@@ -4,7 +4,8 @@ export class Response {
   public constructor(
     public readonly status: number,
     public readonly headers: Headers,
-    public readonly body: string
+    public readonly body: string,
+    public readonly responseTimeInMs: number
   ) {
     this.headers = this.buildHeaders(headers);
   }

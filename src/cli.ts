@@ -157,6 +157,10 @@ export function createCli({ container }: CreateCliOptions) {
       this.log(
         table([
           [
+            chalk.yellow('Response Time'),
+            chalk.white(response.responseTimeInMs.toString()),
+          ],
+          [
             chalk.yellow('Status code'),
             chalk.white(response.status.toString()),
           ],

@@ -173,6 +173,7 @@ export class RequestRepositoryFile implements RequestRepository {
       status: response.status,
       requestHeaders: request.headers,
       responseHeaders: response.headers,
+      responseTime: response.responseTimeInMs,
     });
   }
 
@@ -195,7 +196,8 @@ export class RequestRepositoryFile implements RequestRepository {
     return new Response(
       parseInt(metadata.status, 10),
       metadata.responseHeaders,
-      body
+      body,
+      metadata.responseTime || 0
     );
   }
 
