@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 
 import { Request, Response } from '../../domain/entity';
 import { RequestRepository } from '../../domain/repository';
+import { getRequestDirectory } from '../../utils/path';
 import { RequestRepositoryFile } from './RequestRepositoryFile';
 
 const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
@@ -318,6 +319,34 @@ describe('getResponseByRequestId', () => {
 
     //Then
     expect(response).toBeNull();
+  });
+
+  it('should set the responseTime to 0 for older files', async () => {
+    // Given
+    const request = new Request(
+      'GET',
+      '/pokemon/pikachu',
+      {
+        authorization: 'Bearer token',
+      },
+      ''
+    );
+    const directory = getRequestDirectory(
+      MEMENTO_CACHE_DIR,
+      'https://pokeapi.co/api/v2',
+      request
+    );
+    const metadataPath = path.join(directory, 'metadata.json');
+    const metadata = await fs.readJSON(metadataPath);
+    delete metadata['responseTime'];
+    await fs.writeJson(metadataPath, metadata);
+
+    // When
+    const response = await requestRepository.getResponseByRequestId(request.id);
+
+    // Then
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expect(response!.responseTimeInMs).toEqual(0);
   });
 });
 
