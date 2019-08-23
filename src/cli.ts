@@ -173,7 +173,7 @@ export function createCli({ container }: CreateCliOptions) {
 
       if (options.body) {
         this.log(chalk`\n\n{green Response body}`);
-        this.log(response.body);
+        this.log(response.body.toString('utf-8'));
       }
     });
 

@@ -49,7 +49,7 @@ describe('persistResponseForRequest', () => {
           {
             'content-type': contentType,
           },
-          JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+          Buffer.from(JSON.stringify({ id: 'user-1', name: 'John Doe' })),
           55
         );
 
@@ -106,7 +106,9 @@ describe('persistResponseForRequest', () => {
           {
             'content-type': contentType,
           },
-          '<Note><Author>Jane</Author><Content>Hello world</Content></Note>',
+          Buffer.from(
+            '<Note><Author>Jane</Author><Content>Hello world</Content></Note>'
+          ),
           55
         );
 
@@ -152,7 +154,7 @@ describe('persistResponseForRequest', () => {
       {
         'content-type': 'text/plain',
       },
-      'Hello world',
+      Buffer.from('Hello world'),
       66
     );
 
@@ -189,7 +191,7 @@ describe('persistResponseForRequest', () => {
     // Given
     const requestRepository = getRequestRepository();
     const inputRequest = new Request('GET', '/text', {}, '');
-    const inputResponse = new Response(200, {}, 'Hello world', 77);
+    const inputResponse = new Response(200, {}, Buffer.from('Hello world'), 77);
 
     // When
     await requestRepository.persistResponseForRequest(
@@ -227,7 +229,7 @@ describe('persistResponseForRequest', () => {
       {},
       ''
     );
-    const inputResponse = new Response(200, {}, 'Hello world', 77);
+    const inputResponse = new Response(200, {}, Buffer.from('Hello world'), 77);
 
     // When
     await requestRepository.persistResponseForRequest(
@@ -278,7 +280,7 @@ describe('getResponseByRequestId', () => {
         {
           'content-type': 'application/json',
         },
-        JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+        Buffer.from(JSON.stringify({ id: 'user-1', name: 'John Doe' })),
         88
       )
     );
@@ -304,7 +306,7 @@ describe('getResponseByRequestId', () => {
         {
           'content-type': 'application/json',
         },
-        JSON.stringify({ id: 'user-1', name: 'John Doe' }),
+        Buffer.from(JSON.stringify({ id: 'user-1', name: 'John Doe' })),
         88
       )
     );
@@ -372,10 +374,12 @@ describe('getAllRequests', () => {
         'content-type': 'application/json',
         'x-custom-2': 'header-2',
       },
-      JSON.stringify({
-        id: 'pokemon-1',
-        name: 'Bulbasaur',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-1',
+          name: 'Bulbasaur',
+        })
+      ),
       99
     );
     const request2 = new Request(
@@ -392,10 +396,12 @@ describe('getAllRequests', () => {
         'content-type': 'application/json',
         'x-custom-4': 'header-4',
       },
-      JSON.stringify({
-        id: 'pokemon-151',
-        name: 'Mew',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-151',
+          name: 'Mew',
+        })
+      ),
       100
     );
 
@@ -455,10 +461,12 @@ describe('getRequestById', () => {
         'content-type': 'application/json',
         'x-custom-2': 'header-2',
       },
-      JSON.stringify({
-        id: 'pokemon-1',
-        name: 'Bulbasaur',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-1',
+          name: 'Bulbasaur',
+        })
+      ),
       110
     );
     const request2 = new Request(
@@ -475,10 +483,12 @@ describe('getRequestById', () => {
         'content-type': 'application/json',
         'x-custom-4': 'header-4',
       },
-      JSON.stringify({
-        id: 'pokemon-151',
-        name: 'Mew',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-151',
+          name: 'Mew',
+        })
+      ),
       120
     );
 
@@ -544,10 +554,12 @@ describe('deleteAll', () => {
         'content-type': 'application/json',
         'x-custom-2': 'header-2',
       },
-      JSON.stringify({
-        id: 'pokemon-1',
-        name: 'Bulbasaur',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-1',
+          name: 'Bulbasaur',
+        })
+      ),
       130
     );
     const request2 = new Request(
@@ -564,10 +576,12 @@ describe('deleteAll', () => {
         'content-type': 'application/json',
         'x-custom-4': 'header-4',
       },
-      JSON.stringify({
-        id: 'pokemon-151',
-        name: 'Mew',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-151',
+          name: 'Mew',
+        })
+      ),
       140
     );
 
@@ -624,10 +638,12 @@ describe('deleteByRequestId', () => {
         'content-type': 'application/json',
         'x-custom-2': 'header-2',
       },
-      JSON.stringify({
-        id: 'pokemon-1',
-        name: 'Bulbasaur',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-1',
+          name: 'Bulbasaur',
+        })
+      ),
       150
     );
     const request2 = new Request(
@@ -644,10 +660,12 @@ describe('deleteByRequestId', () => {
         'content-type': 'application/json',
         'x-custom-4': 'header-4',
       },
-      JSON.stringify({
-        id: 'pokemon-151',
-        name: 'Mew',
-      }),
+      Buffer.from(
+        JSON.stringify({
+          id: 'pokemon-151',
+          name: 'Mew',
+        })
+      ),
       160
     );
 

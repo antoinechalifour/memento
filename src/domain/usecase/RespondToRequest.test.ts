@@ -22,7 +22,12 @@ beforeEach(() => {
 describe('when the response is in the cache', () => {
   beforeEach(() => {
     (requestRepository.getResponseByRequestId as jest.Mock).mockResolvedValue(
-      new Response(200, { 'cache-control': 'something' }, 'some body', 66)
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
     );
   });
 
@@ -62,7 +67,12 @@ describe('when the response is in the cache', () => {
 
     //Then
     expect(response).toEqual(
-      new Response(200, { 'cache-control': 'something' }, 'some body', 66)
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
     );
 
     expect(requestRepository.getResponseByRequestId).toHaveBeenCalledTimes(1);
@@ -83,7 +93,12 @@ describe('when no response is in the cache', () => {
       null
     );
     (networkService.executeRequest as jest.Mock).mockResolvedValue(
-      new Response(200, { 'cache-control': 'something' }, 'some body', 66)
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
     );
   });
 
@@ -103,7 +118,12 @@ describe('when no response is in the cache', () => {
 
     //Then
     expect(response).toEqual(
-      new Response(200, { 'cache-control': 'something' }, 'some body', 66)
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
     );
 
     expect(networkService.executeRequest).toHaveBeenCalledTimes(1);
@@ -119,7 +139,12 @@ describe('when no response is in the cache', () => {
     );
     expect(requestRepository.persistResponseForRequest).toHaveBeenCalledWith(
       new Request(method, url, headers, body),
-      new Response(200, { 'cache-control': 'something' }, 'some body', 66)
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
     );
   });
 });

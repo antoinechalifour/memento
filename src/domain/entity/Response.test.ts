@@ -61,7 +61,7 @@ describe('headers', () => {
         SOURCEMAP: 'sourcemap',
         UPGRADE: 'upgrade',
       },
-      'OK',
+      Buffer.from('OK'),
       0
     );
 

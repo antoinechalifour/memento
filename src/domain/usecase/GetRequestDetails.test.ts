@@ -16,7 +16,7 @@ it('should return a tuple with the request and the response', async () => {
   // Given
   const requestId = 'request-id';
   const request = new Request('GET', '/test', {}, '');
-  const response = new Response(201, {}, 'Hello world', 66);
+  const response = new Response(201, {}, Buffer.from('Hello world'), 66);
 
   (requestRepository.getRequestById as jest.Mock).mockResolvedValue(request);
   (requestRepository.getResponseByRequestId as jest.Mock).mockResolvedValue(
