@@ -1150,6 +1150,11 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/lolex@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@types/lolex/-/lolex-3.1.1.tgz#d40895223e5c8f8aa64f5500c6ca4eeab067d432"
+  integrity sha512-NU2qVtKxbt4IBvjEOW1QeUnV6KGUF6hpgJyvwZt3JrXe2qmwQF0+BiazQw+iFy9qL5ie+QHOxTzXkcvJUEh76g==
+
 "@types/mime@*":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
@@ -5775,6 +5780,11 @@ log-update@^2.3.0:
     ansi-escapes "^3.0.0"
     cli-cursor "^2.0.0"
     wrap-ansi "^3.0.1"
+
+lolex@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lolex/-/lolex-4.2.0.tgz#ddbd7f6213ca1ea5826901ab1222b65d714b3cd7"
+  integrity sha512-gKO5uExCXvSm6zbF562EvM+rd1kQDnB9AZBbiQVzf1ZmdDpxUSvpnAaVOP83N/31mRK8Ml8/VE8DMvsAZQ+7wg==
 
 loose-envify@^1.0.0:
   version "1.4.0"

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import lolex from 'lolex';
 
-import { Request } from '../../domain/entity';
+import { Request, Response } from '../../domain/entity';
 import { NetworkServiceAxios } from './NetworkServiceAxios';
 
 jest.mock('axios');
@@ -196,6 +197,17 @@ describe('Headers handling', () => {
 });
 
 describe('error handling', () => {
+  let clock: lolex.Clock;
+
+  beforeEach(() => {
+    clock = lolex.install();
+  });
+
+  afterEach(() => {
+    // @ts-ignore
+    clock.uninstall();
+  });
+
   it('should throw an error when the error does not have a response', async () => {
     expect.assertions(1);
     // Given
@@ -221,5 +233,39 @@ describe('error handling', () => {
       // Then
       expect(err).toBeDefined();
     }
+  });
+
+  it('should return a response when the error has a response', async () => {
+    // Given
+    const error = new Error('Failed to fetch');
+    // @ts-ignore
+    error.response = {
+      status: 200,
+      headers: {},
+      data: Buffer.from('Ok'),
+    };
+    ((axios as any) as jest.Mock).mockImplementation(() => {
+      clock.tick(36);
+
+      return Promise.reject(error);
+    });
+
+    const request = new Request(
+      'GET',
+      '/test',
+      {
+        authorization: 'bearer token',
+      },
+      ''
+    );
+    const networkService = new NetworkServiceAxios({
+      targetUrl: 'http://localhost',
+    });
+
+    // When
+    const response = await networkService.executeRequest(request);
+
+    // Then
+    expect(response).toEqual(new Response(200, {}, Buffer.from('Ok'), 36));
   });
 });
