@@ -30,10 +30,12 @@ describe('2xx success / Plain text', () => {
   beforeEach(() => {
     nock(`${targetUrl}`)
       .get('/get-test-201')
-      .reply(201, 'Hello world');
+      .reply(201, 'Hello world', {
+        'content-type': 'text/plain; charset=utf-8',
+      });
   });
 
-  it('should forward the response', async () => {
+  it.only('should forward the response', async () => {
     // When
     const responseFromNetwork = await request.get('/get-test-201');
     const responseFromCache = await request.get('/get-test-201');

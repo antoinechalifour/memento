@@ -30,11 +30,11 @@ beforeEach(() => {
 
 HTTP_METHODS.forEach(methodName =>
   describe(`HTTP ${methodName}`, () => {
-    describe('content-type: application/json', () => {
+    describe('sending: application/json', () => {
       beforeEach(() => {
         nock(`${targetUrl}`)
           [methodName]('/json', { name: 'John' })
-          .reply(201, 'OK');
+          .reply(201, 'OK', { 'content-type': 'text/plain; charset=utf-8' });
       });
 
       it('should forward the response', async () => {
@@ -63,11 +63,11 @@ HTTP_METHODS.forEach(methodName =>
       });
     });
 
-    describe('content-type: x-www-form-urlencoded', () => {
+    describe('sending: x-www-form-urlencoded', () => {
       beforeEach(() => {
         nock(`${targetUrl}`)
           [methodName]('/x-www-form-urlencoded', 'name=John')
-          .reply(201, 'OK');
+          .reply(201, 'OK', { 'content-type': 'text/plain; charset=utf-8' });
       });
 
       it('should forward the response', async () => {
