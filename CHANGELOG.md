@@ -1,3 +1,5 @@
+# [1.2.0](https://github.com/antoinechalifour/memento/compare/1.2.0-beta.0...1.2.0) (2019-08-24)
+
 # [1.2.0-beta.0](https://github.com/antoinechalifour/memento/compare/v1.1.0...v1.2.0-beta.0) (2019-08-24)
 
 
