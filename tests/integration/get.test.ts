@@ -179,17 +179,13 @@ describe('2xx success / Headers check', () => {
       .set('Authorization', 'Bearer access-token');
 
     // Then
-    expect(responseFromNetwork.status).toBe(200);
     expect(responseFromNetwork.header['x-custom-header']).toEqual(
       'Response header example'
     );
-    expect(responseFromNetwork.text).toEqual('Hello world');
 
-    expect(responseFromCache.status).toBe(200);
     expect(responseFromCache.header['x-custom-header']).toEqual(
       'Response header example'
     );
-    expect(responseFromCache.text).toEqual('Hello world');
 
     expect(networkSpy).toHaveBeenCalledTimes(1);
   });
@@ -199,9 +195,7 @@ describe('4xx errors / Plain text', () => {
   beforeEach(() => {
     nock(`${targetUrl}`)
       .get('/get-test-403')
-      .reply(403, 'Not authorized', {
-        'content-type': 'text/plain',
-      });
+      .reply(403, 'Not authorized', { 'content-type': 'text/plain' });
   });
 
   it('should forward the response', async () => {

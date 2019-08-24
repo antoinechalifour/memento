@@ -29,7 +29,7 @@ describe('persistResponseForRequest', () => {
     const CASES = [
       'APPLICATION/JSON',
       'application/json',
-      'application/json; chartset=UTF-8;',
+      'application/json; charset=utf-8',
     ];
 
     CASES.forEach(contentType => {
@@ -92,6 +92,7 @@ describe('persistResponseForRequest', () => {
     const CASES = [
       'APPLICATION/XML',
       'application/xml',
+      'application/xml; charset=utf-8',
       'TEXT/XML',
       'text/xml',
     ];
@@ -203,7 +204,7 @@ describe('persistResponseForRequest', () => {
       `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body.txt`,
+      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body`,
       'utf-8'
     );
 
@@ -241,7 +242,7 @@ describe('persistResponseForRequest', () => {
       `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/body.txt`,
+      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/body`,
       'utf-8'
     );
 
