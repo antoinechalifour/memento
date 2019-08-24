@@ -35,7 +35,7 @@ describe('2xx success / Plain text', () => {
       });
   });
 
-  it.only('should forward the response', async () => {
+  it('should forward the response', async () => {
     // When
     const responseFromNetwork = await request.get('/get-test-201');
     const responseFromCache = await request.get('/get-test-201');
@@ -164,6 +164,7 @@ describe('2xx success / Headers check', () => {
       .get('/get-test-header')
       .matchHeader('Authorization', 'Bearer access-token')
       .reply(200, 'Hello world', {
+        'content-type': 'text/plain',
         'x-custom-header': 'Response header example',
       });
   });
@@ -198,7 +199,9 @@ describe('4xx errors / Plain text', () => {
   beforeEach(() => {
     nock(`${targetUrl}`)
       .get('/get-test-403')
-      .reply(403, 'Not authorized');
+      .reply(403, 'Not authorized', {
+        'content-type': 'text/plain',
+      });
   });
 
   it('should forward the response', async () => {
