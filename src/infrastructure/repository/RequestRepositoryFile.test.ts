@@ -6,7 +6,10 @@ import { RequestRepository } from '../../domain/repository';
 import { getRequestDirectory } from '../../utils/path';
 import { RequestRepositoryFile } from './RequestRepositoryFile';
 
-const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
+const MEMENTO_CACHE_DIR = path.join(
+  __dirname,
+  '../../../.memento-test-cache-request-repository'
+);
 const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 
 function getRequestRepository() {

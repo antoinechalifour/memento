@@ -5,7 +5,10 @@ import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { Request, Response } from '../../domain/entity';
 import { moveTxtToProperFileTypeMigration } from './1-txt-to-proper-file-type';
 
-const MEMENTO_CACHE_DIR = path.join(__dirname, '../../../.memento-test-cache');
+const MEMENTO_CACHE_DIR = path.join(
+  __dirname,
+  '../../../.memento-test-cache-migration-file-extensions'
+);
 const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 let requestRepository: RequestRepositoryFile;
 
