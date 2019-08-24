@@ -1,32 +1,17 @@
 import path from 'path';
 import fs from 'fs-extra';
 
-import { getProjectDirectory, getRequestDirectory } from '../../utils/path';
+import {
+  getProjectDirectory,
+  getRequestDirectory,
+  getFileExtension,
+} from '../../utils/path';
 import { RequestRepository } from '../../domain/repository';
 import { Request, Response } from '../../domain/entity';
 
 interface Dependencies {
   targetUrl: string;
   cacheDirectory: string;
-}
-
-function isJson(contentType: string | undefined) {
-  return (
-    contentType && contentType.toLowerCase().indexOf('application/json') >= 0
-  );
-}
-
-function isXml(contentType: string | undefined) {
-  if (!contentType) {
-    return false;
-  }
-
-  const lowerCaseContentType = contentType.toLowerCase();
-
-  return (
-    lowerCaseContentType.indexOf('application/xml') >= 0 ||
-    lowerCaseContentType.indexOf('text/xml') >= 0
-  );
 }
 
 export class RequestRepositoryFile implements RequestRepository {
@@ -141,19 +126,11 @@ export class RequestRepositoryFile implements RequestRepository {
   private async getResponseBodyFilePath(request: Request) {
     const metadata = await this.getRequestMetaData(request);
     const contentType = metadata.responseHeaders['content-type'];
-    let fileExtension: string;
-
-    if (isJson(contentType)) {
-      fileExtension = 'json';
-    } else if (isXml(contentType)) {
-      fileExtension = 'xml';
-    } else {
-      fileExtension = 'txt';
-    }
+    const fileExtension = getFileExtension(contentType);
 
     return path.join(
       this.getRequestDirectoryPath(request),
-      `body.${fileExtension}`
+      `body${fileExtension}`
     );
   }
 

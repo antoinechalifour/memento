@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 
-const { Memento, createCli } = require('../dist');
+const { Memento, createCli, runMigrations } = require('../dist');
 
 const memento = Memento();
 
-memento.run().then(() => {
-  createCli({ container: memento.container }).show();
-});
+memento
+  .run()
+  .then(() => runMigrations(memento.container))
+  .then(() => {
+    createCli({ container: memento.container }).show();
+  });
 
 function stopServer() {
   memento.stop();
