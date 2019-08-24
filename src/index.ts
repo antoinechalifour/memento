@@ -4,6 +4,7 @@ import { createContainer, asClass, asValue } from 'awilix';
 
 import { createCli } from './cli';
 import { createApp } from './app';
+import { runMigrations } from './migrations';
 import { configuration } from './configuration';
 import {
   RespondToRequest,
@@ -59,4 +60,4 @@ export function Memento({ cacheDirectory }: MementoOptions = {}) {
   };
 }
 
-export { createCli };
+export { createCli, runMigrations };
