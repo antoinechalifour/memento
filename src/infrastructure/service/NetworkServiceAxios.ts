@@ -25,7 +25,7 @@ export class NetworkServiceAxios implements NetworkService {
         url: `${this.targetUrl}${request.url}`,
         headers: request.headers,
         method: request.method,
-        transformResponse: (data: string) => data,
+        responseType: 'arraybuffer',
       });
     } catch (error) {
       if (!error.response) {

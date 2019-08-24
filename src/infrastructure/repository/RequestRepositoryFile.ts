@@ -196,7 +196,7 @@ export class RequestRepositoryFile implements RequestRepository {
     return new Response(
       parseInt(metadata.status, 10),
       metadata.responseHeaders,
-      body,
+      Buffer.from(body),
       metadata.responseTime || 0
     );
   }

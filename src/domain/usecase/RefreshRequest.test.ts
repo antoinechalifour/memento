@@ -24,7 +24,12 @@ beforeEach(() => {
 
   networkService = getTestNetworkService();
   (networkService.executeRequest as jest.Mock).mockResolvedValue(
-    new Response(200, { 'content-type': 'application/json' }, 'OK', 66)
+    new Response(
+      200,
+      { 'content-type': 'application/json' },
+      Buffer.from('OK'),
+      66
+    )
   );
 
   useCase = new RefreshRequest({ requestRepository, networkService });
@@ -48,7 +53,12 @@ it('should clear the request and refetch it', async () => {
       { authorization: 'Bearer token' },
       ''
     ),
-    new Response(200, { 'content-type': 'application/json' }, 'OK', 66)
+    new Response(
+      200,
+      { 'content-type': 'application/json' },
+      Buffer.from('OK'),
+      66
+    )
   );
 });
 
