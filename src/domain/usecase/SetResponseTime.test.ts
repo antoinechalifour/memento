@@ -28,6 +28,30 @@ describe('when the request is not found', () => {
   });
 });
 
+describe('when the response is not found', () => {
+  it('should throw an error', async () => {
+    expect.assertions(1);
+
+    // Given
+    (requestRepository.getRequestById as jest.Mock).mockResolvedValue(
+      new Request('get', '/test', {}, '')
+    );
+    (requestRepository.getResponseByRequestId as jest.Mock).mockResolvedValue(
+      null
+    );
+
+    const useCase = new SetResponseTime({ requestRepository });
+
+    // When
+    try {
+      await useCase.execute('', 0);
+    } catch (err) {
+      //Then
+      expect(err).toEqual(new Error('Response not found'));
+    }
+  });
+});
+
 describe('when the request is found', () => {
   it('should set the response time', async () => {
     // Given
