@@ -13,9 +13,11 @@ import {
   ListRequest,
   GetRequestDetails,
   SetResponseTime,
+  ImportCurl,
 } from './domain/usecase';
 import { DisableCachePattern } from './domain/entity';
 import { getRequestDirectory } from './utils/path';
+import { clearStdOut } from './utils/cli';
 
 interface CreateCliOptions {
   container: AwilixContainer;
@@ -45,6 +47,7 @@ export function createCli({ container }: CreateCliOptions) {
   const setResponseTimeUseCase = container.resolve<SetResponseTime>(
     'setResponseTimeUseCase'
   );
+  const importCurlUseCase = container.resolve<ImportCurl>('importCurlUseCase');
   const appVersion = container.resolve<string>('appVersion');
 
   const requestsAutocomplete = {
@@ -199,6 +202,32 @@ export function createCli({ container }: CreateCliOptions) {
       );
       setResponseTimeUseCase.execute(requestId, responseTimeInMs);
       this.log('Done.');
+    });
+
+  vorpal
+    .command(
+      'import curl <curlCommand>',
+      'Parses the CURL command and caches an empty response for it'
+    )
+    .action(async function(this: Vorpal.CommandInstance, { curlCommand }) {
+      // This tricks clear the output, to avoid the "pyramid bug" with Vorpal
+      // See: https://github.com/dthree/vorpal/issues/127
+      // See: https://github.com/dthree/vorpal/issues/345
+      // See: https://github.com/dthree/vorpal/issues/23
+      clearStdOut();
+
+      this.log('Importing cURL request...');
+      const request = await importCurlUseCase.execute(curlCommand);
+      const requestDirectory = getRequestDirectory(
+        cacheDirectory,
+        targetUrl,
+        request
+      );
+
+      this.log(chalk`Request {yellow ${request.id}} has been created.`);
+      this.log(
+        chalk`You may edit the request information at {yellow ${requestDirectory}}`
+      );
     });
 
   console.log(chalk`{green 
