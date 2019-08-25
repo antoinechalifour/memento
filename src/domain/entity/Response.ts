@@ -5,7 +5,7 @@ export class Response {
     public readonly status: number,
     public readonly headers: Headers,
     public readonly body: Buffer,
-    public readonly responseTimeInMs: number
+    public responseTimeInMs: number
   ) {
     this.headers = this.buildHeaders(headers);
   }

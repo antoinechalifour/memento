@@ -13,6 +13,7 @@ import {
   RefreshRequest,
   ListRequest,
   GetRequestDetails,
+  SetResponseTime,
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
 import { RequestRepositoryFile } from './infrastructure/repository';
@@ -34,6 +35,7 @@ container.register({
   refreshRequestUseCase: asClass(RefreshRequest),
   listRequestsUseCase: asClass(ListRequest),
   getRequestDetailsUseCase: asClass(GetRequestDetails),
+  setResponseTimeUseCase: asClass(SetResponseTime),
 
   // Repositories
   requestRepository: asClass(RequestRepositoryFile).singleton(),
