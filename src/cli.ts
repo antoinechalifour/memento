@@ -12,6 +12,7 @@ import {
   RefreshRequest,
   ListRequest,
   GetRequestDetails,
+  SetResponseTime,
 } from './domain/usecase';
 import { getRequestDirectory } from './utils/path';
 
@@ -36,6 +37,9 @@ export function createCli({ container }: CreateCliOptions) {
   );
   const getRequestDetailsUseCase = container.resolve<GetRequestDetails>(
     'getRequestDetailsUseCase'
+  );
+  const setResponseTimeUseCase = container.resolve<SetResponseTime>(
+    'setResponseTimeUseCase'
   );
   const appVersion = container.resolve<string>('appVersion');
 
@@ -175,6 +179,18 @@ export function createCli({ container }: CreateCliOptions) {
         this.log(chalk`\n\n{green Response body}`);
         this.log(response.body.toString('utf-8'));
       }
+    });
+
+  vorpal
+    .command(
+      'set response-time <requestId> <responseTime>',
+      'Sets the response time for the provided request'
+    )
+    .action(async function(
+      this: Vorpal.CommandInstance,
+      { requestId, responseTime }
+    ) {
+      setResponseTimeUseCase.execute(requestId, responseTime);
     });
 
   console.log(chalk`{green 
