@@ -183,14 +183,18 @@ export function createCli({ container }: CreateCliOptions) {
 
   vorpal
     .command(
-      'set response-time <requestId> <responseTime>',
-      'Sets the response time for the provided request'
+      'set response-time <requestId> <responseTimeInMs>',
+      'Sets the response time for the provided request id'
     )
     .action(async function(
       this: Vorpal.CommandInstance,
-      { requestId, responseTime }
+      { requestId, responseTimeInMs }
     ) {
-      setResponseTimeUseCase.execute(requestId, responseTime);
+      this.log(
+        chalk`Setting response time to {yellow ${responseTimeInMs}ms} for request {yellow ${requestId}}...`
+      );
+      setResponseTimeUseCase.execute(requestId, responseTimeInMs);
+      this.log('Done.');
     });
 
   console.log(chalk`{green 
