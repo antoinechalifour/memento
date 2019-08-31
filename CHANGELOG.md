@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/antoinechalifour/memento/compare/1.2.0...1.3.0) (2019-08-31)
+
+
+### Features
+
+* add command for changing response time ([#46](https://github.com/antoinechalifour/memento/issues/46)) ([63bcbd6](https://github.com/antoinechalifour/memento/commit/63bcbd6)), closes [#45](https://github.com/antoinechalifour/memento/issues/45)
+* add option for disabling caching ([#56](https://github.com/antoinechalifour/memento/issues/56)) ([bfcd59b](https://github.com/antoinechalifour/memento/commit/bfcd59b))
+
 # [1.2.0](https://github.com/antoinechalifour/memento/compare/1.2.0-beta.0...1.2.0) (2019-08-24)
 
 # [1.2.0-beta.0](https://github.com/antoinechalifour/memento/compare/v1.1.0...v1.2.0-beta.0) (2019-08-24)
