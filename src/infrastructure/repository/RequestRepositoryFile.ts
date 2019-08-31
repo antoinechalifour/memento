@@ -194,7 +194,7 @@ export class RequestRepositoryFile implements RequestRepository {
     const subdirectories = await this.getSubdirectories();
 
     for (const subdirectory of subdirectories) {
-      const regexp = new RegExp(`-${requestId}$`);
+      const regexp = new RegExp(`${requestId}$`);
 
       if (regexp.test(subdirectory)) {
         return subdirectory;

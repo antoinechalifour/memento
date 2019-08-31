@@ -1,0 +1,30 @@
+{
+  "method": "GET",
+  "url": "/pokemon/meowth",
+  "requestBody": "",
+  "status": 200,
+  "requestHeaders": { "user-agent": "curl/7.54.0", "accept": "*/*" },
+  "responseHeaders": {
+    "date": "Sat, 31 Aug 2019 19:05:45 GMT",
+    "content-type": "application/json; charset=utf-8",
+    "set-cookie": [
+      "__cfduid=d1234fc95536b4d481041a172f387d9f71567278345; expires=Sun, 30-Aug-20 19:05:45 GMT; path=/; domain=.pokeapi.co; HttpOnly; Secure"
+    ],
+    "cache-control": "public, max-age=86400, s-maxage=86400",
+    "etag": "W/\"34393-Jb5X697Wmm+HVhBBOoRymSpbtXI\"",
+    "function-execution-id": "zhc43w5qggii",
+    "x-powered-by": "Express",
+    "x-cloud-trace-context": "411a2664751f729e6126462cc3dd3aa2",
+    "x-served-by": "cache-lcy19262-LCY",
+    "x-cache": "MISS",
+    "x-cache-hits": "0",
+    "x-timer": "S1565899545.565590,VS0,VE1670",
+    "vary": "accept-encoding, x-fh-requested-host, cookie, authorization",
+    "cf-cache-status": "HIT",
+    "age": "15010",
+    "expect-ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+    "server": "cloudflare",
+    "cf-ray": "50f1471c58e53baf-CDG"
+  },
+  "responseTime": 198
+}

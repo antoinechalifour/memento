@@ -15,13 +15,8 @@ export function getRequestDirectory(
   request: Request
 ) {
   const projectDirectoryPath = getProjectDirectory(cacheDirectory, targetUrl);
-  const trimmedUrl = request.url.slice(0, 16);
-  const requestDirectoryPath = `${request.method.toLowerCase()}_${trimmedUrl.replace(
-    /\//g,
-    '_'
-  )}-${request.id}`;
 
-  return path.join(projectDirectoryPath, requestDirectoryPath);
+  return path.join(projectDirectoryPath, request.id);
 }
 
 const extensionsMap = new Map<string, string>();
