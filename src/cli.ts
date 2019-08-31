@@ -14,6 +14,7 @@ import {
   GetRequestDetails,
   SetResponseTime,
 } from './domain/usecase';
+import { DisableCachePattern } from './domain/entity';
 import { getRequestDirectory } from './utils/path';
 
 interface CreateCliOptions {
@@ -23,6 +24,9 @@ interface CreateCliOptions {
 export function createCli({ container }: CreateCliOptions) {
   const targetUrl = container.resolve<string>('targetUrl');
   const cacheDirectory = container.resolve<string>('cacheDirectory');
+  const disableCachingPatterns = container.resolve<DisableCachePattern[]>(
+    'disableCachingPatterns'
+  );
   const clearAllRequestsUseCase = container.resolve<ClearAllRequests>(
     'clearAllRequestsUseCase'
   );
@@ -210,6 +214,16 @@ export function createCli({ container }: CreateCliOptions) {
   console.log(chalk`Using Memento {yellow ${appVersion}}`);
   console.log(chalk`Request will be forwarded to {yellow ${targetUrl}}`);
   console.log(chalk`Cache directory is set to {yellow ${cacheDirectory}}`);
+
+  if (disableCachingPatterns.length) {
+    console.log(chalk`Caching will be disabled for the following patterns:`);
+
+    disableCachingPatterns.forEach(option => {
+      console.log(
+        chalk`\t- {green ${option.method}} {yellow ${option.urlPattern}}`
+      );
+    });
+  }
   console.log(chalk`Type {green help} to get available commands`);
 
   return vorpal;

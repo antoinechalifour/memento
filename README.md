@@ -53,12 +53,41 @@ _Note: `npx` is a command that comes with `npm` when installing Node and enables
 
 The following options are supported:
 
-| Option              | Description                                                   | Example               | Default value  |
-| ------------------- | ------------------------------------------------------------- | --------------------- | -------------- |
-| targetUrl           | The API base URL                                              | http://localhost:4000 | None           |
-| port                | The port used to launch Memento                               | 9876                  | 3344           |
-| cacheDirectory      | The cache directory used for storing responses                | memento-integration   | .memento-cache |
-| useRealResponseTime | Whether Memento should respond using the actual response time | true                  | false          |
+| Option                 | Description                                                   | Example                                                | Default value  |
+| ---------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | -------------- |
+| targetUrl              | The API base URL                                              | http://localhost:4000                                  | None           |
+| port                   | The port used to launch Memento                               | 9876                                                   | 3344           |
+| cacheDirectory         | The cache directory used for storing responses                | memento-integration                                    | .memento-cache |
+| useRealResponseTime    | Whether Memento should respond using the actual response time | true                                                   | false          |
+| disableCachingPatterns | An array of patterns used to ignore caching certain requests  | [{ method: 'post', urlPattern: '/pokemon/*/sprites' }] | []             |
+
+### Option: disableCachingPatterns
+
+You may use `disableCachingPatterns` in your configuration to tell Memento to ignore caching responses based on the request method and URL. As an example, if you wish to not cache routes likes `/pokemon/mew/abilities` and `pokemon/ditto/abilities`, you may use the following configuration :
+
+```
+{
+  // ... your configuration
+  "disableCachingPatterns": [{
+    "method": "GET",
+    "urlPattern": "/pokemon/*/abilities"
+  }]
+}
+```
+
+The [minimatch](https://www.npmjs.com/package/minimatch) package is used for comparing glob patterns and the actual url. You may use a tool like [globtester](http://www.globtester.com) to test your configurations.
+
+### Recipe: ignore caching all POST requests
+
+```
+{
+  // ... your configuration
+  "disableCachingPatterns": [{
+    "method": "post",
+    "urlPattern": "**"
+  }]
+}
+```
 
 ## Examples
 

@@ -27,6 +27,7 @@ container.register({
   cacheDirectory: asValue(configuration.cacheDirectory),
   appVersion: asValue(version),
   useRealResponseTime: asValue(configuration.useRealResponseTime),
+  disableCachingPatterns: asValue(configuration.disableCachingPatterns),
 
   // Use cases
   respondToRequestUseCase: asClass(RespondToRequest),

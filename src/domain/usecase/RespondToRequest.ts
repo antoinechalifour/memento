@@ -1,5 +1,7 @@
+import minimatch from 'minimatch';
+
 import { wait } from '../../utils/timers';
-import { Method, Response, Request } from '../entity';
+import { Method, Response, Request, DisableCachePattern } from '../entity';
 import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
 
@@ -7,6 +9,7 @@ interface Dependencies {
   requestRepository: RequestRepository;
   networkService: NetworkService;
   useRealResponseTime: boolean;
+  disableCachingPatterns: DisableCachePattern[];
 }
 
 export interface Headers {
@@ -17,15 +20,18 @@ export class RespondToRequest {
   private requestRepository: RequestRepository;
   private networkService: NetworkService;
   private useRealResponseTime: boolean;
+  private disableCachingPatterns: DisableCachePattern[];
 
   public constructor({
     requestRepository,
     networkService,
     useRealResponseTime,
+    disableCachingPatterns,
   }: Dependencies) {
     this.requestRepository = requestRepository;
     this.networkService = networkService;
     this.useRealResponseTime = useRealResponseTime;
+    this.disableCachingPatterns = disableCachingPatterns;
   }
 
   public async execute(
@@ -35,6 +41,10 @@ export class RespondToRequest {
     body: string
   ): Promise<Response> {
     const request = new Request(method, url, headers, body);
+
+    if (this.shouldIgnoreCaching(method, url)) {
+      return this.networkService.executeRequest(request);
+    }
 
     const cachedResponse = await this.requestRepository.getResponseByRequestId(
       request.id
@@ -54,5 +64,15 @@ export class RespondToRequest {
     }
 
     return response;
+  }
+
+  private shouldIgnoreCaching(method: Method, url: string) {
+    return this.disableCachingPatterns.some(disableCacheParams => {
+      const methodMatch =
+        method.toLowerCase() === disableCacheParams.method.toLowerCase();
+      const globMatch = minimatch(url, disableCacheParams.urlPattern);
+
+      return methodMatch && globMatch;
+    });
   }
 }
