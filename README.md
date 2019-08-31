@@ -59,7 +59,7 @@ The following options are supported:
 | port                   | The port used to launch Memento                               | 9876                                                   | 3344           |
 | cacheDirectory         | The cache directory used for storing responses                | memento-integration                                    | .memento-cache |
 | useRealResponseTime    | Whether Memento should respond using the actual response time | true                                                   | false          |
-| disableCachingPatterns | An array of patterns usd to ignore caching certain requests   | [{ method: 'post', urlPattern: '/pokemon/*/sprites' }] | []             |
+| disableCachingPatterns | An array of patterns used to ignore caching certain requests  | [{ method: 'post', urlPattern: '/pokemon/*/sprites' }] | []             |
 
 ### Option: disableCachingPatterns
 
