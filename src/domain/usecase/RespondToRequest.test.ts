@@ -37,6 +37,7 @@ describe('when the response is in the cache', () => {
       requestRepository,
       networkService,
       useRealResponseTime: false,
+      disableCachingPatterns: [],
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -56,6 +57,7 @@ describe('when the response is in the cache', () => {
       requestRepository,
       networkService,
       useRealResponseTime: true,
+      disableCachingPatterns: [],
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -107,6 +109,12 @@ describe('when no response is in the cache', () => {
       requestRepository,
       networkService,
       useRealResponseTime: true,
+      disableCachingPatterns: [
+        {
+          method: 'POST',
+          urlPattern: '/beers/1',
+        },
+      ],
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -139,6 +147,223 @@ describe('when no response is in the cache', () => {
     );
     expect(requestRepository.persistResponseForRequest).toHaveBeenCalledWith(
       new Request(method, url, headers, body),
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+});
+
+describe('when caching is disabled for the method and url', () => {
+  beforeEach(() => {
+    (networkService.executeRequest as jest.Mock).mockResolvedValue(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (1 matching pattern)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'post',
+          urlPattern: '/pokemon/ditto',
+        },
+      ],
+    });
+    const method = 'POST';
+    const url = '/pokemon/ditto';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (3 patterns / 1 matching pattern)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'POST',
+          urlPattern: '/pokemon/ditto',
+        },
+        {
+          method: 'get',
+          urlPattern: '/pokemon/ditto',
+        },
+        {
+          method: 'post',
+          urlPattern: '/pokemon/ditto?format=true',
+        },
+      ],
+    });
+    const method = 'POST';
+    const url = '/pokemon/ditto';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (glob style)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'post',
+          urlPattern: '/pokemon/ditto*',
+        },
+      ],
+    });
+    const method = 'POST';
+    const url = '/pokemon/ditto?format=true';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (glob style)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'get',
+          urlPattern: '/pokemon/mew',
+        },
+      ],
+    });
+    const method = 'GET';
+    const url = '/pokemon/mew/';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (nested route)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'get',
+          urlPattern: '/pokemon/mew/**/*',
+        },
+      ],
+    });
+    const method = 'GET';
+    const url = '/pokemon/mew/abilities/2/stats';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
+      new Response(
+        200,
+        { 'cache-control': 'something' },
+        Buffer.from('some body'),
+        66
+      )
+    );
+  });
+
+  it('should not cache the response (nested route)', async () => {
+    // Given
+    const useCase = new RespondToRequest({
+      networkService,
+      requestRepository,
+      useRealResponseTime: false,
+      disableCachingPatterns: [
+        {
+          method: 'get',
+          urlPattern: '/pokemon/*/sprites/**',
+        },
+        {
+          method: 'post',
+          urlPattern: '/pokemon/*/sprites/**',
+        },
+      ],
+    });
+    const method = 'GET';
+    const url = '/pokemon/mew/sprites/2/back';
+
+    // When
+    const response = await useCase.execute(method, url, {}, '');
+
+    //Then
+    expect(requestRepository.persistResponseForRequest).not.toHaveBeenCalled();
+    expect(requestRepository.getResponseByRequestId).not.toHaveBeenCalled();
+    expect(response).toEqual(
       new Response(
         200,
         { 'cache-control': 'something' },

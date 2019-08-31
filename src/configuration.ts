@@ -34,6 +34,16 @@ export const configuration = {
   useRealResponseTime: getUseRealResponseTime(
     cosmicConfiguration.config.useRealResponseTime
   ),
+  disableCachingPatterns:
+    cosmicConfiguration.config.disableCachingPatterns || [],
 };
 
 assert(configuration.targetUrl, 'targetUrl option is required');
+
+configuration.disableCachingPatterns.forEach((option: any) => {
+  assert(option.method, 'Invalid disableCachingPatterns: method is required');
+  assert(
+    option.urlPattern,
+    'Invalid disableCachingPatterns: urlPattern is required'
+  );
+});

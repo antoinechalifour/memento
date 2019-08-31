@@ -16,6 +16,7 @@ export function getTestApplication() {
     // Constants
     targetUrl: asValue(targetUrl),
     useRealResponseTime: asValue(false),
+    disableCachingPatterns: asValue([]),
 
     // Use cases
     respondToRequestUseCase: asClass(RespondToRequest),
