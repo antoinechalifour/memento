@@ -180,3 +180,43 @@ describe('requests respecting the new format', () => {
     expect(oldFileExists).toBe(true);
   });
 });
+
+describe('request that already have been migrated', () => {
+  it('should do nothing', async () => {
+    beforeEach(async () => {
+      const requestDirectory = getOutputFilePath(
+        'bb4032a14daf7b56f8f9f4312ce139543bc9a281'
+      );
+
+      await fs.ensureDir(requestDirectory);
+      await fs.writeFile(
+        path.join(requestDirectory, 'body.xml'),
+        '<text>something</text>'
+      );
+      await fs.writeJson(path.join(requestDirectory, 'metadata.json'), {
+        method: 'GET',
+        url: '/new-format',
+        requestBody: '',
+        status: 200,
+        requestHeaders: {},
+        responseHeaders: { 'content-type': 'application/xml' },
+        responseTime: 0,
+      });
+    });
+  });
+
+  it('should not move the body file', async () => {
+    // When
+    await moveTxtToProperFileTypeMigration({
+      targetUrl: 'https://pokeapi.co/api/v2',
+      cacheDirectory: MEMENTO_CACHE_DIR,
+    });
+
+    // Then
+    const oldFileExists = await fs.pathExists(
+      getOutputFilePath('bb4032a14daf7b56f8f9f4312ce139543bc9a281')
+    );
+
+    expect(oldFileExists).toBe(true);
+  });
+});

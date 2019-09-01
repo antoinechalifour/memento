@@ -39,6 +39,11 @@ export async function moveTxtToProperFileTypeMigration({
   for (const request of allRequests) {
     const requestDirectoryName = getRequestDirectoryName(request);
     const requestDirectory = path.join(projectFullPath, requestDirectoryName);
+    const requestDirectoryExists = await fs.pathExists(requestDirectory);
+
+    if (!requestDirectoryExists) {
+      continue;
+    }
 
     // Read the metadata
     const metadatafile = await fs.readJson(
