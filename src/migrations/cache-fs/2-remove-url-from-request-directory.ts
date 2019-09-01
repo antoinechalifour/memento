@@ -1,20 +1,22 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { RequestRepository } from '../../domain/repository';
+import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { getProjectDirectory } from '../../utils/path';
 
 export interface Dependencies {
   targetUrl: string;
   cacheDirectory: string;
-  requestRepository: RequestRepository;
 }
 
 export async function moveRequestsToIdDirectories({
   targetUrl,
   cacheDirectory,
-  requestRepository,
 }: Dependencies) {
+  const requestRepository = new RequestRepositoryFile({
+    targetUrl,
+    cacheDirectory,
+  });
   const projectDirectoryPath = getProjectDirectory(cacheDirectory, targetUrl);
   const allRequests = await requestRepository.getAllRequests();
 

@@ -1,7 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { moveRequestsToIdDirectories } from './2-remove-url-from-request-directory';
 
 const MEMENTO_CACHE_DIR = path.join(
@@ -12,7 +11,6 @@ const OUTPUT_DIRECTORY = path.join(
   MEMENTO_CACHE_DIR,
   'https___pokeapi-co_api_v2'
 );
-let requestRepository: RequestRepositoryFile;
 
 afterAll(() => {
   fs.removeSync(MEMENTO_CACHE_DIR);
@@ -20,11 +18,6 @@ afterAll(() => {
 
 beforeEach(() => {
   fs.removeSync(MEMENTO_CACHE_DIR);
-
-  requestRepository = new RequestRepositoryFile({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
-  });
 });
 
 it('should move all old directories to a folder which name is the request id', async () => {
@@ -48,7 +41,6 @@ it('should move all old directories to a folder which name is the request id', a
   await moveRequestsToIdDirectories({
     targetUrl: 'https://pokeapi.co/api/v2',
     cacheDirectory: MEMENTO_CACHE_DIR,
-    requestRepository,
   });
 
   // Then

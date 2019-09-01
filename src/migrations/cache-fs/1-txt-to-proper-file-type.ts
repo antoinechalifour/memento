@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 
 import { RequestRepositoryFile } from '../../infrastructure/repository';
-import { getFileExtension, getRequestDirectory } from '../../utils/path';
+import { getFileExtension } from '../../utils/path';
 
 export interface Dependencies {
   targetUrl: string;
@@ -18,13 +18,19 @@ export async function moveTxtToProperFileTypeMigration({
     cacheDirectory,
   });
   const allRequests = await requestRepository.getAllRequests();
+  const projectDirectoryName = targetUrl
+    .replace(/[:\/]/g, '_')
+    .replace(/\./g, '-');
+  const projectFullPath = path.join(cacheDirectory, projectDirectoryName);
 
   for (const request of allRequests) {
-    const requestDirectory = getRequestDirectory(
-      cacheDirectory,
-      targetUrl,
-      request
-    );
+    const trimmedUrl = request.url.slice(0, 16);
+    const requestDirectoryPath = `${request.method.toLowerCase()}_${trimmedUrl.replace(
+      /\//g,
+      '_'
+    )}-${request.id}`;
+
+    const requestDirectory = path.join(projectFullPath, requestDirectoryPath);
     const metadatafile = await fs.readJson(
       path.join(requestDirectory, 'metadata.json')
     );
