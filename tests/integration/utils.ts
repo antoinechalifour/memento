@@ -17,6 +17,7 @@ export function getTestApplication() {
     targetUrl: asValue(targetUrl),
     useRealResponseTime: asValue(false),
     disableCachingPatterns: asValue([]),
+    port: asValue(0),
 
     // Use cases
     respondToRequestUseCase: asClass(RespondToRequest),
@@ -29,7 +30,7 @@ export function getTestApplication() {
   });
 
   // Configure supertest
-  const { app } = createApp({ port: 0, container });
+  const { app } = createApp({ container });
   const server = app.listen();
 
   const request = supertest(server);

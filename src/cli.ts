@@ -1,55 +1,31 @@
 /* istanbul ignore file */
 
 import Vorpal from 'vorpal';
-import path from 'path';
 import { AwilixContainer } from 'awilix';
 import chalk from 'chalk';
-import table from 'text-table';
 
+import { ListRequest } from './domain/usecase';
 import {
-  ClearAllRequests,
-  ClearRequest,
-  RefreshRequest,
-  ListRequest,
-  GetRequestDetails,
-  SetResponseTime,
-} from './domain/usecase';
-import { DisableCachePattern } from './domain/entity';
-import { getRequestDirectory } from './utils/path';
+  CliClear,
+  CliConfig,
+  CliLs,
+  CliRefresh,
+  CliInfo,
+  CliResponseTime,
+  CliInjector,
+} from './application/cli';
 
 interface CreateCliOptions {
   container: AwilixContainer;
+  reload: () => Promise<unknown>;
 }
 
-export function createCli({ container }: CreateCliOptions) {
-  const targetUrl = container.resolve<string>('targetUrl');
-  const cacheDirectory = container.resolve<string>('cacheDirectory');
-  const disableCachingPatterns = container.resolve<DisableCachePattern[]>(
-    'disableCachingPatterns'
-  );
-  const clearAllRequestsUseCase = container.resolve<ClearAllRequests>(
-    'clearAllRequestsUseCase'
-  );
-  const clearRequestUseCase = container.resolve<ClearRequest>(
-    'clearRequestUseCase'
-  );
-  const refreshRequestUseCase = container.resolve<RefreshRequest>(
-    'refreshRequestUseCase'
-  );
-  const listRequestsUseCase = container.resolve<ListRequest>(
-    'listRequestsUseCase'
-  );
-  const getRequestDetailsUseCase = container.resolve<GetRequestDetails>(
-    'getRequestDetailsUseCase'
-  );
-  const setResponseTimeUseCase = container.resolve<SetResponseTime>(
-    'setResponseTimeUseCase'
-  );
-  const appVersion = container.resolve<string>('appVersion');
-
+export function createCli({ container, reload }: CreateCliOptions) {
+  const injector = new CliInjector(container);
   const requestsAutocomplete = {
     data() {
-      return listRequestsUseCase
+      return container
+        .resolve<ListRequest>('listRequestsUseCase')
         .execute()
         .then(requests => requests.map(request => request.id));
     },
@@ -60,35 +36,28 @@ export function createCli({ container }: CreateCliOptions) {
   vorpal.delimiter('memento$ ');
 
   vorpal
-    .command('ls', 'Lists all cached requests')
+    .command('config', 'Displays the current configuration')
+    .action(injector.action(CliConfig, 'print'));
+
+  vorpal
+    .command('config reload', 'Reloads the configuration file')
     .action(async function(this: Vorpal.CommandInstance) {
-      const requests = await listRequestsUseCase.execute();
+      await reload();
 
-      if (requests.length === 0) {
-        this.log('No request have been cached for now.');
-        return;
-      }
+      const config = container.build(CliConfig, {
+        injector: () => ({ logger: this.log.bind(this) }),
+      });
 
-      this.log('The following requests have been cached:');
-      this.log(
-        table([
-          [chalk.gray('id'), chalk.gray('method'), chalk.gray('url')],
-          ...requests.map(request => [
-            chalk.yellow(request.id),
-            chalk.green(request.method),
-            chalk.white(request.url),
-          ]),
-        ])
-      );
+      return config.print();
     });
 
   vorpal
+    .command('ls', 'Lists all cached requests')
+    .action(injector.action(CliLs, 'allRequests'));
+
+  vorpal
     .command('clear all', 'Removes all cached responses')
-    .action(async function(this: Vorpal.CommandInstance) {
-      this.log('Clearing all cached responses...');
-      await clearAllRequestsUseCase.execute();
-      this.log('Done.');
-    });
+    .action(injector.action(CliClear, 'all'));
 
   vorpal
     .command(
@@ -96,11 +65,7 @@ export function createCli({ container }: CreateCliOptions) {
       'Removes the cached response for the provided request id'
     )
     .autocomplete(requestsAutocomplete)
-    .action(async function(this: Vorpal.CommandInstance, { requestId }) {
-      this.log(chalk`Clearing request {yellow ${requestId}}...`);
-      await clearRequestUseCase.execute(requestId);
-      this.log('Done.');
-    });
+    .action(injector.action(CliClear, 'one'));
 
   vorpal
     .command(
@@ -108,11 +73,7 @@ export function createCli({ container }: CreateCliOptions) {
       'Refetches the request and updates the response'
     )
     .autocomplete(requestsAutocomplete)
-    .action(async function(this: Vorpal.CommandInstance, { requestId }) {
-      this.log(chalk`Refetching data for request {yellow ${requestId}}...`);
-      await refreshRequestUseCase.execute(requestId);
-      this.log('Done.');
-    });
+    .action(injector.action(CliRefresh, 'request'));
 
   vorpal
     .command(
@@ -121,87 +82,16 @@ export function createCli({ container }: CreateCliOptions) {
     )
     .autocomplete(requestsAutocomplete)
     .option('-b, --body', 'Include the response body')
-    .action(async function(
-      this: Vorpal.CommandInstance,
-      { requestId, options }
-    ) {
-      const [request, response] = await getRequestDetailsUseCase.execute(
-        requestId
-      );
-
-      const requestDirectoryPath = getRequestDirectory(
-        cacheDirectory,
-        targetUrl,
-        request
-      );
-
-      this.log(chalk`{green Request cache}`);
-      this.log(
-        table([
-          [
-            chalk.yellow('Request directory'),
-            chalk.white(requestDirectoryPath),
-          ],
-          [
-            chalk.yellow('Metadata file'),
-            chalk.white(path.join(requestDirectoryPath, 'metadata.json')),
-          ],
-        ])
-      );
-
-      this.log(chalk`\n\n{green Request information}`);
-      this.log(
-        table([
-          [chalk.yellow('Method'), chalk.white(request.method)],
-          [chalk.yellow('URL'), chalk.white(request.url)],
-          ...Object.keys(request.headers).map(headerName => [
-            chalk.yellow(headerName),
-            chalk.white(request.headers[headerName]),
-          ]),
-        ])
-      );
-
-      this.log(chalk`\n\n{green Response information}`);
-      this.log(
-        table([
-          [
-            chalk.yellow('Response Time'),
-            chalk.white(response.responseTimeInMs.toString()),
-          ],
-          [
-            chalk.yellow('Status code'),
-            chalk.white(response.status.toString()),
-          ],
-          ...Object.keys(response.headers).map(headerName => [
-            chalk.yellow(headerName),
-            chalk.white(response.headers[headerName]),
-          ]),
-        ])
-      );
-
-      if (options.body) {
-        this.log(chalk`\n\n{green Response body}`);
-        this.log(response.body.toString('utf-8'));
-      }
-    });
+    .action(injector.action(CliInfo, 'request'));
 
   vorpal
     .command(
       'set response-time <requestId> <responseTimeInMs>',
       'Sets the response time for the provided request id'
     )
-    .action(async function(
-      this: Vorpal.CommandInstance,
-      { requestId, responseTimeInMs }
-    ) {
-      this.log(
-        chalk`Setting response time to {yellow ${responseTimeInMs}ms} for request {yellow ${requestId}}...`
-      );
-      setResponseTimeUseCase.execute(requestId, responseTimeInMs);
-      this.log('Done.');
-    });
+    .action(injector.action(CliResponseTime, 'set'));
 
-  console.log(chalk`{green 
+  vorpal.log(chalk`{green 
       __   __  _______  __   __  _______  __    _  _______  _______ 
       |  |_|  ||       ||  |_|  ||       ||  |  | ||       ||       |
       |       ||    ___||       ||    ___||   |_| ||_     _||   _   |
@@ -211,20 +101,14 @@ export function createCli({ container }: CreateCliOptions) {
       |_|   |_||_______||_|   |_||_______||_|  |__|  |___|  |_______|
     }
               `);
-  console.log(chalk`Using Memento {yellow ${appVersion}}`);
-  console.log(chalk`Request will be forwarded to {yellow ${targetUrl}}`);
-  console.log(chalk`Cache directory is set to {yellow ${cacheDirectory}}`);
 
-  if (disableCachingPatterns.length) {
-    console.log(chalk`Caching will be disabled for the following patterns:`);
+  container
+    .build(CliConfig, {
+      injector: () => ({ logger: vorpal.log.bind(vorpal) }),
+    })
+    .print();
 
-    disableCachingPatterns.forEach(option => {
-      console.log(
-        chalk`\t- {green ${option.method}} {yellow ${option.urlPattern}}`
-      );
-    });
-  }
-  console.log(chalk`Type {green help} to get available commands`);
+  vorpal.log(chalk`Type {green help} to get available commands`);
 
   return vorpal;
 }

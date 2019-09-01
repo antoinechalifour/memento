@@ -18,32 +18,38 @@ function getUseRealResponseTime(useRealResponseTime: string | undefined) {
   return useRealResponseTime ? Boolean(useRealResponseTime) : false;
 }
 
-const configExplorer = cosmiconfig('memento');
-const cosmicConfiguration = configExplorer.searchSync();
+export function getConfiguration() {
+  const configExplorer = cosmiconfig('memento');
+  const cosmicConfiguration = configExplorer.searchSync();
 
-if (!cosmicConfiguration) {
-  throw new Error(
-    'Memento configuration was not found. Did you create a .mementorc file?'
-  );
+  if (!cosmicConfiguration) {
+    throw new Error(
+      'Memento configuration was not found. Did you create a .mementorc file?'
+    );
+  }
+
+  const configuration = {
+    targetUrl: cosmicConfiguration.config.targetUrl,
+    port: getPortFromString(cosmicConfiguration.config.port),
+    cacheDirectory: getCacheDirectory(
+      cosmicConfiguration.config.cacheDirectory
+    ),
+    useRealResponseTime: getUseRealResponseTime(
+      cosmicConfiguration.config.useRealResponseTime
+    ),
+    disableCachingPatterns:
+      cosmicConfiguration.config.disableCachingPatterns || [],
+  };
+
+  assert(configuration.targetUrl, 'targetUrl option is required');
+
+  configuration.disableCachingPatterns.forEach((option: any) => {
+    assert(option.method, 'Invalid disableCachingPatterns: method is required');
+    assert(
+      option.urlPattern,
+      'Invalid disableCachingPatterns: urlPattern is required'
+    );
+  });
+
+  return configuration;
 }
-
-export const configuration = {
-  targetUrl: cosmicConfiguration.config.targetUrl,
-  port: getPortFromString(cosmicConfiguration.config.port),
-  cacheDirectory: getCacheDirectory(cosmicConfiguration.config.cacheDirectory),
-  useRealResponseTime: getUseRealResponseTime(
-    cosmicConfiguration.config.useRealResponseTime
-  ),
-  disableCachingPatterns:
-    cosmicConfiguration.config.disableCachingPatterns || [],
-};
-
-assert(configuration.targetUrl, 'targetUrl option is required');
-
-configuration.disableCachingPatterns.forEach((option: any) => {
-  assert(option.method, 'Invalid disableCachingPatterns: method is required');
-  assert(
-    option.urlPattern,
-    'Invalid disableCachingPatterns: urlPattern is required'
-  );
-});
