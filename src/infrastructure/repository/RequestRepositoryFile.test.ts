@@ -19,13 +19,9 @@ function getRequestRepository() {
   });
 }
 
-beforeEach(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+beforeEach(() => fs.remove(MEMENTO_CACHE_DIR));
 
-afterAll(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+afterAll(() => fs.remove(MEMENTO_CACHE_DIR));
 
 describe('persistResponseForRequest', () => {
   describe('JSON support', () => {

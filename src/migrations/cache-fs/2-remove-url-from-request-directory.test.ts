@@ -12,13 +12,9 @@ const OUTPUT_DIRECTORY = path.join(
   'https___pokeapi-co_api_v2'
 );
 
-afterAll(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+afterAll(() => fs.remove(MEMENTO_CACHE_DIR));
 
-beforeEach(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+beforeEach(() => fs.remove(MEMENTO_CACHE_DIR));
 
 it('should move all old directories to a folder which name is the request id', async () => {
   // Given
