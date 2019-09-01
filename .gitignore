@@ -8,3 +8,4 @@ dist
 .mementorc
 .memento-cache
 coverage
+.vscode/
