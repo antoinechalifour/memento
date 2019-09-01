@@ -106,13 +106,11 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private ensureProjectDirectory() {
-    const projectDirectoryPath = this.getProjectDirectoryPath();
-    return fs.ensureDir(projectDirectoryPath);
+    return fs.ensureDir(this.getProjectDirectoryPath());
   }
 
   private ensureRequestDirectory(request: Request) {
-    const cacheDirPath = this.getRequestDirectoryPath(request);
-    return fs.ensureDir(cacheDirPath);
+    return fs.ensureDir(this.getRequestDirectoryPath(request));
   }
 
   private getRequestDirectoryPath(request: Request) {
@@ -135,15 +133,11 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private getRequestMetaData(request: Request) {
-    const metadataFilePath = this.getRequestMetadataFilePath(request);
-
-    return fs.readJSON(metadataFilePath);
+    return fs.readJSON(this.getRequestMetadataFilePath(request));
   }
 
   private writeRequestMetaData(request: Request, response: Response) {
-    const metadataFilePath = this.getRequestMetadataFilePath(request);
-
-    return fs.outputJSON(metadataFilePath, {
+    return fs.outputJSON(this.getRequestMetadataFilePath(request), {
       method: request.method,
       url: request.url,
       requestBody: request.body,
@@ -167,8 +161,10 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private async buildResponseFromRequest(request: Request) {
-    const metadata = await this.getRequestMetaData(request);
-    const body = await this.getResponseBody(request);
+    const [metadata, body] = await Promise.all([
+      this.getRequestMetaData(request),
+      this.getResponseBody(request),
+    ]);
 
     return new Response(
       parseInt(metadata.status, 10),
@@ -179,8 +175,9 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private async buildRequestFromRequestDirectory(directoryPath: string) {
-    const metadatFilePath = path.join(directoryPath, 'metadata.json');
-    const metadata = await fs.readJSON(metadatFilePath);
+    const metadata = await fs.readJSON(
+      path.join(directoryPath, 'metadata.json')
+    );
 
     return new Request(
       metadata.method,
