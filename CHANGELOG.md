@@ -1,3 +1,11 @@
+## [1.3.1-alpha.0](https://github.com/antoinechalifour/memento/compare/1.3.0...1.3.1-alpha.0) (2019-09-01)
+
+
+### Bug Fixes
+
+* do not migrate requests that have already been migrated ([70b4822](https://github.com/antoinechalifour/memento/commit/70b4822))
+* use simpler request directory names ([#57](https://github.com/antoinechalifour/memento/issues/57)) ([3177898](https://github.com/antoinechalifour/memento/commit/3177898)), closes [#49](https://github.com/antoinechalifour/memento/issues/49)
+
 # [1.3.0](https://github.com/antoinechalifour/memento/compare/1.2.0...1.3.0) (2019-08-31)
 
 
