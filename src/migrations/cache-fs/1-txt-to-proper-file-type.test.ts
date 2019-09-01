@@ -13,13 +13,9 @@ function getOutputFilePath(fileName: string) {
   return path.join(OUTPUT_DIRECTORY, fileName);
 }
 
-afterAll(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+afterAll(() => fs.remove(MEMENTO_CACHE_DIR));
 
-beforeEach(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+beforeEach(() => fs.remove(MEMENTO_CACHE_DIR));
 
 async function setupRequest(folder: string, body: any, metadata: any) {
   const requestDirectory = getOutputFilePath(folder);

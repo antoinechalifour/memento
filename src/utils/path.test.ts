@@ -42,7 +42,7 @@ describe('getRequestDirectory', () => {
 
     //Then
     expect(requestDirectory).toEqual(
-      '/tmp/.memento-cache/https___pokeapi-co_api_v2/get__really_long_url-25276a6270cf8ba1277f7004a92dece9687f82e1'
+      '/tmp/.memento-cache/https___pokeapi-co_api_v2/25276a6270cf8ba1277f7004a92dece9687f82e1'
     );
   });
 });

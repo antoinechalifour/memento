@@ -19,13 +19,9 @@ function getRequestRepository() {
   });
 }
 
-beforeEach(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+beforeEach(() => fs.remove(MEMENTO_CACHE_DIR));
 
-afterAll(() => {
-  fs.removeSync(MEMENTO_CACHE_DIR);
-});
+afterAll(() => fs.remove(MEMENTO_CACHE_DIR));
 
 describe('persistResponseForRequest', () => {
   describe('JSON support', () => {
@@ -63,10 +59,10 @@ describe('persistResponseForRequest', () => {
         );
 
         const metadataContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.id}/metadata.json`
+          `${OUTPUT_DIRECTORY}/${inputRequest.id}/metadata.json`
         );
         const bodyContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__pokemon_pikachu-${inputRequest.id}/body.json`
+          `${OUTPUT_DIRECTORY}/${inputRequest.id}/body.json`
         );
 
         //Then
@@ -123,10 +119,10 @@ describe('persistResponseForRequest', () => {
         );
 
         const metadataContent = await fs.readJSON(
-          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.id}/metadata.json`
+          `${OUTPUT_DIRECTORY}/${inputRequest.id}/metadata.json`
         );
         const bodyContent = await fs.readFile(
-          `${OUTPUT_DIRECTORY}/get__notes-${inputRequest.id}/body.xml`,
+          `${OUTPUT_DIRECTORY}/${inputRequest.id}/body.xml`,
           'utf-8'
         );
 
@@ -169,10 +165,10 @@ describe('persistResponseForRequest', () => {
     );
 
     const metadataContent = await fs.readJSON(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/metadata.json`
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body.txt`,
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/body.txt`,
       'utf-8'
     );
 
@@ -204,10 +200,10 @@ describe('persistResponseForRequest', () => {
     );
 
     const metadataContent = await fs.readJSON(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/metadata.json`
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__text-${inputRequest.id}/body`,
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/body`,
       'utf-8'
     );
 
@@ -242,10 +238,10 @@ describe('persistResponseForRequest', () => {
     );
 
     const metadataContent = await fs.readJSON(
-      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/metadata.json`
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/metadata.json`
     );
     const bodyContent = await fs.readFile(
-      `${OUTPUT_DIRECTORY}/get__really_long_url-${inputRequest.id}/body`,
+      `${OUTPUT_DIRECTORY}/${inputRequest.id}/body`,
       'utf-8'
     );
 
@@ -422,14 +418,6 @@ describe('getAllRequests', () => {
     //Then
     expect(requests).toEqual([
       new Request(
-        'get',
-        '/pokemon/mew',
-        {
-          'x-custom-3': 'header-3',
-        },
-        ''
-      ),
-      new Request(
         'post',
         '/pokemon',
         {
@@ -438,6 +426,14 @@ describe('getAllRequests', () => {
         JSON.stringify({
           name: 'Bulbasaur',
         })
+      ),
+      new Request(
+        'get',
+        '/pokemon/mew',
+        {
+          'x-custom-3': 'header-3',
+        },
+        ''
       ),
     ]);
   });
