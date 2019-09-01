@@ -1,20 +1,22 @@
 import path from 'path';
 import fs from 'fs-extra';
 
-import { RequestRepository } from '../../domain/repository';
+import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { getFileExtension, getRequestDirectory } from '../../utils/path';
 
 export interface Dependencies {
   targetUrl: string;
   cacheDirectory: string;
-  requestRepository: RequestRepository;
 }
 
 export async function moveTxtToProperFileTypeMigration({
   targetUrl,
   cacheDirectory,
-  requestRepository,
 }: Dependencies) {
+  const requestRepository = new RequestRepositoryFile({
+    targetUrl,
+    cacheDirectory,
+  });
   const allRequests = await requestRepository.getAllRequests();
 
   for (const request of allRequests) {

@@ -1,8 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { RequestRepositoryFile } from '../../infrastructure/repository';
-import { Request, Response } from '../../domain/entity';
 import { moveTxtToProperFileTypeMigration } from './1-txt-to-proper-file-type';
 
 const MEMENTO_CACHE_DIR = path.join(
@@ -10,7 +8,6 @@ const MEMENTO_CACHE_DIR = path.join(
   '../../../.memento-test-cache-migration-file-extensions'
 );
 const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
-let requestRepository: RequestRepositoryFile;
 
 function getOutputFilePath(fileName: string) {
   return path.join(OUTPUT_DIRECTORY, fileName);
@@ -22,34 +19,34 @@ afterAll(() => {
 
 beforeEach(() => {
   fs.removeSync(MEMENTO_CACHE_DIR);
-
-  requestRepository = new RequestRepositoryFile({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
-  });
 });
 
-describe('text/plain requests migration', () => {
-  beforeEach(async () => {
-    const request = new Request('GET', '/text', {}, '');
-    const response = new Response(
-      200,
-      {
-        'content-type': 'text/plain',
-      },
-      Buffer.from('Ok'),
-      0
-    );
+async function setupRequest(folder: string, body: any, metadata: any) {
+  const requestDirectory = getOutputFilePath(folder);
 
-    await requestRepository.persistResponseForRequest(request, response);
-  });
+  await fs.ensureDir(requestDirectory);
+  await fs.writeFile(path.join(requestDirectory, 'body.txt'), body);
+  await fs.writeJson(path.join(requestDirectory, 'metadata.json'), metadata);
+}
+
+describe('text/plain requests migration', () => {
+  beforeEach(() =>
+    setupRequest('get__text-74121b3875b9d4d16c7e9dfd80bd90ff50da5d86', 'Ok', {
+      method: 'GET',
+      url: '/text',
+      requestBody: '',
+      status: 200,
+      requestHeaders: {},
+      responseHeaders: { 'content-type': 'text/plain' },
+      responseTime: 0,
+    })
+  );
 
   it('should not move the body file', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
       targetUrl: 'https://pokeapi.co/api/v2',
       cacheDirectory: MEMENTO_CACHE_DIR,
-      requestRepository,
     });
 
     // Then
@@ -65,35 +62,27 @@ describe('text/plain requests migration', () => {
 });
 
 describe('application/json requests migration', () => {
-  beforeEach(async () => {
-    const request = new Request('GET', '/json', {}, '');
-    const response = new Response(
-      200,
+  beforeEach(() =>
+    setupRequest(
+      'get__json-728ad90473b5366f44ebc49a57da2c5df837d040',
+      Buffer.from(JSON.stringify({ name: 'John Doe' })),
       {
-        'content-type': 'application/json',
-      },
-      Buffer.from('{"name": "John Doe"}'),
-      0
-    );
-
-    await requestRepository.persistResponseForRequest(request, response);
-
-    await fs.move(
-      getOutputFilePath(
-        'get__json-728ad90473b5366f44ebc49a57da2c5df837d040/body.json'
-      ),
-      getOutputFilePath(
-        'get__json-728ad90473b5366f44ebc49a57da2c5df837d040/body.txt'
-      )
-    );
-  });
+        method: 'GET',
+        url: '/json',
+        requestBody: '',
+        status: 200,
+        requestHeaders: {},
+        responseHeaders: { 'content-type': 'application/json' },
+        responseTime: 0,
+      }
+    )
+  );
 
   it('should move the body file to body.json', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
       targetUrl: 'https://pokeapi.co/api/v2',
       cacheDirectory: MEMENTO_CACHE_DIR,
-      requestRepository,
     });
 
     // Then
@@ -115,35 +104,27 @@ describe('application/json requests migration', () => {
 });
 
 describe('application/octet-stream request migration', () => {
-  beforeEach(async () => {
-    const request = new Request('GET', '/octet-stream', {}, '');
-    const response = new Response(
-      200,
-      {
-        'content-type': 'application/octet-stream',
-      },
+  beforeEach(() =>
+    setupRequest(
+      'get__octet-stream-d1f560b23c4db2f2a2e0dfc1bfa32592d4370cb5',
       Buffer.from('something'),
-      0
-    );
-
-    await requestRepository.persistResponseForRequest(request, response);
-
-    await fs.move(
-      getOutputFilePath(
-        'get__octet-stream-d1f560b23c4db2f2a2e0dfc1bfa32592d4370cb5/body'
-      ),
-      getOutputFilePath(
-        'get__octet-stream-d1f560b23c4db2f2a2e0dfc1bfa32592d4370cb5/body.txt'
-      )
-    );
-  });
+      {
+        method: 'GET',
+        url: '/octet-stream',
+        requestBody: '',
+        status: 200,
+        requestHeaders: {},
+        responseHeaders: { 'content-type': 'application/octet-stream' },
+        responseTime: 0,
+      }
+    )
+  );
 
   it('should move the body file to body', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
       targetUrl: 'https://pokeapi.co/api/v2',
       cacheDirectory: MEMENTO_CACHE_DIR,
-      requestRepository,
     });
 
     // Then
@@ -157,6 +138,7 @@ describe('application/octet-stream request migration', () => {
         'get__octet-stream-d1f560b23c4db2f2a2e0dfc1bfa32592d4370cb5/body'
       )
     );
+
     // Assert that fold files have been moved to new files.
     expect(oldFileExists).toBe(false);
     expect(newFileExists).toBe(true);
@@ -165,17 +147,24 @@ describe('application/octet-stream request migration', () => {
 
 describe('requests respecting the new format', () => {
   beforeEach(async () => {
-    const request = new Request('GET', '/new-format', {}, '');
-    const response = new Response(
-      200,
-      {
-        'content-type': 'application.xml',
-      },
-      Buffer.from('<text>something</text>'),
-      0
+    const requestDirectory = getOutputFilePath(
+      'get__new-format-bb4032a14daf7b56f8f9f4312ce139543bc9a281'
     );
 
-    await requestRepository.persistResponseForRequest(request, response);
+    await fs.ensureDir(requestDirectory);
+    await fs.writeFile(
+      path.join(requestDirectory, 'body.xml'),
+      '<text>something</text>'
+    );
+    await fs.writeJson(path.join(requestDirectory, 'metadata.json'), {
+      method: 'GET',
+      url: '/new-format',
+      requestBody: '',
+      status: 200,
+      requestHeaders: {},
+      responseHeaders: { 'content-type': 'application/xml' },
+      responseTime: 0,
+    });
   });
 
   it('should not move the body file', async () => {
@@ -183,7 +172,6 @@ describe('requests respecting the new format', () => {
     await moveTxtToProperFileTypeMigration({
       targetUrl: 'https://pokeapi.co/api/v2',
       cacheDirectory: MEMENTO_CACHE_DIR,
-      requestRepository,
     });
 
     // Then
