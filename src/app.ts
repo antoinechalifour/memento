@@ -10,11 +10,10 @@ import { scopePerRequest } from 'awilix-koa';
 import { respondToRequest } from './application/http/request';
 
 interface AppOptions {
-  port: number;
   container: AwilixContainer;
 }
 
-export function createApp({ port, container }: AppOptions) {
+export function createApp({ container }: AppOptions) {
   const app = new Koa();
   let server: Server;
 
@@ -27,6 +26,8 @@ export function createApp({ port, container }: AppOptions) {
   return {
     app,
     run() {
+      const port = container.resolve<number>('port');
+
       return new Promise(resolve => {
         server = app.listen(port, resolve);
       });

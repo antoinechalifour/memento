@@ -6,12 +6,15 @@ process.env.NODE_ENV = 'development';
 const { Memento, createCli, runMigrations } = require('../dist');
 
 const memento = Memento();
+const container = memento.container;
 
-memento
-  .run()
-  .then(() => runMigrations(memento.container))
+runMigrations(container)
+  .then(() => memento.run())
   .then(() => {
-    createCli({ container: memento.container }).show();
+    createCli({
+      container: memento.container,
+      reload: memento.reload,
+    }).show();
   });
 
 function stopServer() {
