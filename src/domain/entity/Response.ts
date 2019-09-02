@@ -40,6 +40,18 @@ export class Response {
       headers[key.toLowerCase()] = inputHeaders[key];
     });
 
+    if (headers['set-cookie']) {
+      headers['set-cookie'] = this.removeSecureCookies(headers['set-cookie']);
+    }
+
     return headers;
+  }
+
+  private removeSecureCookies(cookies: string | string[]) {
+    if (Array.isArray(cookies)) {
+      return cookies.map(cookie => cookie.replace(/\s?Secure/g, ''));
+    } else {
+      return cookies.replace(/\s?Secure/g, '');
+    }
   }
 }

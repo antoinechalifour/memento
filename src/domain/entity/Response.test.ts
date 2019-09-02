@@ -108,4 +108,34 @@ describe('headers', () => {
       sourcemap: 'sourcemap',
     });
   });
+
+  it('remove secure cookies', () => {
+    // Given
+    const response = new Response(
+      200,
+      {
+        'www-authenticate': 'www-authenticate',
+        'set-cookie': [
+          'test_secure1=value1; Path=/;Secure',
+          'test_secure2=value2; Path=/; Secure',
+          'test_secure3=value3; Path=/;',
+        ],
+      },
+      Buffer.from('OK'),
+      0
+    );
+
+    // When
+    const headers = response.headers;
+
+    //Then
+    expect(headers).toEqual({
+      'www-authenticate': 'www-authenticate',
+      'set-cookie': [
+        'test_secure1=value1; Path=/;',
+        'test_secure2=value2; Path=/;',
+        'test_secure3=value3; Path=/;',
+      ],
+    });
+  });
 });

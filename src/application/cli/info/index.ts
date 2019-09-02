@@ -64,7 +64,7 @@ export class CliInfo {
         [chalk.yellow('URL'), chalk.white(request.url)],
         ...Object.keys(request.headers).map(headerName => [
           chalk.yellow(headerName),
-          chalk.white(request.headers[headerName]),
+          chalk.white(...request.headers[headerName]),
         ]),
       ])
     );
@@ -79,7 +79,7 @@ export class CliInfo {
         [chalk.yellow('Status code'), chalk.white(response.status.toString())],
         ...Object.keys(response.headers).map(headerName => [
           chalk.yellow(headerName),
-          chalk.white(response.headers[headerName]),
+          chalk.white(...response.headers[headerName]),
         ]),
       ])
     );

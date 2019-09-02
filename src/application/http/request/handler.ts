@@ -26,7 +26,12 @@ class RequestHandler {
     );
 
     ctx.status = response.status;
-    ctx.set(response.headers);
+
+    // For some reason response.headers['set-cookie'] is an array
+    // and koa typings do not accept array header values, but it still works.
+    // calling ctx.set('set-cookie') multiple times does not work though.
+    ctx.set(response.headers as any);
+
     ctx.body = response.body;
   }
 }
