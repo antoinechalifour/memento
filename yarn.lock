@@ -9010,9 +9010,9 @@ ts-jest@^24.0.2:
     yargs-parser "10.x"
 
 tsdx@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/tsdx/-/tsdx-0.9.0.tgz#12fe1e9ac4bab0d3e0177dfd9ec1971474fe178d"
-  integrity sha512-75uA3HHWQ29eSiSaQhIb0qrPS+kdTikITO7JbrWoyDgYFju73gF661YQe+YHyvSa5IHtD5uasMbFCj+lqstfzA==
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/tsdx/-/tsdx-0.9.1.tgz#e0c9646d0bc95f8a01c96c7e7996a2c52a3eb270"
+  integrity sha512-/rCi/eb+NNvQXFzEufcODaApZB7+Bbnexbx3bDIR9bCaeuJAKWGpNBAj/A7PFIaYPYlyYVfaTa+Y2onkwN4z5w==
   dependencies:
     "@babel/core" "^7.4.4"
     "@babel/helper-module-imports" "^7.0.0"
