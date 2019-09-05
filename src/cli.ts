@@ -11,7 +11,7 @@ import {
   CliLs,
   CliRefresh,
   CliInfo,
-  CliResponseTime,
+  CliEdit,
   CliInjector,
 } from './application/cli';
 
@@ -86,10 +86,17 @@ export function createCli({ container, reload }: CreateCliOptions) {
 
   vorpal
     .command(
-      'set response-time <requestId> <responseTimeInMs>',
+      'edit response-time <requestId> <responseTimeInMs>',
       'Sets the response time for the provided request id'
     )
-    .action(injector.action(CliResponseTime, 'set'));
+    .action(injector.action(CliEdit, 'responseTime'));
+
+  vorpal
+    .command(
+      'edit response-body <requestId>',
+      'Opens your editor to edit the response body'
+    )
+    .action(injector.action(CliEdit, 'responseBody'));
 
   vorpal.log(chalk`{green 
       __   __  _______  __   __  _______  __    _  _______  _______ 

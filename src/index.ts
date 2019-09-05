@@ -14,6 +14,7 @@ import {
   ListRequest,
   GetRequestDetails,
   SetResponseTime,
+  EditResponseBody,
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
 import { RequestRepositoryFile } from './infrastructure/repository';
@@ -46,6 +47,7 @@ export function Memento({ cacheDirectory }: MementoOptions = {}) {
       listRequestsUseCase: asClass(ListRequest),
       getRequestDetailsUseCase: asClass(GetRequestDetails),
       setResponseTimeUseCase: asClass(SetResponseTime),
+      editResponseBodyUseCase: asClass(EditResponseBody),
 
       // Repositories
       requestRepository: asClass(RequestRepositoryFile),

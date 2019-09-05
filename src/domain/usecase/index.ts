@@ -5,3 +5,4 @@ export * from './RefreshRequest';
 export * from './ListRequests';
 export * from './GetRequestDetails';
 export * from './SetResponseTime';
+export * from './EditResponseBody';

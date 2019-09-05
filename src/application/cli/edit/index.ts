@@ -1,23 +1,30 @@
 import chalk from 'chalk';
 
-import { SetResponseTime } from '../../../domain/usecase';
+import { SetResponseTime, EditResponseBody } from '../../../domain/usecase';
 import { Logger } from '../types';
 
 interface Dependencies {
   setResponseTimeUseCase: SetResponseTime;
+  editResponseBodyUseCase: EditResponseBody;
   logger: Logger;
 }
 
-export class CliResponseTime {
+export class CliEdit {
   private setResponseTime: SetResponseTime;
+  private editResponseBody: EditResponseBody;
   private logger: Logger;
 
-  public constructor({ setResponseTimeUseCase, logger }: Dependencies) {
+  public constructor({
+    setResponseTimeUseCase,
+    editResponseBodyUseCase,
+    logger,
+  }: Dependencies) {
     this.setResponseTime = setResponseTimeUseCase;
+    this.editResponseBody = editResponseBodyUseCase;
     this.logger = logger;
   }
 
-  public async set({
+  public async responseTime({
     requestId,
     responseTimeInMs,
   }: {
@@ -32,5 +39,13 @@ export class CliResponseTime {
       parseInt(responseTimeInMs, 10)
     );
     this.logger('Done.');
+  }
+
+  public async responseBody({ requestId }: { requestId: string }) {
+    try {
+      await this.editResponseBody.execute(requestId);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

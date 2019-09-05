@@ -5,5 +5,5 @@ export * from './config';
 export * from './info';
 export * from './ls';
 export * from './refresh';
-export * from './responseTime';
+export * from './edit';
 export * from './injector';
