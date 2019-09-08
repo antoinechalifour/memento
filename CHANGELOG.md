@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/antoinechalifour/memento/compare/1.3.1-alpha.0...1.4.0) (2019-09-08)
+
+
+### Features
+
+* add config reloading command ([#58](https://github.com/antoinechalifour/memento/issues/58)) ([449cc5b](https://github.com/antoinechalifour/memento/commit/449cc5b))
+
 ## [1.3.1-alpha.0](https://github.com/antoinechalifour/memento/compare/1.3.0...1.3.1-alpha.0) (2019-09-01)
 
 
