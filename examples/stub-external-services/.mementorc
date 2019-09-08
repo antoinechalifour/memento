@@ -1,3 +1,4 @@
 {
-  "targetUrl": "https://pokeapi.co/api/v2"
+  "targetUrl": "https://pokeapi.co/api/v2",
+  "cacheDirectory": "memento-integration-tests-data"
 }

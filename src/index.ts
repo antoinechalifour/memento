@@ -28,6 +28,10 @@ export function Memento({ cacheDirectory }: MementoOptions = {}) {
   function loadConfiguration() {
     const configuration = getConfiguration();
 
+    if (cacheDirectory) {
+      configuration.cacheDirectory = cacheDirectory;
+    }
+
     container.register({
       // Constants
       config: asValue(configuration),
@@ -47,10 +51,6 @@ export function Memento({ cacheDirectory }: MementoOptions = {}) {
       // Services
       networkService: asClass(NetworkServiceAxios),
     });
-
-    if (cacheDirectory) {
-      container.register('cacheDirectory', asValue(cacheDirectory));
-    }
   }
 
   loadConfiguration();
