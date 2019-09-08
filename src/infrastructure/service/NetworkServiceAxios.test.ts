@@ -169,7 +169,6 @@ describe('Headers handling', () => {
       'last-modified': 'last-modified',
       etag: 'etag',
       vary: 'vary',
-      'set-cookie': 'set-cookie',
       'content-disposition': 'content-disposition',
       'content-length': 'content-length',
       'content-type': 'content-type',
@@ -196,6 +195,33 @@ describe('Headers handling', () => {
       'server-timing': 'server-timing',
       sourcemap: 'sourcemap',
     });
+  });
+
+  it('should clean cookies according to the policy', async () => {
+    // Given
+    ((axios as any) as jest.Mock).mockResolvedValue({
+      status: 200,
+      headers: {
+        'SET-COOKIE': [
+          '_ga=value1; Path=/; Secure',
+          'test=value2; Path=/; secure',
+          '_gid=value3; Path=/',
+        ],
+      },
+      data: 'Ok',
+    });
+    const request = new Request('GET', '/toto', {}, '');
+    const networkService = new NetworkServiceAxios({
+      config: getTestConfiguration({
+        ignoreCookiesPattern: /AMP_TOKEN|_ga.*|_gid/gi,
+      }),
+    });
+
+    // When
+    const response = await networkService.executeRequest(request);
+
+    //Then
+    expect(response.cookies).toEqual(['test=value2; Path=/']);
   });
 });
 

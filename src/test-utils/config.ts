@@ -10,6 +10,7 @@ export function getTestConfiguration(
     port: 0,
     useRealResponseTime: false,
     version: '',
+    ignoreCookiesPattern: /.*/g,
     ...overrides,
   };
 }

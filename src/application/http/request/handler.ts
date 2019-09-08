@@ -25,6 +25,12 @@ class RequestHandler {
       ctx.request.rawBody || ''
     );
 
+    const cookies = response.cookies;
+
+    if (cookies.length > 0) {
+      ctx.set('set-cookie', cookies);
+    }
+
     ctx.status = response.status;
     ctx.set(response.headers);
     ctx.body = response.body;
