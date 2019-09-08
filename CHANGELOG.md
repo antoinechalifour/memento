@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/antoinechalifour/memento/compare/1.4.0...1.5.0) (2019-09-08)
+
+
+### Features
+
+* add cookie ignore policy ([#71](https://github.com/antoinechalifour/memento/issues/71)) ([2019894](https://github.com/antoinechalifour/memento/commit/2019894))
+
 # [1.4.0](https://github.com/antoinechalifour/memento/compare/1.3.1-alpha.0...1.4.0) (2019-09-08)
 
 
