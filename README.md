@@ -92,11 +92,12 @@ The [minimatch](https://www.npmjs.com/package/minimatch) package is used for com
 
 ### Option: ignoreCookiesPattern
 
-Even though Memento play well with stateless APIs, you may want to use it against APIs which uses cookies. This might be tricky if the server always sets different cookies (thus cached requests cannot be replayed as the change every time they are made).
+Even though Memento play well with stateless APIs, you may want to use it against APIs which use cookies. This might be tricky if the server always sets different cookies (thus cached requests cannot be replayed as the change every time they are made).
 
 Memento provides an `ignoreCookiesPattern` which allows you to tell Memento not to care about cookies that match the regular expression that you provided.
 
 *Note: you may use [Regexr](https://regexr.com/) to test your configuration.*
+
 *Note: as Memento runs over HTTP, secure cookies will be downgraded to normal cookies.*
 
 ### Recipe: ignore Google Analytics cookies
