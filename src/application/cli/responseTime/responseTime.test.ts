@@ -1,6 +1,6 @@
-import { CliResponseTime } from '.';
+import { SetResponseTime } from '../../../domain/usecase';
 import { Logger } from '../types';
-import { SetResponseTime } from 'domain/usecase';
+import { CliResponseTime } from '.';
 
 function getTestDependencies(): {
   logger: Logger;

@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { createContainer, asValue } from 'awilix';
 
+import { MementoConfiguration } from '../configuration';
 import { runMigrations } from './index';
 
 const MEMENTO_CACHE_DIR = path.join(
@@ -64,10 +65,17 @@ beforeAll(async () => {
 
 it('should migrate the cache directory to the new format', async () => {
   // Given
+  const config: MementoConfiguration = {
+    cacheDirectory: MEMENTO_CACHE_DIR,
+    disableCachingPatterns: [],
+    port: 0,
+    targetUrl: 'https://pokeapi.co/api/v2',
+    useRealResponseTime: false,
+    version: '',
+  };
   const container = createContainer();
   container.register({
-    targetUrl: asValue('https://pokeapi.co/api/v2'),
-    cacheDirectory: asValue(MEMENTO_CACHE_DIR),
+    config: asValue(config),
   });
 
   // When

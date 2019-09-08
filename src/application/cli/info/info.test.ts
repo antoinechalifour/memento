@@ -1,17 +1,24 @@
 import { GetRequestDetails } from '../../../domain/usecase';
 import { Request, Response } from '../../../domain/entity';
+import { MementoConfiguration } from '../../../configuration';
 import { Logger } from '../types';
 import { CliInfo } from '.';
 
 function getTestDependencies(): {
   getRequestDetailsUseCase: GetRequestDetails;
-  cacheDirectory: string;
-  targetUrl: string;
+  config: MementoConfiguration;
   logger: Logger;
 } {
   return {
     logger: jest.fn(),
-    cacheDirectory: 'cache-directory',
+    config: {
+      cacheDirectory: 'cache-directory',
+      disableCachingPatterns: [],
+      port: 0,
+      targetUrl: '',
+      useRealResponseTime: false,
+      version: '',
+    },
     // @ts-ignore
     getRequestDetailsUseCase: {
       execute: jest.fn().mockResolvedValue([

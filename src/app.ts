@@ -8,6 +8,7 @@ import { AwilixContainer } from 'awilix';
 import { scopePerRequest } from 'awilix-koa';
 
 import { respondToRequest } from './application/http/request';
+import { MementoConfiguration } from './configuration';
 
 interface AppOptions {
   container: AwilixContainer;
@@ -26,10 +27,10 @@ export function createApp({ container }: AppOptions) {
   return {
     app,
     run() {
-      const port = container.resolve<number>('port');
+      const config = container.resolve<MementoConfiguration>('config');
 
       return new Promise(resolve => {
-        server = app.listen(port, resolve);
+        server = app.listen(config.port, resolve);
       });
     },
     stop() {

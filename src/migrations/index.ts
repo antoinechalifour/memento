@@ -2,20 +2,14 @@
 
 import { AwilixContainer } from 'awilix';
 
+import { MementoConfiguration } from '../configuration';
 import { moveTxtToProperFileTypeMigration } from './cache-fs/1-txt-to-proper-file-type';
 import { moveRequestsToIdDirectories } from './cache-fs/2-remove-url-from-request-directory';
 
 export async function runMigrations(container: AwilixContainer) {
-  const targetUrl = container.resolve<string>('targetUrl');
-  const cacheDirectory = container.resolve<string>('cacheDirectory');
+  const config = container.resolve<MementoConfiguration>('config');
 
-  await moveTxtToProperFileTypeMigration({
-    targetUrl,
-    cacheDirectory,
-  });
+  await moveTxtToProperFileTypeMigration({ config });
 
-  await moveRequestsToIdDirectories({
-    targetUrl,
-    cacheDirectory,
-  });
+  await moveRequestsToIdDirectories({ config });
 }

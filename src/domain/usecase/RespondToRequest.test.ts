@@ -36,8 +36,14 @@ describe('when the response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: false,
-      disableCachingPatterns: [],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -56,8 +62,14 @@ describe('when the response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: true,
-      disableCachingPatterns: [],
+      config: {
+        useRealResponseTime: true,
+        cacheDirectory: '',
+        disableCachingPatterns: [],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -108,13 +120,19 @@ describe('when no response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: true,
-      disableCachingPatterns: [
-        {
-          method: 'POST',
-          urlPattern: '/beers/1',
-        },
-      ],
+      config: {
+        useRealResponseTime: true,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'POST',
+            urlPattern: '/beers/1',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -174,13 +192,19 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'POST';
     const url = '/pokemon/ditto';
@@ -206,21 +230,27 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'POST',
-          urlPattern: '/pokemon/ditto',
-        },
-        {
-          method: 'get',
-          urlPattern: '/pokemon/ditto',
-        },
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto?format=true',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'POST',
+            urlPattern: '/pokemon/ditto',
+          },
+          {
+            method: 'get',
+            urlPattern: '/pokemon/ditto',
+          },
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto?format=true',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'POST';
     const url = '/pokemon/ditto';
@@ -246,13 +276,19 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto*',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto*',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'POST';
     const url = '/pokemon/ditto?format=true';
@@ -278,13 +314,19 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/mew',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/mew',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/pokemon/mew/';
@@ -310,13 +352,19 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/mew/**/*',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/mew/**/*',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/pokemon/mew/abilities/2/stats';
@@ -342,17 +390,23 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/*/sprites/**',
-        },
-        {
-          method: 'post',
-          urlPattern: '/pokemon/*/sprites/**',
-        },
-      ],
+      config: {
+        useRealResponseTime: false,
+        cacheDirectory: '',
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/*/sprites/**',
+          },
+          {
+            method: 'post',
+            urlPattern: '/pokemon/*/sprites/**',
+          },
+        ],
+        port: 0,
+        targetUrl: '',
+        version: '',
+      },
     });
     const method = 'GET';
     const url = '/pokemon/mew/sprites/2/back';

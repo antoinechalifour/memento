@@ -14,8 +14,14 @@ const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 
 function getRequestRepository() {
   return new RequestRepositoryFile({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
+    config: {
+      cacheDirectory: MEMENTO_CACHE_DIR,
+      disableCachingPatterns: [],
+      port: 0,
+      targetUrl: 'https://pokeapi.co/api/v2',
+      useRealResponseTime: false,
+      version: '',
+    },
   });
 }
 

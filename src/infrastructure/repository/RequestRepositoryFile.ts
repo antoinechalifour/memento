@@ -8,19 +8,17 @@ import {
 } from '../../utils/path';
 import { RequestRepository } from '../../domain/repository';
 import { Request, Response } from '../../domain/entity';
+import { MementoConfiguration } from '../../configuration';
 
 interface Dependencies {
-  targetUrl: string;
-  cacheDirectory: string;
+  config: MementoConfiguration;
 }
 
 export class RequestRepositoryFile implements RequestRepository {
-  private targetUrl: string;
-  private cacheDirectory: string;
+  private config: MementoConfiguration;
 
-  public constructor({ targetUrl, cacheDirectory }: Dependencies) {
-    this.targetUrl = targetUrl;
-    this.cacheDirectory = cacheDirectory;
+  public constructor({ config }: Dependencies) {
+    this.config = config;
   }
 
   public async getResponseByRequestId(requestId: string) {
@@ -93,7 +91,10 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private getProjectDirectoryPath() {
-    return getProjectDirectory(this.cacheDirectory, this.targetUrl);
+    return getProjectDirectory(
+      this.config.cacheDirectory,
+      this.config.targetUrl
+    );
   }
 
   private async getSubdirectories() {
@@ -114,7 +115,11 @@ export class RequestRepositoryFile implements RequestRepository {
   }
 
   private getRequestDirectoryPath(request: Request) {
-    return getRequestDirectory(this.cacheDirectory, this.targetUrl, request);
+    return getRequestDirectory(
+      this.config.cacheDirectory,
+      this.config.targetUrl,
+      request
+    );
   }
 
   private getRequestMetadataFilePath(request: Request) {

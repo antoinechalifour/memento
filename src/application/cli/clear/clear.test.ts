@@ -1,6 +1,6 @@
-import { CliClear } from '.';
+import { ClearAllRequests, ClearRequest } from '../../../domain/usecase';
 import { Logger } from '../types';
-import { ClearAllRequests, ClearRequest } from 'domain/usecase';
+import { CliClear } from '.';
 
 function getTestDependencies(): {
   logger: Logger;

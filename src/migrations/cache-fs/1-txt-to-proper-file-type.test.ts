@@ -41,8 +41,14 @@ describe('text/plain requests migration', () => {
   it('should not move the body file', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
-      targetUrl: 'https://pokeapi.co/api/v2',
-      cacheDirectory: MEMENTO_CACHE_DIR,
+      config: {
+        targetUrl: 'https://pokeapi.co/api/v2',
+        cacheDirectory: MEMENTO_CACHE_DIR,
+        disableCachingPatterns: [],
+        port: 0,
+        useRealResponseTime: false,
+        version: '',
+      },
     });
 
     // Then
@@ -77,8 +83,14 @@ describe('application/json requests migration', () => {
   it('should move the body file to body.json', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
-      targetUrl: 'https://pokeapi.co/api/v2',
-      cacheDirectory: MEMENTO_CACHE_DIR,
+      config: {
+        targetUrl: 'https://pokeapi.co/api/v2',
+        cacheDirectory: MEMENTO_CACHE_DIR,
+        disableCachingPatterns: [],
+        port: 0,
+        useRealResponseTime: false,
+        version: '',
+      },
     });
 
     // Then
@@ -119,8 +131,14 @@ describe('application/octet-stream request migration', () => {
   it('should move the body file to body', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
-      targetUrl: 'https://pokeapi.co/api/v2',
-      cacheDirectory: MEMENTO_CACHE_DIR,
+      config: {
+        targetUrl: 'https://pokeapi.co/api/v2',
+        cacheDirectory: MEMENTO_CACHE_DIR,
+        disableCachingPatterns: [],
+        port: 0,
+        useRealResponseTime: false,
+        version: '',
+      },
     });
 
     // Then
@@ -166,8 +184,14 @@ describe('requests respecting the new format', () => {
   it('should not move the body file', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
-      targetUrl: 'https://pokeapi.co/api/v2',
-      cacheDirectory: MEMENTO_CACHE_DIR,
+      config: {
+        targetUrl: 'https://pokeapi.co/api/v2',
+        cacheDirectory: MEMENTO_CACHE_DIR,
+        disableCachingPatterns: [],
+        port: 0,
+        useRealResponseTime: false,
+        version: '',
+      },
     });
 
     // Then
@@ -208,8 +232,14 @@ describe('request that already have been migrated', () => {
   it('should not move the body file', async () => {
     // When
     await moveTxtToProperFileTypeMigration({
-      targetUrl: 'https://pokeapi.co/api/v2',
-      cacheDirectory: MEMENTO_CACHE_DIR,
+      config: {
+        targetUrl: 'https://pokeapi.co/api/v2',
+        cacheDirectory: MEMENTO_CACHE_DIR,
+        disableCachingPatterns: [],
+        port: 0,
+        useRealResponseTime: false,
+        version: '',
+      },
     });
 
     // Then

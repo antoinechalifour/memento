@@ -2,9 +2,21 @@ import axios from 'axios';
 import lolex from 'lolex';
 
 import { Request, Response } from '../../domain/entity';
+import { MementoConfiguration } from '../../configuration';
 import { NetworkServiceAxios } from './NetworkServiceAxios';
 
 jest.mock('axios');
+
+function getTestConfiguration(): MementoConfiguration {
+  return {
+    targetUrl: 'http://localhost',
+    cacheDirectory: '',
+    disableCachingPatterns: [],
+    port: 0,
+    useRealResponseTime: false,
+    version: '',
+  };
+}
 
 describe('Headers handling', () => {
   it('should not forward hop-by-hop request headers', async () => {
@@ -50,7 +62,7 @@ describe('Headers handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When
@@ -148,7 +160,7 @@ describe('Headers handling', () => {
     });
     const request = new Request('GET', '/toto', {}, '');
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When
@@ -223,7 +235,7 @@ describe('error handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When
@@ -259,7 +271,7 @@ describe('error handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When

@@ -4,10 +4,10 @@ import fs from 'fs-extra';
 import { Request } from '../../domain/entity';
 import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { getFileExtension } from '../../utils/path';
+import { MementoConfiguration } from '../../configuration';
 
 export interface Dependencies {
-  targetUrl: string;
-  cacheDirectory: string;
+  config: MementoConfiguration;
 }
 
 function getRequestDirectoryName(request: Request) {
@@ -22,19 +22,18 @@ function getRequestDirectoryName(request: Request) {
  *   body.txt -> to body.{appropriate file extension}
  */
 export async function moveTxtToProperFileTypeMigration({
-  targetUrl,
-  cacheDirectory,
+  config,
 }: Dependencies) {
-  const requestRepository = new RequestRepositoryFile({
-    targetUrl,
-    cacheDirectory,
-  });
+  const requestRepository = new RequestRepositoryFile({ config });
   const allRequests = await requestRepository.getAllRequests();
 
-  const projectDirectoryName = targetUrl
+  const projectDirectoryName = config.targetUrl
     .replace(/[:\/]/g, '_')
     .replace(/\./g, '-');
-  const projectFullPath = path.join(cacheDirectory, projectDirectoryName);
+  const projectFullPath = path.join(
+    config.cacheDirectory,
+    projectDirectoryName
+  );
 
   for (const request of allRequests) {
     const requestDirectoryName = getRequestDirectoryName(request);

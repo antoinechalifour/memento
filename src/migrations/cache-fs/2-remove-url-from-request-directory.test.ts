@@ -35,8 +35,14 @@ it('should move all old directories to a folder which name is the request id', a
 
   // When
   await moveRequestsToIdDirectories({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
+    config: {
+      targetUrl: 'https://pokeapi.co/api/v2',
+      cacheDirectory: MEMENTO_CACHE_DIR,
+      disableCachingPatterns: [],
+      port: 0,
+      useRealResponseTime: false,
+      version: '',
+    },
   });
 
   // Then

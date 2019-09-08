@@ -1,15 +1,15 @@
 import minimatch from 'minimatch';
 
 import { wait } from '../../utils/timers';
-import { Method, Response, Request, DisableCachePattern } from '../entity';
+import { MementoConfiguration } from '../../configuration';
+import { Method, Response, Request } from '../entity';
 import { RequestRepository } from '../repository';
 import { NetworkService } from '../service';
 
 interface Dependencies {
   requestRepository: RequestRepository;
   networkService: NetworkService;
-  useRealResponseTime: boolean;
-  disableCachingPatterns: DisableCachePattern[];
+  config: MementoConfiguration;
 }
 
 export interface Headers {
@@ -19,19 +19,16 @@ export interface Headers {
 export class RespondToRequest {
   private requestRepository: RequestRepository;
   private networkService: NetworkService;
-  private useRealResponseTime: boolean;
-  private disableCachingPatterns: DisableCachePattern[];
+  private config: MementoConfiguration;
 
   public constructor({
     requestRepository,
     networkService,
-    useRealResponseTime,
-    disableCachingPatterns,
+    config,
   }: Dependencies) {
     this.requestRepository = requestRepository;
     this.networkService = networkService;
-    this.useRealResponseTime = useRealResponseTime;
-    this.disableCachingPatterns = disableCachingPatterns;
+    this.config = config;
   }
 
   public async execute(
@@ -59,7 +56,7 @@ export class RespondToRequest {
       await this.requestRepository.persistResponseForRequest(request, response);
     }
 
-    if (this.useRealResponseTime) {
+    if (this.config.useRealResponseTime) {
       await wait(response.responseTimeInMs);
     }
 
@@ -67,7 +64,7 @@ export class RespondToRequest {
   }
 
   private shouldIgnoreCaching(method: Method, url: string) {
-    return this.disableCachingPatterns.some(disableCacheParams => {
+    return this.config.disableCachingPatterns.some(disableCacheParams => {
       const methodMatch =
         method.toLowerCase() === disableCacheParams.method.toLowerCase();
       const globMatch = minimatch(url, disableCacheParams.urlPattern);
