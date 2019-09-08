@@ -1,3 +1,4 @@
+import { getTestConfiguration } from '../../../test-utils/config';
 import { GetRequestDetails } from '../../../domain/usecase';
 import { Request, Response } from '../../../domain/entity';
 import { MementoConfiguration } from '../../../configuration';
@@ -11,14 +12,9 @@ function getTestDependencies(): {
 } {
   return {
     logger: jest.fn(),
-    config: {
+    config: getTestConfiguration({
       cacheDirectory: 'cache-directory',
-      disableCachingPatterns: [],
-      port: 0,
-      targetUrl: '',
-      useRealResponseTime: false,
-      version: '',
-    },
+    }),
     // @ts-ignore
     getRequestDetailsUseCase: {
       execute: jest.fn().mockResolvedValue([
