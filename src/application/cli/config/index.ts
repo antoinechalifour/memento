@@ -53,6 +53,10 @@ export class CliConfig {
           chalk.white('Disabled cache for'),
           chalk.yellow(disableCachingMessage),
         ],
+        [
+          chalk.white('Ignore cookies pattern'),
+          chalk.yellow(this.config.ignoreCookiesPattern.source),
+        ],
       ])
     );
   }

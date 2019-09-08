@@ -80,7 +80,6 @@ describe('headers', () => {
       'last-modified': 'last-modified',
       etag: 'etag',
       vary: 'vary',
-      'set-cookie': 'set-cookie',
       'content-disposition': 'content-disposition',
       'content-length': 'content-length',
       'content-type': 'content-type',
@@ -107,5 +106,58 @@ describe('headers', () => {
       'server-timing': 'server-timing',
       sourcemap: 'sourcemap',
     });
+  });
+
+  it('should set the cookies', () => {
+    // Given
+    const response = new Response(
+      200,
+      {
+        // @ts-ignore
+        'SET-COOKIE': [
+          'test1=value1; Path=/; Secure',
+          'test2=value2; Path=/; secure',
+          'test3=value2; Path=/',
+        ],
+      },
+      Buffer.from('OK'),
+      0
+    );
+
+    // When
+    const cookies = response.cookies;
+
+    // Then
+    expect(cookies).toEqual([
+      'test1=value1; Path=/',
+      'test2=value2; Path=/',
+      'test3=value2; Path=/',
+    ]);
+  });
+});
+
+describe('applyCookiesPolicy', () => {
+  it('should remove google analytics cookies', () => {
+    // Given
+    const response = new Response(
+      200,
+      {
+        // @ts-ignore
+        'set-cookie': [
+          '_ga=gavalue; Path=/; Secure',
+          'test=value; Path=/; Secure',
+          '_gid=gidvalue; Path=/',
+        ],
+      },
+      Buffer.from(''),
+      0
+    );
+    const policy = /AMP_TOKEN|_ga.*|_gid/gi;
+
+    // When
+    response.applyCookiesPolicy(policy);
+
+    // Then
+    expect(response.cookies).toEqual(['test=value; Path=/']);
   });
 });

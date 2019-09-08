@@ -43,6 +43,10 @@ export function getConfiguration() {
     ),
     disableCachingPatterns: (cosmicConfiguration.config
       .disableCachingPatterns || []) as DisableCachePattern[],
+    ignoreCookiesPattern: new RegExp(
+      cosmicConfiguration.config.ignoreCookiesPattern || 'a^', // a^ matches nothing by default
+      'g'
+    ),
   };
 
   assert(configuration.targetUrl, 'targetUrl option is required');

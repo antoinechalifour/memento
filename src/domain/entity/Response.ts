@@ -1,6 +1,8 @@
 import { Headers } from './Headers';
 
 export class Response {
+  public cookies: string[];
+
   public constructor(
     public readonly status: number,
     public readonly headers: Headers,
@@ -8,6 +10,16 @@ export class Response {
     public responseTimeInMs: number
   ) {
     this.headers = this.buildHeaders(headers);
+    this.cookies = this.buildCookies();
+  }
+
+  public applyCookiesPolicy(policy: RegExp) {
+    this.cookies = this.cookies.filter(cookie => {
+      policy.lastIndex = 0;
+      return !policy.test(cookie);
+    });
+
+    policy.lastIndex = 0;
   }
 
   private buildHeaders(inputHeaders: Headers): Headers {
@@ -41,5 +53,23 @@ export class Response {
     });
 
     return headers;
+  }
+
+  private buildCookies() {
+    const cookies = this.parseSetCookieHeader();
+
+    delete this.headers['set-cookie'];
+
+    return cookies.map(cookie => this.makeUnsecureCookie(cookie));
+  }
+
+  private makeUnsecureCookie(cookie: string) {
+    return cookie.replace(/; Secure/gi, '');
+  }
+
+  private parseSetCookieHeader(): string[] {
+    const cookies = (this.headers['set-cookie'] as any) || [];
+
+    return Array.isArray(cookies) ? cookies : [cookies];
   }
 }

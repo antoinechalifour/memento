@@ -40,11 +40,15 @@ export class NetworkServiceAxios implements NetworkService {
 
     const responseTime = dateAfter.getTime() - dateBefore.getTime();
 
-    return new Response(
+    const response = new Response(
       axiosResponse.status,
       axiosResponse.headers,
       axiosResponse.data,
       responseTime
     );
+
+    response.applyCookiesPolicy(this.config.ignoreCookiesPattern);
+
+    return response;
   }
 }

@@ -60,6 +60,7 @@ The following options are supported:
 | cacheDirectory         | The cache directory used for storing responses                | memento-integration                                    | .memento-cache |
 | useRealResponseTime    | Whether Memento should respond using the actual response time | true                                                   | false          |
 | disableCachingPatterns | An array of patterns used to ignore caching certain requests  | [{ method: 'post', urlPattern: '/pokemon/*/sprites' }] | []             |
+| ignoreCookiesPattern   | A regular expression for ignoring cookies                     | AMP_TOKEN\|_ga.*\|_gid                                 | null           |
 
 ### Option: disableCachingPatterns
 
@@ -77,7 +78,7 @@ You may use `disableCachingPatterns` in your configuration to tell Memento to ig
 
 The [minimatch](https://www.npmjs.com/package/minimatch) package is used for comparing glob patterns and the actual url. You may use a tool like [globtester](http://www.globtester.com) to test your configurations.
 
-### Recipe: ignore caching all POST requests
+#### Recipe: ignore caching all POST requests
 
 ```
 {
@@ -86,6 +87,26 @@ The [minimatch](https://www.npmjs.com/package/minimatch) package is used for com
     "method": "post",
     "urlPattern": "**"
   }]
+}
+```
+
+### Option: ignoreCookiesPattern
+
+Even though Memento play well with stateless APIs, you may want to use it against APIs which uses cookies. This might be tricky if the server always sets different cookies (thus cached requests cannot be replayed as the change every time they are made).
+
+Memento provides an `ignoreCookiesPattern` which allows you to tell Memento not to care about cookies that match the regular expression that you provided.
+
+*Note: you may use [Regexr](https://regexr.com/) to test your configuration.*
+*Note: as Memento runs over HTTP, secure cookies will be downgraded to normal cookies.*
+
+### Recipe: ignore Google Analytics cookies
+
+A common use case is ignoring Google Analytics cookies : `_ga`, `_gid`, `_gat`, `_gac-*`, `AMP_TOKEN`. The following configuration tells Memento to ignore such cookies:
+
+```
+{
+  // ... your configuration
+  "ignoreCookiesPattern": "AMP_TOKEN|_ga.*|_gid"
 }
 ```
 

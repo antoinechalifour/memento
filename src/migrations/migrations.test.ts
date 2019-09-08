@@ -72,6 +72,7 @@ it('should migrate the cache directory to the new format', async () => {
     targetUrl: 'https://pokeapi.co/api/v2',
     useRealResponseTime: false,
     version: '',
+    ignoreCookiesPattern: /.*/g,
   };
   const container = createContainer();
   container.register({
