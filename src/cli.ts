@@ -36,11 +36,11 @@ export function createCli({ container, reload }: CreateCliOptions) {
   vorpal.delimiter('memento$ ');
 
   vorpal
-    .command('config', 'Displays the current configuration')
+    .command('config', 'Displays the current configuration.')
     .action(injector.action(CliConfig, 'print'));
 
   vorpal
-    .command('config reload', 'Reloads the configuration file')
+    .command('config reload', 'Reloads the configuration file.')
     .action(async function(this: Vorpal.CommandInstance) {
       await reload();
 
@@ -52,25 +52,22 @@ export function createCli({ container, reload }: CreateCliOptions) {
     });
 
   vorpal
-    .command('ls', 'Lists all cached requests')
+    .command('ls', 'Displays a list of all cached requests.')
     .action(injector.action(CliLs, 'allRequests'));
 
   vorpal
-    .command('clear all', 'Removes all cached responses')
+    .command('clear all', 'Clears all requests from the cache.')
     .action(injector.action(CliClear, 'all'));
 
   vorpal
-    .command(
-      'clear <requestId>',
-      'Removes the cached response for the provided request id'
-    )
+    .command('clear <requestId>', 'Clears the request by id from the cache.')
     .autocomplete(requestsAutocomplete)
     .action(injector.action(CliClear, 'one'));
 
   vorpal
     .command(
       'refresh <requestId>',
-      'Refetches the request and updates the response'
+      'Invalidates the cache for the request by id.'
     )
     .autocomplete(requestsAutocomplete)
     .action(injector.action(CliRefresh, 'request'));
@@ -78,7 +75,7 @@ export function createCli({ container, reload }: CreateCliOptions) {
   vorpal
     .command(
       'info <requestId>',
-      'Displays information about the request and its response'
+      'Displays information about the request and its response.'
     )
     .autocomplete(requestsAutocomplete)
     .option('-b, --body', 'Include the response body')
@@ -87,7 +84,7 @@ export function createCli({ container, reload }: CreateCliOptions) {
   vorpal
     .command(
       'set response-time <requestId> <responseTimeInMs>',
-      'Sets the response time for the provided request id'
+      'Sets the response time for the request by id. Requires useRealResponseTime to be true.'
     )
     .action(injector.action(CliResponseTime, 'set'));
 
