@@ -4,6 +4,9 @@ import path from 'path';
 import assert from 'assert';
 import cosmiconfig from 'cosmiconfig';
 
+import { version } from '../package.json';
+import { DisableCachePattern } from './domain/entity';
+
 function getPortFromString(port: string | undefined): number {
   return port ? parseInt(port, 10) : 3344;
 }
@@ -29,16 +32,17 @@ export function getConfiguration() {
   }
 
   const configuration = {
-    targetUrl: cosmicConfiguration.config.targetUrl,
+    targetUrl: cosmicConfiguration.config.targetUrl as string,
     port: getPortFromString(cosmicConfiguration.config.port),
+    version,
     cacheDirectory: getCacheDirectory(
       cosmicConfiguration.config.cacheDirectory
     ),
     useRealResponseTime: getUseRealResponseTime(
       cosmicConfiguration.config.useRealResponseTime
     ),
-    disableCachingPatterns:
-      cosmicConfiguration.config.disableCachingPatterns || [],
+    disableCachingPatterns: (cosmicConfiguration.config
+      .disableCachingPatterns || []) as DisableCachePattern[],
   };
 
   assert(configuration.targetUrl, 'targetUrl option is required');
@@ -53,3 +57,5 @@ export function getConfiguration() {
 
   return configuration;
 }
+
+export type MementoConfiguration = ReturnType<typeof getConfiguration>;

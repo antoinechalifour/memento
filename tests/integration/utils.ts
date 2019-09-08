@@ -1,6 +1,7 @@
 import { createContainer, asValue, asClass } from 'awilix';
 import supertest from 'supertest';
 
+import { MementoConfiguration } from '../../src/configuration';
 import { createApp } from '../../src/app';
 import { RespondToRequest } from '../../src/domain/usecase';
 import { RequestRepositoryMemory } from '../../src/infrastructure/repository';
@@ -11,13 +12,18 @@ export function getTestApplication() {
   // Setup the application configuration
   const targetUrl = 'http://localhost:8000';
   const container = createContainer();
+  const config: MementoConfiguration = {
+    cacheDirectory: '',
+    disableCachingPatterns: [],
+    port: 0,
+    targetUrl,
+    useRealResponseTime: false,
+    version: '',
+  };
 
   container.register({
     // Constants
-    targetUrl: asValue(targetUrl),
-    useRealResponseTime: asValue(false),
-    disableCachingPatterns: asValue([]),
-    port: asValue(0),
+    config: asValue(config),
 
     // Use cases
     respondToRequestUseCase: asClass(RespondToRequest),

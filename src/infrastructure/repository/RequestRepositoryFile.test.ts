@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 
+import { getTestConfiguration } from '../../test-utils/config';
 import { Request, Response } from '../../domain/entity';
 import { RequestRepository } from '../../domain/repository';
 import { getRequestDirectory } from '../../utils/path';
@@ -14,8 +15,10 @@ const OUTPUT_DIRECTORY = `${MEMENTO_CACHE_DIR}/https___pokeapi-co_api_v2`;
 
 function getRequestRepository() {
   return new RequestRepositoryFile({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
+    config: getTestConfiguration({
+      cacheDirectory: MEMENTO_CACHE_DIR,
+      targetUrl: 'https://pokeapi.co/api/v2',
+    }),
   });
 }
 

@@ -2,16 +2,17 @@ import axios, { AxiosResponse } from 'axios';
 
 import { NetworkService } from '../../domain/service';
 import { Request, Response } from '../../domain/entity';
+import { MementoConfiguration } from '../../configuration';
 
 interface Dependencies {
-  targetUrl: string;
+  config: MementoConfiguration;
 }
 
 export class NetworkServiceAxios implements NetworkService {
-  private targetUrl: string;
+  private config: MementoConfiguration;
 
-  public constructor({ targetUrl }: Dependencies) {
-    this.targetUrl = targetUrl;
+  public constructor({ config }: Dependencies) {
+    this.config = config;
   }
 
   public async executeRequest(request: Request): Promise<Response> {
@@ -22,7 +23,7 @@ export class NetworkServiceAxios implements NetworkService {
     try {
       axiosResponse = await axios({
         data: request.body,
-        url: `${this.targetUrl}${request.url}`,
+        url: `${this.config.targetUrl}${request.url}`,
         headers: request.headers,
         method: request.method,
         responseType: 'arraybuffer',

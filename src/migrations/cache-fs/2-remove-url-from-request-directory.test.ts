@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { getTestConfiguration } from '../../test-utils/config';
 import { moveRequestsToIdDirectories } from './2-remove-url-from-request-directory';
 
 const MEMENTO_CACHE_DIR = path.join(
@@ -35,8 +36,10 @@ it('should move all old directories to a folder which name is the request id', a
 
   // When
   await moveRequestsToIdDirectories({
-    targetUrl: 'https://pokeapi.co/api/v2',
-    cacheDirectory: MEMENTO_CACHE_DIR,
+    config: getTestConfiguration({
+      targetUrl: 'https://pokeapi.co/api/v2',
+      cacheDirectory: MEMENTO_CACHE_DIR,
+    }),
   });
 
   // Then

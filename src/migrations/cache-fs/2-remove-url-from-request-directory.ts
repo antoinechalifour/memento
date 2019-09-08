@@ -4,10 +4,10 @@ import path from 'path';
 import { Request } from '../../domain/entity';
 import { RequestRepositoryFile } from '../../infrastructure/repository';
 import { getProjectDirectory } from '../../utils/path';
+import { MementoConfiguration } from '../../configuration';
 
 export interface Dependencies {
-  targetUrl: string;
-  cacheDirectory: string;
+  config: MementoConfiguration;
 }
 
 /**
@@ -31,15 +31,12 @@ function getNewRequestDirectoryname(request: Request) {
 /**
  * Migrates the cache directory for each request to a directory named after the request id.
  */
-export async function moveRequestsToIdDirectories({
-  targetUrl,
-  cacheDirectory,
-}: Dependencies) {
-  const projectDirectoryPath = getProjectDirectory(cacheDirectory, targetUrl);
-  const requestRepository = new RequestRepositoryFile({
-    targetUrl,
-    cacheDirectory,
-  });
+export async function moveRequestsToIdDirectories({ config }: Dependencies) {
+  const projectDirectoryPath = getProjectDirectory(
+    config.cacheDirectory,
+    config.targetUrl
+  );
+  const requestRepository = new RequestRepositoryFile({ config });
 
   // Get a list of all requests to check / migrate
   const allRequests = await requestRepository.getAllRequests();

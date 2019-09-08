@@ -3,53 +3,30 @@
 import chalk from 'chalk';
 import table from 'text-table';
 
-import { DisableCachePattern } from '../../../domain/entity';
+import { MementoConfiguration } from '../../../configuration';
 import { Logger } from '../types';
 
 interface Dependencies {
-  appVersion: string;
-  port: number;
-  targetUrl: string;
-  cacheDirectory: string;
-  useRealResponseTime: boolean;
-  disableCachingPatterns: DisableCachePattern[];
+  config: MementoConfiguration;
   logger: Logger;
 }
 
 export class CliConfig {
-  private appVersion: string;
-  private cacheDirectory: string;
-  private disableCachingPatterns: DisableCachePattern[];
-  private port: number;
-  private targetUrl: string;
-  private useRealResponseTime: boolean;
+  private config: MementoConfiguration;
   private logger: Logger;
 
-  public constructor({
-    appVersion,
-    cacheDirectory,
-    disableCachingPatterns,
-    port,
-    targetUrl,
-    useRealResponseTime,
-    logger,
-  }: Dependencies) {
-    this.appVersion = appVersion;
-    this.cacheDirectory = cacheDirectory;
-    this.disableCachingPatterns = disableCachingPatterns;
-    this.port = port;
-    this.targetUrl = targetUrl;
-    this.useRealResponseTime = useRealResponseTime;
+  public constructor({ config, logger }: Dependencies) {
+    this.config = config;
     this.logger = logger;
   }
 
   public print(): void {
     let disableCachingMessage = '';
 
-    if (this.disableCachingPatterns.length) {
+    if (this.config.disableCachingPatterns.length) {
       disableCachingMessage += '\r';
 
-      this.disableCachingPatterns.forEach(option => {
+      this.config.disableCachingPatterns.forEach(option => {
         disableCachingMessage += chalk`\t\t\t- {green ${option.method}} {yellow ${option.urlPattern}}\n`;
       });
 
@@ -61,14 +38,17 @@ export class CliConfig {
     this.logger('Done');
     this.logger(
       table([
-        [chalk.white('Memento Version'), chalk.yellow(this.appVersion)],
-        [chalk.white('Port'), chalk.yellow(this.port.toString())],
-        [chalk.white('Target URL'), chalk.yellow(this.targetUrl)],
+        [chalk.white('Memento Version'), chalk.yellow(this.config.version)],
+        [chalk.white('Port'), chalk.yellow(this.config.port.toString())],
+        [chalk.white('Target URL'), chalk.yellow(this.config.targetUrl)],
         [
           chalk.white('Use real response time'),
-          chalk.yellow(this.useRealResponseTime.toString()),
+          chalk.yellow(this.config.useRealResponseTime.toString()),
         ],
-        [chalk.white('Cache directory'), chalk.yellow(this.cacheDirectory)],
+        [
+          chalk.white('Cache directory'),
+          chalk.yellow(this.config.cacheDirectory),
+        ],
         [
           chalk.white('Disabled cache for'),
           chalk.yellow(disableCachingMessage),

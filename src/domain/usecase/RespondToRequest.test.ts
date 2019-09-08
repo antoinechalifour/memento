@@ -1,3 +1,4 @@
+import { getTestConfiguration } from '../../test-utils/config';
 import {
   getTestRequestRepository,
   getTestNetworkService,
@@ -36,8 +37,7 @@ describe('when the response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: false,
-      disableCachingPatterns: [],
+      config: getTestConfiguration({ useRealResponseTime: false }),
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -56,8 +56,7 @@ describe('when the response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: true,
-      disableCachingPatterns: [],
+      config: getTestConfiguration({ useRealResponseTime: true }),
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -108,13 +107,15 @@ describe('when no response is in the cache', () => {
     const useCase = new RespondToRequest({
       requestRepository,
       networkService,
-      useRealResponseTime: true,
-      disableCachingPatterns: [
-        {
-          method: 'POST',
-          urlPattern: '/beers/1',
-        },
-      ],
+      config: getTestConfiguration({
+        useRealResponseTime: true,
+        disableCachingPatterns: [
+          {
+            method: 'POST',
+            urlPattern: '/beers/1',
+          },
+        ],
+      }),
     });
     const method = 'GET';
     const url = '/beers/1';
@@ -174,13 +175,14 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto',
+          },
+        ],
+      }),
     });
     const method = 'POST';
     const url = '/pokemon/ditto';
@@ -206,21 +208,22 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'POST',
-          urlPattern: '/pokemon/ditto',
-        },
-        {
-          method: 'get',
-          urlPattern: '/pokemon/ditto',
-        },
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto?format=true',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'POST',
+            urlPattern: '/pokemon/ditto',
+          },
+          {
+            method: 'get',
+            urlPattern: '/pokemon/ditto',
+          },
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto?format=true',
+          },
+        ],
+      }),
     });
     const method = 'POST';
     const url = '/pokemon/ditto';
@@ -246,13 +249,14 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'post',
-          urlPattern: '/pokemon/ditto*',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'post',
+            urlPattern: '/pokemon/ditto*',
+          },
+        ],
+      }),
     });
     const method = 'POST';
     const url = '/pokemon/ditto?format=true';
@@ -278,13 +282,14 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/mew',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/mew',
+          },
+        ],
+      }),
     });
     const method = 'GET';
     const url = '/pokemon/mew/';
@@ -310,13 +315,14 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/mew/**/*',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/mew/**/*',
+          },
+        ],
+      }),
     });
     const method = 'GET';
     const url = '/pokemon/mew/abilities/2/stats';
@@ -342,17 +348,18 @@ describe('when caching is disabled for the method and url', () => {
     const useCase = new RespondToRequest({
       networkService,
       requestRepository,
-      useRealResponseTime: false,
-      disableCachingPatterns: [
-        {
-          method: 'get',
-          urlPattern: '/pokemon/*/sprites/**',
-        },
-        {
-          method: 'post',
-          urlPattern: '/pokemon/*/sprites/**',
-        },
-      ],
+      config: getTestConfiguration({
+        disableCachingPatterns: [
+          {
+            method: 'get',
+            urlPattern: '/pokemon/*/sprites/**',
+          },
+          {
+            method: 'post',
+            urlPattern: '/pokemon/*/sprites/**',
+          },
+        ],
+      }),
     });
     const method = 'GET';
     const url = '/pokemon/mew/sprites/2/back';

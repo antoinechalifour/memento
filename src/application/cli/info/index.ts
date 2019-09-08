@@ -4,31 +4,28 @@ import table from 'text-table';
 
 import { GetRequestDetails } from '../../../domain/usecase';
 import { getRequestDirectory } from '../../../utils/path';
+import { MementoConfiguration } from '../../../configuration';
 import { Logger } from '../types';
 
 interface Dependencies {
   getRequestDetailsUseCase: GetRequestDetails;
-  cacheDirectory: string;
-  targetUrl: string;
+  config: MementoConfiguration;
   logger: Logger;
 }
 
 export class CliInfo {
   private getRequestDetails: GetRequestDetails;
-  private cacheDirectory: string;
-  private targetUrl: string;
+  private config: MementoConfiguration;
   private logger: Logger;
 
   public constructor({
     getRequestDetailsUseCase,
+    config,
     logger,
-    cacheDirectory,
-    targetUrl,
   }: Dependencies) {
     this.getRequestDetails = getRequestDetailsUseCase;
+    this.config = config;
     this.logger = logger;
-    this.cacheDirectory = cacheDirectory;
-    this.targetUrl = targetUrl;
   }
 
   public async request({
@@ -41,8 +38,8 @@ export class CliInfo {
     const [request, response] = await this.getRequestDetails.execute(requestId);
 
     const requestDirectoryPath = getRequestDirectory(
-      this.cacheDirectory,
-      this.targetUrl,
+      this.config.cacheDirectory,
+      this.config.targetUrl,
       request
     );
 

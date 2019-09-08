@@ -1,6 +1,7 @@
 import axios from 'axios';
 import lolex from 'lolex';
 
+import { getTestConfiguration } from '../../test-utils/config';
 import { Request, Response } from '../../domain/entity';
 import { NetworkServiceAxios } from './NetworkServiceAxios';
 
@@ -50,7 +51,9 @@ describe('Headers handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration({
+        targetUrl: 'http://localhost',
+      }),
     });
 
     // When
@@ -148,7 +151,7 @@ describe('Headers handling', () => {
     });
     const request = new Request('GET', '/toto', {}, '');
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When
@@ -223,7 +226,7 @@ describe('error handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When
@@ -259,7 +262,7 @@ describe('error handling', () => {
       ''
     );
     const networkService = new NetworkServiceAxios({
-      targetUrl: 'http://localhost',
+      config: getTestConfiguration(),
     });
 
     // When

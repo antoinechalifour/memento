@@ -17,7 +17,6 @@ import {
 } from './domain/usecase';
 import { NetworkServiceAxios } from './infrastructure/service';
 import { RequestRepositoryFile } from './infrastructure/repository';
-import { version } from '../package.json';
 
 export interface MementoOptions {
   cacheDirectory?: string;
@@ -31,12 +30,7 @@ export function Memento({ cacheDirectory }: MementoOptions = {}) {
 
     container.register({
       // Constants
-      port: asValue(configuration.port),
-      targetUrl: asValue(configuration.targetUrl),
-      cacheDirectory: asValue(configuration.cacheDirectory),
-      appVersion: asValue(version),
-      useRealResponseTime: asValue(configuration.useRealResponseTime),
-      disableCachingPatterns: asValue(configuration.disableCachingPatterns),
+      config: asValue(configuration),
 
       // Use cases
       respondToRequestUseCase: asClass(RespondToRequest),
