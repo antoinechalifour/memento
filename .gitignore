@@ -6,6 +6,7 @@ node_modules
 .rts2_cache_umd
 dist
 .mementorc
+.mementorc.json
 .memento-cache
 coverage
 .vscode/

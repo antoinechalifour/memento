@@ -6,4 +6,5 @@ export * from './info';
 export * from './ls';
 export * from './refresh';
 export * from './responseTime';
+export * from './import';
 export * from './injector';
