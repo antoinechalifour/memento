@@ -12,6 +12,7 @@ import {
   CliRefresh,
   CliInfo,
   CliResponseTime,
+  CliImport,
   CliInjector,
 } from './application/cli';
 
@@ -87,6 +88,10 @@ export function createCli({ container, reload }: CreateCliOptions) {
       'Sets the response time for the request by id. Requires useRealResponseTime to be true.'
     )
     .action(injector.action(CliResponseTime, 'set'));
+
+  vorpal
+    .command('import', 'Imports curl commands')
+    .action(injector.action(CliImport, 'import'));
 
   vorpal.log(chalk`{green 
       __   __  _______  __   __  _______  __    _  _______  _______ 
