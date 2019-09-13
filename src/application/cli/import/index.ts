@@ -2,6 +2,7 @@ import { spawnSync } from 'child_process';
 import { tmpdir } from 'os';
 import { writeFile, readFile } from 'fs-extra';
 import chalk from 'chalk';
+import { defaultEditor } from 'env-editor';
 
 import { ImportCurl } from '../../../domain/usecase';
 import { getRequestDirectory } from '../../../utils/path';
@@ -28,6 +29,8 @@ export class CliImport {
   }
 
   public async import() {
+    const editor = defaultEditor().binary;
+
     // Reset the file content
     await writeFile(
       EDITOR_OUPUT_FILE,
@@ -35,24 +38,30 @@ export class CliImport {
     );
 
     // Get the command using the user editor
-    spawnSync('nano', [EDITOR_OUPUT_FILE], {
+    spawnSync(editor, [EDITOR_OUPUT_FILE], {
       stdio: 'inherit',
     });
 
     const editorContents = await readFile(EDITOR_OUPUT_FILE, 'utf-8');
     const command = editorContents.split('\n')[1];
 
-    const request = await this.importCurl.execute(command);
+    try {
+      const request = await this.importCurl.execute(command);
 
-    const requestDirectory = getRequestDirectory(
-      this.config.cacheDirectory,
-      this.config.targetUrl,
-      request
-    );
+      const requestDirectory = getRequestDirectory(
+        this.config.cacheDirectory,
+        this.config.targetUrl,
+        request
+      );
 
-    this.logger(chalk`Request {yellow ${request.id}} has been created.`);
-    this.logger(
-      chalk`You may edit the request information at {yellow ${requestDirectory}}`
-    );
+      this.logger(chalk`Request {yellow ${request.id}} has been created.`);
+      this.logger(
+        chalk`You may edit the request information at {yellow ${requestDirectory}}`
+      );
+    } catch (err) {
+      this.logger(
+        chalk.red`Invalid curl command provided. Please refer to the documentation for more instructions.`
+      );
+    }
   }
 }
