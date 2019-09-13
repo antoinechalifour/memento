@@ -120,6 +120,25 @@ A common use case is ignoring Google Analytics cookies : `_ga`, `_gid`, `_gat`, 
 
 Launching Memento will start the interactive Memento CLI, where you can type commands to modify the cached requests and responses. The documentation can be found by typing `help` in the command prompt.
 
+
+### Command: import
+
+You may import cURL commands into Memento. This feature is intended to be used as such:
+
+1. develop your app like the API is ready
+2. open the "network" tab in the Chrome devtools
+3. right click the failed request and select "copy as cURL"
+
+   ![How to copy curl](./doc/how-to-copy-curl.png)
+
+4. use the "import" command in memento and paste the cURL command.
+
+   ![How to import curl](./doc/how-to-import-curl.png)
+
+5. you can now edit the response in your editor to stub the API call 🎉
+
+**Note: Memento will open the editor defined in your EDITOR environment variable. Non-terminal editors are not supported.**
+
 ## Cache location
 
 By default, memento will create a `.memento-cache` directory in the current directory where each response will be mapped to a directory containing:
