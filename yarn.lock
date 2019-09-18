@@ -903,10 +903,10 @@
     once "^1.4.0"
     universal-user-agent "^3.0.0"
 
-"@octokit/rest@16.28.7":
-  version "16.28.7"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.28.7.tgz#a2c2db5b318da84144beba82d19c1a9dbdb1a1fa"
-  integrity sha512-cznFSLEhh22XD3XeqJw51OLSfyL2fcFKUO+v2Ep9MTAFfFLS1cK1Zwd1yEgQJmJoDnj4/vv3+fGGZweG+xsbIA==
+"@octokit/rest@16.28.9":
+  version "16.28.9"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.28.9.tgz#ac8c5f3ff305e9e0a0989a5245e4286f057a95d7"
+  integrity sha512-IKGnX+Tvzt7XHhs8f4ajqxyJvYAMNX5nWfoJm4CQj8LZToMiaJgutf5KxxpxoC3y5w7JTJpW5rnWnF4TsIvCLA==
   dependencies:
     "@octokit/request" "^5.0.0"
     "@octokit/request-error" "^1.0.2"
@@ -919,8 +919,7 @@
     lodash.uniq "^4.5.0"
     octokit-pagination-methods "^1.1.0"
     once "^1.4.0"
-    universal-user-agent "^3.0.0"
-    url-template "^2.0.8"
+    universal-user-agent "^4.0.0"
 
 "@release-it/conventional-changelog@^1.1.0":
   version "1.1.0"
@@ -4031,10 +4030,10 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-form-data@2.5.0, form-data@^2.3.1:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.5.0.tgz#094ec359dc4b55e7d62e0db4acd76e89fe874d37"
-  integrity sha512-WXieX3G/8side6VIqx44ablyULoGruSde5PNTxoUyo5CeyAMX6nVWUd0rgist/EuX655cjhUhTo1Fo3tRYqbcA==
+form-data@2.5.1, form-data@^2.3.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
+  integrity sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
@@ -6889,7 +6888,7 @@ os-locale@^3.0.0:
     lcid "^2.0.0"
     mem "^4.0.0"
 
-os-name@3.1.0, os-name@^3.0.0:
+os-name@3.1.0, os-name@^3.0.0, os-name@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/os-name/-/os-name-3.1.0.tgz#dec19d966296e1cd62d701a5a66ee1ddeae70801"
   integrity sha512-h8L+8aNjNcMpo/mAIBPn5PXCM16iyPGjHNWo6U1YO8sJTMHtEtyczI6QJnLoplswm6goopQkqc7OAnjhWcugVg==
@@ -7812,12 +7811,12 @@ regjsparser@^0.6.0:
     jsesc "~0.5.0"
 
 release-it@^12.2.1, release-it@^12.3.5:
-  version "12.4.0"
-  resolved "https://registry.yarnpkg.com/release-it/-/release-it-12.4.0.tgz#ff13f1040c23dc5d9f793820d4e62ddd65f1e00a"
-  integrity sha512-FcdydWmdyuYPDo1vR7SwTju9rCseH0DQsjC3LP8W8aR4g6ULFw1j16eVbcL+ZAFGUbtJmTTIrxax1G48rB8Fsg==
+  version "12.4.1"
+  resolved "https://registry.yarnpkg.com/release-it/-/release-it-12.4.1.tgz#8f19b69fa67f34935e73b9873d3355d212a36836"
+  integrity sha512-aqpmBWYT1No7/s2iZQvjqoRSW5+eFec1uMW1Fw829t7yaGaMSUOhfWAewo6ExN9l0QrkVWIaFq9jYUjO4BKt0A==
   dependencies:
     "@iarna/toml" "2.2.3"
-    "@octokit/rest" "16.28.7"
+    "@octokit/rest" "16.28.9"
     async-retry "1.2.3"
     chalk "2.4.2"
     cosmiconfig "5.2.1"
@@ -7825,7 +7824,7 @@ release-it@^12.2.1, release-it@^12.3.5:
     deprecated-obj "1.0.1"
     detect-repo-changelog "1.0.1"
     find-up "4.1.0"
-    form-data "2.5.0"
+    form-data "2.5.1"
     git-url-parse "11.1.2"
     globby "10.0.1"
     got "9.6.0"
@@ -7843,7 +7842,7 @@ release-it@^12.2.1, release-it@^12.3.5:
     url-join "4.0.1"
     uuid "3.3.3"
     window-size "1.1.1"
-    yargs-parser "13.1.1"
+    yargs-parser "14.0.0"
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -9234,6 +9233,13 @@ universal-user-agent@^3.0.0:
   dependencies:
     os-name "^3.0.0"
 
+universal-user-agent@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/universal-user-agent/-/universal-user-agent-4.0.0.tgz#27da2ec87e32769619f68a14996465ea1cb9df16"
+  integrity sha512-eM8knLpev67iBDizr/YtqkJsF3GK8gzDc6st/WKzrTuPtcsOKW/0IdL4cnMBsU69pOx0otavLWBDGTwg+dB0aA==
+  dependencies:
+    os-name "^3.1.0"
+
 universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
@@ -9692,10 +9698,10 @@ yargs-parser@10.x:
   dependencies:
     camelcase "^4.1.0"
 
-yargs-parser@13.1.1:
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-13.1.1.tgz#d26058532aa06d365fe091f6a1fc06b2f7e5eca0"
-  integrity sha512-oVAVsHz6uFrg3XQheFII8ESO2ssAf9luWuAd6Wexsu4F3OtIW0o8IribPXYrD4WC24LWtPrJlGy87y5udK+dxQ==
+yargs-parser@14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-14.0.0.tgz#42e25777b06718ec99eac2c3a98ad3de73b6818f"
+  integrity sha512-zn/Mnx+tbFjkCFUodEpjXckNS65NfpB5oyqOkDDEG/8uxlfLZJu2IoBLQFjukUkn9rBbGkVYNzrDh6qy4NUd3g==
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
