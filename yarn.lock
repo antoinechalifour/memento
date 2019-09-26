@@ -1246,9 +1246,9 @@
   integrity sha512-dchbFCWfVgUSWEvhOkXGS7zjm+K7jCUvGrQkAHPk2Fmslfofp4HQTH2pqnQ3Pw5GPYv0zWa2AQjKtsfZThuemQ==
 
 "@types/vorpal@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@types/vorpal/-/vorpal-1.11.0.tgz#a797bcc87500e9cbeffa93363eec43e9f3507dee"
-  integrity sha512-gsPnt1APkEBk0kLYJYa5HFWblVOhj43L4krLVN+vNmVIjVLWiXa9N1JmsErcRbRmBjzsJbKpSM6dXsEHG/YZ/w==
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@types/vorpal/-/vorpal-1.12.0.tgz#9074d26f6f09d134b99b8fce2ffa0030495e1550"
+  integrity sha512-QJpUBEnDySb2W58KpO0d51pedxFzKQS9AmeSIryIZUpYTpucXAHzGQWbaQWoQvfqX8dKyqkcBgdNQNv3FakB3w==
 
 "@types/yargs@^12.0.2", "@types/yargs@^12.0.9":
   version "12.0.12"
