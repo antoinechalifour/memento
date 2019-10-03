@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/antoinechalifour/memento/compare/1.5.0...1.6.0) (2019-10-03)
+
+
+### Features
+
+* support imports using the user editor ([#77](https://github.com/antoinechalifour/memento/issues/77)) ([c7abbf4](https://github.com/antoinechalifour/memento/commit/c7abbf4))
+
 # [1.5.0](https://github.com/antoinechalifour/memento/compare/1.4.0...1.5.0) (2019-09-08)
 
 

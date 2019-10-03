@@ -1,7 +1,7 @@
 {
   "name": "@antoinechalifour/memento",
   "description": "Memento is a development-only tool that caches HTTP calls once they have been executed.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "module": "dist/memento.esm.js",
   "typings": "dist/index.d.ts",
