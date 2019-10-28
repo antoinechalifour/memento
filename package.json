@@ -86,7 +86,7 @@
     "cosmiconfig": "5.2.1",
     "env-editor": "^0.4.0",
     "fs-extra": "8.1.0",
-    "koa": "2.10.0",
+    "koa": "2.11.0",
     "koa-bodyparser": "4.2.1",
     "minimatch": "^3.0.4",
     "object-hash": "2.0.0",
