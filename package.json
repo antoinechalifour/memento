@@ -72,7 +72,7 @@
     "pretty-quick": "^2.0.0",
     "release-it": "^12.3.5",
     "supertest": "^4.0.2",
-    "tsdx": "^0.9.0",
+    "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
   },
