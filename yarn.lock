@@ -1021,6 +1021,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/content-disposition@*":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@types/content-disposition/-/content-disposition-0.5.4.tgz#de48cf01c79c9f1560bcfd8ae43217ab028657f8"
+  integrity sha512-0mPF08jn9zYI0n0Q/Pnz7C4kThdSt+6LD4amsrYDDpgBfrVWa3TcCOxKX1zkGgYniGagRv8heN2cbh+CAn+uuQ==
+
 "@types/content-type@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@types/content-type/-/content-type-1.1.3.tgz#3688bd77fc12f935548eef102a4e34c512b03a07"
@@ -1101,6 +1106,11 @@
   resolved "https://registry.yarnpkg.com/@types/http-assert/-/http-assert-1.5.0.tgz#56c95c69b51e7168b0d6727005d1fb2a00aaef94"
   integrity sha512-8CBLG8RmxSvoY07FE6M/QpvJ7J5KzeKqF8eWN7Dq6Ks+lBTQae8Roc2G81lUu2Kw5Ju1gymOuvgyUsussbjAaA==
 
+"@types/http-errors@*":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-1.8.1.tgz#e81ad28a60bee0328c6d2384e029aec626f1ae67"
+  integrity sha512-e+2rjEwK6KDaNOm5Aa9wNGgyS9oSZU/4pfSMMPYNOfjvFI0WVXm29+ITRFr6aKDvvKo7uU1jV68MW4ScsfDi7Q==
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -1154,13 +1164,15 @@
     "@types/koa" "*"
 
 "@types/koa@*", "@types/koa@^2.0.49":
-  version "2.0.52"
-  resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.52.tgz#7dd11de4189ab339ad66c4ccad153716b14e525f"
-  integrity sha512-cp/GTOhOYwomlSKqEoG0kaVEVJEzP4ojYmfa7EKaGkmkkRwJ4B/1VBLbQZ49Z+WJNvzXejQB/9GIKqMo9XLgFQ==
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.13.4.tgz#10620b3f24a8027ef5cbae88b393d1b31205726b"
+  integrity sha512-dfHYMfU+z/vKtQB7NUrthdAEiSvnLebvBjwHtfFmpZmB7em2N3WVQdHgnFq+xvyVgxW5jKDmjWfLD3lw4g4uTw==
   dependencies:
     "@types/accepts" "*"
+    "@types/content-disposition" "*"
     "@types/cookies" "*"
     "@types/http-assert" "*"
+    "@types/http-errors" "*"
     "@types/keygrip" "*"
     "@types/koa-compose" "*"
     "@types/node" "*"
